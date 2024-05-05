@@ -411,6 +411,9 @@
         <!-- Template Main JS File -->
         <script src="{{asset('backend/assets/js/main.js')}}"></script>
 
+        {{-- Library Sweatalert --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
