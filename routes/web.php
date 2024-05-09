@@ -12,3 +12,4 @@ Route::get('/admin', [AuthController::class, 'indexAdmin']);
 Route::resource('/educationLevels', EducationLevelsController::class);
 Route::resource('/teacher', TeachersController::class);
 Route::resource('/semesters', App\Http\Controllers\SemestersController::class);
+Route::resource('/classrooms', App\Http\Controllers\ClassroomsController::class);
