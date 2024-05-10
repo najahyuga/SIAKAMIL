@@ -22,7 +22,6 @@ class Students extends Model
         'address',
         'image',
         'status',
-        'user_id',
         'education_levels_id',
         'classrooms_id'
     ];
@@ -37,7 +36,7 @@ class Students extends Model
         return $this->belongsTo(Classrooms::class);
     }
 
-    public function users()
+    public function user()
     {
         return $this->hasOne(User::class);
     }

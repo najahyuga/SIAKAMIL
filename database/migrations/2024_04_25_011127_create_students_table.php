@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('nik');
-            $table->integer('noAkteLahir');
-            $table->integer('nis');
-            $table->integer('nisn');
-            $table->integer('noHP');
+            $table->string('nik', 16);
+            $table->string('noAkteLahir', 10);
+            $table->string('nis', 5);
+            $table->string('nisn', 10);
+            $table->string('noHP', 15);
             $table->enum('agama', ['islam', 'kristen', 'katolik', 'buddha', 'hindu', 'khonghucu']);
             $table->enum('gender', ['Laki-Laki', 'Perempuan']);
             $table->date('dateOfBirth');
