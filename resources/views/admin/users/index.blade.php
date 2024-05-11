@@ -164,6 +164,14 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
 
+                <!-- Start Management Users Nav -->
+                <li class="nav-item">
+                    <a class="nav-link " href="/users">
+                        <i class="ri ri-folder-user-line"></i>
+                        <span>Management Users</span>
+                    </a>
+                </li><!-- End Management Users Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
@@ -242,12 +250,12 @@
 
                 <!-- Start Management Students Nav -->
                 <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="/students">
                         <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="students-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/students" class="active">
+                            <a href="/students" >
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
@@ -258,25 +266,6 @@
                         </li>
                     </ul>
                 </li><!-- End Management Students Nav -->
-
-                <!-- Start Management Users Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Users</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/users">
-                                <i class="bi bi-circle"></i><span>Users Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/users/create">
-                                <i class="bi bi-circle"></i><span>Insert User Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Users Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -383,7 +372,7 @@
                                                 <td class="text-center">
                                                     <form method="POST">
                                                         <a href="{{ route('users.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('users.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        {{-- <a href="{{ route('users.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a> --}}
                                                         @csrf
                                                     </form>
                                                 </td>

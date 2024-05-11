@@ -164,6 +164,14 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
 
+                <!-- Start Management Users Nav -->
+                <li class="nav-item">
+                    <a class="nav-link " href="/users">
+                        <i class="ri ri-folder-user-line"></i>
+                        <span>Management Users</span>
+                    </a>
+                </li><!-- End Management Users Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
@@ -242,12 +250,12 @@
 
                 <!-- Start Management Students Nav -->
                 <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="students-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <ul id="students-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/students" class="active">
+                            <a href="/students" >
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
@@ -258,25 +266,6 @@
                         </li>
                     </ul>
                 </li><!-- End Management Students Nav -->
-
-                <!-- Start Management Users Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Users</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/users">
-                                <i class="bi bi-circle"></i><span>Users Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/users/create">
-                                <i class="bi bi-circle"></i><span>Insert User Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Users Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -376,6 +365,16 @@
                                             <div class="col-lg-3 col-md-4 label">Level</div>
                                             <div class="col-lg-9 col-md-8">{{ $user->level }}</div>
                                         </div>
+
+                                        <div class="row">
+                                            @if ( $user->teachers_id != null )
+                                                <div class="col-lg-3 col-md-4 label">Teacher ID</div>
+                                                <div class="col-lg-9 col-md-8">{{ $user->teachers_id }}</div>
+                                            @else
+                                                <div class="col-lg-3 col-md-4 label">Students ID</div>
+                                                <div class="col-lg-9 col-md-8">{{ $user->students_id }}</div>
+                                            @endif
+                                        </div>
                                     </div>{{-- End List --}}
 
                                     <!-- Start Profile Edit Form -->
@@ -384,7 +383,7 @@
                                             @csrf
                                             @method('PUT')
 
-                                            <div class="row mb-3">
+                                            <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Username</label>
                                                 <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $user->username) }}" placeholder="Masukkan Username!">
                                                 <!-- error message untuk name -->
@@ -397,7 +396,7 @@
 
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Email</label>
-                                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $teacher->user->email) }}" placeholder="Masukkan Email Anda!">
+                                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $user->email) }}" placeholder="Masukkan Email Anda!">
 
                                                 <!-- error message untuk name -->
                                                 @error('email')
@@ -411,7 +410,7 @@
                                                 <label class="font-weight-bold">Password
                                                     <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal 6 Karakter</span>
                                                 </label>
-                                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $teacher->user->password) }}" placeholder="Masukkan Password Anda!">
+                                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $user->password) }}" placeholder="Masukkan Password Anda!">
 
                                                 <!-- error message untuk name -->
                                                 @error('password')
@@ -425,7 +424,7 @@
                                                 <label class="font-weight-bold">Role Levels
                                                 </label>
                                                 <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                                    <option value="{{ $teacher->user->id }}">{{ $teacher->user->id }}. {{ $teacher->user->level }}</option>
+                                                    <option value="{{ $user->id }}">{{ $user->id }}. {{ $user->level }}</option>
                                                     {{-- @foreach ($user as $data)
                                                         <option value="{{ $data->id }}">{{ $data->level }}</option>
                                                     @endforeach --}}
