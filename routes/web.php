@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryCoursesController;
 use App\Http\Controllers\EducationLevelsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TeachersController;
@@ -17,3 +18,4 @@ Route::resource('/semesters', App\Http\Controllers\SemestersController::class);
 Route::resource('/classrooms', App\Http\Controllers\ClassroomsController::class);
 Route::resource('/students', StudentsController::class);
 Route::resource('/users', UsersController::class);
+Route::resource('/categoryCourses', CategoryCoursesController::class);
