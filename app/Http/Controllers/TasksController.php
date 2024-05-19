@@ -22,8 +22,13 @@ class TasksController extends Controller
             // get data to display in index page
             $tasks = Tasks::all();
 
-            // mengembalikan ke halaman dashboard admin
-            return view('admin.tasks.index', compact('tasks'));
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman dashboard admin
+                return view('admin.tasks.index', compact('tasks'));
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman dashboard guru
+                return view('guru.tasks.index', compact('tasks'));
+            }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
             response()->json([
@@ -42,7 +47,15 @@ class TasksController extends Controller
             // get data to display in create page
             $courses_id = Courses::select('id', 'name')->get();
 
-            return view('admin.tasks.create', ['courses_id' => $courses_id]);
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman create admin
+                return view('admin.tasks.create', ['courses_id' => $courses_id]);
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman create admin
+                return view('guru.tasks.create', ['courses_id' => $courses_id]);
+            } {
+                # code...
+            }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
             response()->json([
@@ -78,8 +91,19 @@ class TasksController extends Controller
             $task->courses_id = $request->courses_id;
             $task->save();
 
-            // Redirect to admin tasks store
-            return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
+            // Redirect based on user level
+            $user = Auth::user();
+
+            if ($user->level == 'admin') {
+                // Redirect to admin tasks store
+                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
+            } elseif ($user->level == 'guru') {
+                // Redirect to guru tasks store
+                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
+            } else {
+                // Redirect to a default route if level is not recognized
+                return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
+            }
 
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menyimpan data: " . $th->getMessage());

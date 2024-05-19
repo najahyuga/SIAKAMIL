@@ -32,6 +32,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/users', UsersController::class);
     Route::resource('/categoryCourses', CategoryCoursesController::class);
     Route::resource('/courses', CoursesController::class);
-    Route::resource('/tasks', TasksController::class);
+
+    Route::controller(TasksController::class)->group(function () {
+        Route::resource('/tasks', TasksController::class);
+        Route::get('/tasks', 'index')->name('guru.tasks.index');
+        Route::get('/tasks', 'index')->name('admin.tasks.index');
+    });
 });
 
