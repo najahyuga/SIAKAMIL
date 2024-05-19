@@ -25,7 +25,7 @@ class ClassroomsController extends Controller
      */
     public function create()
     {
-        $semesters_id = Semesters::select('id', 'name')->get();
+        $semesters_id = Semesters::select()->get();
         return view('admin.classrooms.create', ['semesters_id' => $semesters_id]);
     }
 
@@ -57,7 +57,7 @@ class ClassroomsController extends Controller
     {
         // get data based on id and name
         // mendapatkan data berdasarkan id dan name
-        $semesters = Semesters::select('id', 'name')->get();
+        $semesters = Semesters::with('education_levels')->get();
 
         // displays data based on ID
         // menampilkan data berdasarkan id

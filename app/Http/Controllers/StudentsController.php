@@ -126,19 +126,19 @@ class StudentsController extends Controller
      */
     public function edit(string $id)
     {
-        // get data based on id and name
-        $education_levels_id = EducationLevels::select('id', 'name')->get();
-        $classrooms_id = Classrooms::select('id', 'name')->get();
+            // get data based on id and name
+            $education_levels_id = EducationLevels::select('id', 'name')->get();
+            $classrooms_id = Classrooms::select('id', 'name')->get();
 
-        // get data based on id and level
-        $user = User::select('id', 'level')->get();
+            // get data based on id and level
+            $user = User::select('id', 'level')->get();
 
-        // display data based on ID
-        // menampilkan data berdasarkan ID
-        $student = Students::findOrFail($id);
+            // display data based on ID
+            // menampilkan data berdasarkan ID
+            $student = Students::findOrFail($id);
 
-        // mengembalikan ke halaman show
-        return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
+            // mengembalikan ke halaman show
+            return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
     }
 
     /**

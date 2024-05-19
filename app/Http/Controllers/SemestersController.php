@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classrooms;
 use App\Models\EducationLevels;
 use App\Models\Semesters;
 use Illuminate\Http\RedirectResponse;
@@ -18,14 +19,15 @@ class SemestersController extends Controller
     {
         try {
             // get data to display on index page
-            $semesters = Semesters::all();
-            return view('admin.semesters.index', compact('semesters'));
+            $semesters = Semesters::with('classrooms')->get();
+            $classrooms = Classrooms::select('name')->get();
+            return view('admin.semesters.index', ['classrooms'=>$classrooms], compact('semesters'));
         } catch (\Throwable $th) {
             Log::error("Failed Get Data Semesters" . $th->getMessage());
-            return response()->statuss(500)->json([
+            return response()->json([
                 'status'    => false,
                 'message'   => 'failed'
-            ]);
+            ], 500);
         }
     }
 
@@ -95,7 +97,7 @@ class SemestersController extends Controller
         $semester = Semesters::findOrFail($id);
 
         // mengembalikan ke halaman index
-        return view('admin.semesters.index', ['education_levels_id' => $education_levels_id], compact('semester'));
+        return view('admin.semesters.edit', ['education_levels_id' => $education_levels_id], compact('semester'));
     }
 
     /**
