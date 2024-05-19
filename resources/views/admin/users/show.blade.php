@@ -267,6 +267,25 @@
                     </ul>
                 </li><!-- End Management Students Nav -->
 
+                <!-- Start Management Category Courses Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/categoryCourses" >
+                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/categoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Category Courses Nav -->
+
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#course-nav" data-bs-toggle="collapse" href="#">
@@ -274,12 +293,12 @@
                     </a>
                     <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/course" >
+                            <a href="/courses" >
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/course/create">
+                            <a href="/courses/create">
                             <i class="bi bi-circle"></i><span>Insert Course Data</span>
                             </a>
                         </li>
@@ -293,12 +312,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/task" >
+                            <a href="/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/task/create" >
+                            <a href="/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>

@@ -164,6 +164,14 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
 
+                <!-- Start Management Users Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/users">
+                        <i class="ri ri-folder-user-line"></i>
+                        <span>Management Users</span>
+                    </a>
+                </li><!-- End Management Users Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
@@ -202,44 +210,6 @@
                     </ul>
                 </li><!-- End Management Teachers Nav -->
 
-                <!-- Start Management Students Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/student">
-                            <i class="bi bi-circle"></i><span>Students Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/student/create">
-                            <i class="bi bi-circle"></i><span>Insert Students Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Students Nav -->
-
-                <!-- Start Management Users Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Users</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/user">
-                                <i class="bi bi-circle"></i><span>User Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/user/create">
-                                <i class="bi bi-circle"></i><span>Insert User Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Users Nav -->
-
                 <!-- Start Management semesters Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#semesters-nav" data-bs-toggle="collapse" href="#">
@@ -247,12 +217,12 @@
                     </a>
                     <ul id="semesters-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/semester" >
+                            <a href="/semesters" >
                             <i class="bi bi-circle"></i><span>Semesters Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/semester/create">
+                            <a href="/semesters/create">
                             <i class="bi bi-circle"></i><span>Insert Semesters Data</span>
                             </a>
                         </li>
@@ -266,17 +236,55 @@
                     </a>
                     <ul id="Classrooms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/classroom" >
+                            <a href="/classrooms" >
                             <i class="bi bi-circle"></i><span>Classrooms Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/classroom/create">
+                            <a href="/classrooms/create">
                             <i class="bi bi-circle"></i><span>Insert Classroom Data</span>
                             </a>
                         </li>
                     </ul>
                 </li><!-- End Management Classrooms Nav -->
+
+                <!-- Start Management Students Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/students">
+                            <i class="bi bi-circle"></i><span>Students Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/students/create">
+                            <i class="bi bi-circle"></i><span>Insert Students Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Students Nav -->
+
+                <!-- Start Management Category Courses Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/categoryCourses" >
+                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/categoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -285,12 +293,12 @@
                     </a>
                     <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/course" >
+                            <a href="/courses" >
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/course/create">
+                            <a href="/courses/create">
                             <i class="bi bi-circle"></i><span>Insert Course Data</span>
                             </a>
                         </li>
@@ -304,12 +312,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/task" >
+                            <a href="/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/task/create" >
+                            <a href="/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -439,8 +447,9 @@
                                             <div class="row mb-3">
                                                 <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                                 <div class="col-md-8 col-lg-9">
-                                                    <img src="{{ asset('/storage/images/'.$teacher->image) }}" class="rounded" style="width: 30%" alt="image">
-                                                    <div class="pt-2">
+                                                    <img src="{{ asset('/storage/images/'.$teacher->image) }}" class="rounded" style="width: 30%" alt="image"><br>
+                                                    <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span>
+                                                    <div class="pt-1">
                                                         <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image">
                                                             <input type="file" id="file_upload_id" style="display:none">
                                                             <i class="bi bi-upload" onclick="_upload()"></i>
@@ -506,7 +515,9 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Status Keaktifan</label>
+                                                <label class="font-weight-bold">Status Keaktifan
+                                                    <span class="badge bg-success mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Active</span>
+                                                </label>
                                                 <select class="form-select @error('status') is-invalid @enderror" name="status" aria-label="Default select example">
                                                     <option>Status Keaktifan</option>
                                                     <option value="active" {{ ($teacher->status=='active') ? 'selected' : '' }}>Active</option>
@@ -546,7 +557,9 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Password</label>
+                                                <label class="font-weight-bold">Password
+                                                    <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal 6 Karakter</span>
+                                                </label>
                                                 <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $teacher->user->password) }}" placeholder="Masukkan Password Anda!">
 
                                                 <!-- error message untuk name -->
@@ -558,8 +571,7 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Role Level
-                                                    <span class="badge bg-danger"><i class="bi bi-exclamation-octagon me-1"></i>Default Calon Siswa</span><br>
+                                                <label class="font-weight-bold">Role Levels
                                                 </label>
                                                 <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
                                                     <option value="{{ $teacher->user->id }}">{{ $teacher->user->id }}. {{ $teacher->user->level }}</option>

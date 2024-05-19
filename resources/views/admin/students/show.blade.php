@@ -164,6 +164,14 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
 
+                <!-- Start Management Users Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/users">
+                        <i class="ri ri-folder-user-line"></i>
+                        <span>Management Users</span>
+                    </a>
+                </li><!-- End Management Users Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
@@ -259,24 +267,24 @@
                     </ul>
                 </li><!-- End Management Students Nav -->
 
-                <!-- Start Management Users Nav -->
+                <!-- Start Management Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Users</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link collapsed" data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/user">
-                                <i class="bi bi-circle"></i><span>User Data</span>
+                            <a href="/categoryCourses" >
+                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/user/create">
-                                <i class="bi bi-circle"></i><span>Insert User Data</span>
+                            <a href="/categoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
                             </a>
                         </li>
                     </ul>
-                </li><!-- End Management Users Nav -->
+                </li><!-- End Management Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -285,12 +293,12 @@
                     </a>
                     <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/course" >
+                            <a href="/courses" >
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/course/create">
+                            <a href="/courses/create">
                             <i class="bi bi-circle"></i><span>Insert Course Data</span>
                             </a>
                         </li>
@@ -304,12 +312,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/task" >
+                            <a href="/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/task/create" >
+                            <a href="/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -563,6 +571,25 @@
                                             </div>
 
                                             <div class="row mb-3">
+                                                <label class="font-weight-bold">Agama</label>
+                                                <select class="form-select @error('agama') is-invalid @enderror" name="agama" aria-label="Pilih Agama">
+                                                    <option selected>Pilih Agama</option>
+                                                    <option value="islam" {{ ($student->agama=='islam') ? 'selected' : '' }}>Islam</option>
+                                                    <option value="kristen" {{ ($student->agama=='kristen') ? 'selected' : '' }}>Kristen</option>
+                                                    <option value="katolik" {{ ($student->agama=='katolik') ? 'selected' : '' }}>Katolik</option>
+                                                    <option value="buddha" {{ ($student->agama=='buddha') ? 'selected' : '' }}>Buddha</option>
+                                                    <option value="hindu" {{ ($student->agama=='hindu') ? 'selected' : '' }}>Kristen</option>
+                                                    <option value="khonghucu" {{ ($student->agama=='khonghucu') ? 'selected' : '' }}>Khonghucu</option>
+                                                </select>
+                                                <!-- error message untuk agama -->
+                                                @error('agama')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
                                                 <label class="col-md-4 col-lg-3 col-form-label">Alamat</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <textarea name="address" type="text" class="form-control @error('address') is-invalid @enderror" placeholder="Masukkan Alamat Anda!">{{ old('address', $student->address) }}</textarea>
@@ -796,6 +823,11 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            // get image in local
+            function _upload(){
+                document.getElementById('file_upload_id').click();
+            }
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();

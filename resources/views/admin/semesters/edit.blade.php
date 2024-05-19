@@ -164,6 +164,14 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
 
+                <!-- Start Management Users Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/users">
+                        <i class="ri ri-folder-user-line"></i>
+                        <span>Management Users</span>
+                    </a>
+                </li><!-- End Management Users Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
@@ -247,36 +255,36 @@
                     </a>
                     <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/student">
+                            <a href="/students">
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/student/create">
+                            <a href="/students/create">
                             <i class="bi bi-circle"></i><span>Insert Students Data</span>
                             </a>
                         </li>
                     </ul>
                 </li><!-- End Management Students Nav -->
 
-                <!-- Start Management Users Nav -->
+                <!-- Start Management Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Users</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link collapsed" data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/user">
-                                <i class="bi bi-circle"></i><span>User Data</span>
+                            <a href="/categoryCourses" >
+                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/user/create">
-                                <i class="bi bi-circle"></i><span>Insert User Data</span>
+                            <a href="/categoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
                             </a>
                         </li>
                     </ul>
-                </li><!-- End Management Users Nav -->
+                </li><!-- End Management Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -285,12 +293,12 @@
                     </a>
                     <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/course" >
+                            <a href="/courses" >
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/course/create">
+                            <a href="/courses/create">
                             <i class="bi bi-circle"></i><span>Insert Course Data</span>
                             </a>
                         </li>
@@ -304,12 +312,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/task" >
+                            <a href="/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/task/create" >
+                            <a href="/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -336,10 +344,85 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Semesters Data</li>
+                        <li class="breadcrumb-item"><a href="/semesters">Semesters Data</a></li>
+                        <li class="breadcrumb-item active">Edit Semester Data</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
+
+            <section class="section">
+                <div class="row">
+                    <div class="card col-lg">
+                        <div class="card-body">
+                            <h5 class="card-title">Forms Edit Semesters Data</h5>
+                            <!-- Custom Styled Validation with Tooltips novalidate -->
+                            <form action="{{ route('semesters.store') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group mb-3">
+                                    <div class="form-group mb-3">
+                                        <label class="font-weight-bold">Semester
+                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Contoh: Semester Ganjil/Semester Genap</span><br>
+                                        </label>
+                                        <select class="form-select @error('name') is-invalid @enderror" name="name" aria-label="Default select example">
+                                            <option selected>Pilih Jenis Jenjang Pendidikan</option>
+                                            <option value="Semester 1 Ganjil" {{ ($semester->name == 'Semester 1 Ganjil') ? 'selected' : '' }}>Semester 1 Ganjil</option>
+                                            <option value="Semester 2 Genap" {{ ($semester->name == 'Semester 2 Genap') ? 'selected' : '' }}>Semester 2 Genap</option>
+                                        </select>
+                                        <!-- error message untuk name -->
+                                        @error('name')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="font-weight-bold">Semester Mulai</label>
+                                        <input type="date" class="form-control @error('startDate') is-invalid @enderror" name="startDate" value="{{ old('startDate', $semester->startDate) }}" placeholder="Masukkan Tanggal Mulai Semester!">
+
+                                        <!-- error message untuk Semester Mulai -->
+                                        @error('startDate')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="font-weight-bold">Semester Selesai</label>
+                                        <input type="date" class="form-control @error('endDate') is-invalid @enderror" name="endDate" value="{{ old('endDate', $semester->endDate) }}" placeholder="Masukkan Tanggal Selesai Semester!">
+
+                                        <!-- error message untuk Semester Selesai -->
+                                        @error('endDate')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <label class="font-weight-bold">Jenjang Pendidikan</label>
+                                    <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
+                                        <option value="{{ $semester->education_levels->id }}">{{ $semester->education_levels->id }}. {{ $semester->education_levels->name }}</option>
+                                        @foreach ($education_levels_id as $data)
+                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!-- error message untuk name -->
+                                    @error('education_levels_id')
+                                        <div class="alert alert-danger mt-2">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <button type="submit" class="btn btn-md btn-primary me-3">SAVE</button>
+                                <button type="reset" class="btn btn-md btn-warning">RESET</button>
+                            </form>
+                            <!-- End Custom Styled Validation with Tooltips -->
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main><!-- End #main -->
 
         <!-- ======= Footer ======= -->

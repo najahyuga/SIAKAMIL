@@ -164,6 +164,14 @@
                     </a>
                 </li><!-- End Dashboard Nav -->
 
+                <!-- Start Management Users Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/users">
+                        <i class="ri ri-folder-user-line"></i>
+                        <span>Management Users</span>
+                    </a>
+                </li><!-- End Management Users Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
@@ -247,36 +255,36 @@
                     </a>
                     <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/student">
+                            <a href="/students">
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/student/create">
+                            <a href="/students/create">
                             <i class="bi bi-circle"></i><span>Insert Students Data</span>
                             </a>
                         </li>
                     </ul>
                 </li><!-- End Management Students Nav -->
 
-                <!-- Start Management Users Nav -->
+                <!-- Start Management Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Users</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link collapsed" data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/user">
-                                <i class="bi bi-circle"></i><span>User Data</span>
+                            <a href="/categoryCourses" >
+                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/user/create">
-                                <i class="bi bi-circle"></i><span>Insert User Data</span>
+                            <a href="/categoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
                             </a>
                         </li>
                     </ul>
-                </li><!-- End Management Users Nav -->
+                </li><!-- End Management Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -285,12 +293,12 @@
                     </a>
                     <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/course" >
+                            <a href="/courses" >
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/course/create">
+                            <a href="/courses/create">
                             <i class="bi bi-circle"></i><span>Insert Course Data</span>
                             </a>
                         </li>
@@ -304,12 +312,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/task" >
+                            <a href="/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/task/create" >
+                            <a href="/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -369,7 +377,7 @@
                                     <select class="form-select @error('semesters_id') is-invalid @enderror" name="semesters_id" aria-label="Pilih Semesters Yang Akan Di Buatkan Kelas">
                                         <option selected>Pilih Semesters Yang Akan Di Buatkan Kelas</option>
                                         @foreach ($semesters_id as $data)
-                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                            <option value="{{ $data->id }}">{{ $data->name }} {{ date('Y', strtotime($data->startDate)) }}/{{ date('Y', strtotime($data->endDate)) }}</option>
                                         @endforeach
                                     </select>
                                     <!-- error message untuk name -->
