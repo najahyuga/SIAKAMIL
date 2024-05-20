@@ -27,8 +27,8 @@
                         alt="Profile"
                         class="rounded-circle"
                     />
-                    <span class="d-none d-md-block dropdown-toggle ps-2"
-                        >{{-- {{ Auth::user()->username}} --}}</span
+                    <span class="d-none d-md-block dropdown-toggle ps-2 pe-2"
+                        >{{ Auth::user()->username}}</span
                     > </a
                 ><!-- End Profile Iamge Icon -->
 
@@ -36,8 +36,8 @@
                     class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
                 >
                     <li class="dropdown-header">
-                        {{-- <h6>{{ Auth::user()->username}}</h6>
-                        <span>{{ Auth::user()->level}}</span> --}}
+                        <h6>{{ Auth::user()->username}}</h6>
+                        <span>{{ Auth::user()->level}}</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider" />
@@ -49,7 +49,7 @@
                             href="#"
                         >
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Sign Out</span>
+                            <span>{{ route('logout') }}</span>
                         </a>
                     </li>
                 </ul>
