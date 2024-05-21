@@ -11,8 +11,8 @@ use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 // akses tanpa harus login
+Route::get('/', [AuthController::class, 'dashboard']);
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', [AuthController::class, 'dashboard']);
     Route::get('/login', [AuthController::class, 'indexLogin']);
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::get('/register',[AuthController::class, 'indexRegister']);
@@ -21,7 +21,6 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin', [AuthController::class, 'indexAdmin'])->middleware('UsersAkses:admin'); // pembatasan hak akses hanya untuk admin
-    Route::get('/guru', [AuthController::class, 'indexGuru'])->middleware('UsersAkses:guru'); // pembatasan hak akses hanya untuk guru
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::resource('/educationLevels', EducationLevelsController::class);
@@ -32,11 +31,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/users', UsersController::class);
     Route::resource('/categoryCourses', CategoryCoursesController::class);
     Route::resource('/courses', CoursesController::class);
+});
 
-    Route::controller(TasksController::class)->group(function () {
-        Route::resource('/tasks', TasksController::class);
-        Route::get('/tasks', 'index')->name('guru.tasks.index');
-        Route::get('/tasks', 'index')->name('admin.tasks.index');
-    });
+// Rute untuk guru
+Route::prefix('guru')->name('guru.')->middleware('UsersAkses:guru')->group(function () {
+    Route::get('/', [AuthController::class, 'indexGuru']);
+    Route::resource('tasks', TasksController::class);
 });
 
