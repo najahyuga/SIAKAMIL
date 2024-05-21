@@ -53,8 +53,6 @@ class TasksController extends Controller
             } elseif (Auth::user()->level == 'guru') {
                 // mengembalikan ke halaman create admin
                 return view('guru.tasks.create', ['courses_id' => $courses_id]);
-            } {
-                # code...
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
@@ -66,53 +64,50 @@ class TasksController extends Controller
     }
 
     public function store(Request $request): RedirectResponse
-    {
-        try {
-            // Validate form
-            $request->validate([
-                'name'          => 'required|min:5',
-                'description'   => 'required|min:5',
-                'deadline'      => 'required',
-                'file'          => 'required|file|max:20048',
-                'courses_id'    => 'required'
-            ]);
+{
+    try {
+        // Validate form
+        $request->validate([
+            'name'          => 'required|min:5',
+            'description'   => 'required|min:5',
+            'deadline'      => 'required|date',
+            'file'          => 'required|file|max:20048',
+            'courses_id'    => 'required|exists:courses,id'
+        ]);
 
-            // Store the file
-            $fileTugas = $request->file('file');
-            $fileName = $fileTugas->getClientOriginalName();
-            $fileTugas->storeAs('public/file', $fileName);
+        // Store the file
+        $fileTugas = $request->file('file');
+        $fileName = time() . '_' . $fileTugas->getClientOriginalName();
+        $fileTugas->storeAs('public/file', $fileName);
 
-            // Create the task using Active Record pattern
-            $task = new Tasks();
-            $task->name = $request->name;
-            $task->description = $request->description;
-            $task->deadline = $request->deadline;
-            $task->file = $fileName;
-            $task->courses_id = $request->courses_id;
-            $task->save();
+        // Create the task using Active Record pattern
+        $task = new Tasks();
+        $task->name = $request->name;
+        $task->description = $request->description;
+        $task->deadline = $request->deadline;
+        $task->file = $fileName;
+        $task->courses_id = $request->courses_id;
+        $task->save();
 
-            // Redirect based on user level
-            $user = Auth::user();
+        // Redirect based on user level
+        $user = Auth::user();
 
-            if ($user->level == 'admin') {
-                // Redirect to admin tasks store
-                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
-            } elseif ($user->level == 'guru') {
-                // Redirect to guru tasks store
-                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
-            } else {
-                // Redirect to a default route if level is not recognized
-                return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
-            }
-
-        } catch (\Throwable $th) {
-            Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
-            return response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat menyimpan data'
-            ], 500);
+        if ($user->level == 'admin') {
+            // Redirect to admin tasks index
+            return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
+        } elseif ($user->level == 'guru') {
+            // Redirect to guru tasks index
+            return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
+        } else {
+            // Redirect to a default route if level is not recognized
+            return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
         }
+
+    } catch (\Throwable $th) {
+        Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
+        return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
     }
+}
 
     /**
      * Display the specified resource.
@@ -127,8 +122,21 @@ class TasksController extends Controller
             // menampilkan data berdasarkan ID
             $task = Tasks::findOrFail($id);
 
-            // mengembalikan ke halaman create
+            // Redirect based on user level
+        $user = Auth::user();
+
+        if ($user->level == 'admin') {
+            // Redirect to admin tasks show
+            // mengembalikan ke halaman show
             return view('admin.tasks.show', ['courses_id' => $courses_id], compact('task'));
+        } elseif ($user->level == 'guru') {
+            // Redirect to guru tasks show
+            // mengembalikan ke halaman show
+            return view('guru.tasks.show', ['courses_id' => $courses_id], compact('task'));
+        } else {
+            // Redirect to a default route if level is not recognized
+            return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
+        }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
             response()->json([
@@ -147,7 +155,14 @@ class TasksController extends Controller
             $courses_id = Courses::select('id', 'name')->get();
 
             $task = Tasks::findOrFail($id);
-            return view('admin.tasks.edit', ['courses_id' => $courses_id], compact('task'));
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman edit admin
+                return view('admin.tasks.edit', ['courses_id' => $courses_id], compact('task'));
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman edir guru
+                return view('guru.tasks.edit', ['courses_id' => $courses_id], compact('task'));
+            }
+
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
             response()->json([
@@ -163,37 +178,40 @@ class TasksController extends Controller
     public function update(Request $request, string $id): RedirectResponse
     {
         try {
-            // validate form
+            // Validate form
             $request->validate([
                 'name'          => 'required|min:5',
                 'description'   => 'required|min:5',
                 'deadline'      => 'required',
-                'file'          => 'required',
-                'courses_id'    => 'required'
+                'file'          => 'nullable|file|max:20048',
+                'courses_id'    => 'required|exists:courses,id'
             ]);
 
-            // get data by ID
+            // Get data by ID
             $task = Tasks::findOrFail($id);
 
-            // cek file apakah diupload
+            // Check if file is uploaded
             if ($request->hasFile('file')) {
-                // upload file baru
+                // Store new file
                 $fileTugas = $request->file('file');
-                $fileTugas->storeAs('public/file', $fileTugas->getClientOriginalName());
+                $fileName = time() . '_' . $fileTugas->getClientOriginalName();
+                $fileTugas->storeAs('public/file', $fileName);
 
-                // delete file lama
-                Storage::delete('public/file' . $fileTugas->getClientOriginalName());
+                // Delete old file if exists
+                if ($task->file) {
+                    Storage::delete('public/file/' . $task->file);
+                }
 
-                // update data dengan file baru
+                // Update task with new file
                 $task->update([
                     'name'          => $request->name,
                     'description'   => $request->description,
                     'deadline'      => $request->deadline,
-                    'file'          => $fileTugas->getClientOriginalName(),
+                    'file'          => $fileName,
                     'courses_id'    => $request->courses_id
                 ]);
             } else {
-                // update data tanpa file
+                // Update task without new file
                 $task->update([
                     'name'          => $request->name,
                     'description'   => $request->description,
@@ -202,14 +220,19 @@ class TasksController extends Controller
                 ]);
             }
 
-            // mengembalikan ke halaman index
-            return redirect()->route('tasks.index')->with(['success' => 'Data Berhasil Diubah!']);
+            // Redirect based on user level
+            $user = Auth::user();
+
+            if ($user->level == 'admin') {
+                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
+            } elseif ($user->level == 'guru') {
+                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
+            } else {
+                return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
+            }
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengubah data ". $th->getMessage());
-            response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat mengubah data'
-            ], 500);
+            Log::error("Tidak dapat mengubah data: " . $th->getMessage());
+            return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
         }
     }
 
