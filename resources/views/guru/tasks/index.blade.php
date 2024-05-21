@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-        <title>Management Tasks - SIAKAMIL</title>
+        <title>Guru - Management Tasks - SIAKAMIL</title>
         <meta content="" name="description" />
         <meta content="" name="keywords" />
 
@@ -52,7 +52,7 @@
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
             <div class="d-flex align-items-center justify-content-between">
-                <a href="/admin" class="logo d-flex align-items-center">
+                <a href="/guru" class="logo d-flex align-items-center">
                     <img src="{{asset('backend/assets/img/logopkbm.jpeg')}}" alt="IMAGELOGO" />
                     <span class="d-none d-lg-block">SIAKAMIL</span>
                 </a>
@@ -69,40 +69,17 @@
                     </li>
 
                     <li class="nav-item dropdown pe-3">
-                        <a
-                            class="nav-link nav-profile d-flex align-items-center pe-0"
-                            href="#"
-                            data-bs-toggle="dropdown"
-                        >
-                            <img
-                                src="{{asset('backend/assets/img/profile-img.jpg')}}"
-                                alt="Profile"
-                                class="rounded-circle"
-                            />
-                            <span class="d-none d-md-block dropdown-toggle ps-2"
-                                >K. Anderson</span
-                            > </a
-                        ><!-- End Profile Iamge Icon -->
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="{{asset('backend/assets/img/profile-img.jpg')}}" alt="Profile" class="rounded-circle"/>
+                            <span class="d-none d-md-block dropdown-toggle ps-2">
+                                {{ Auth::user()->username }}
+                            </span>
+                        </a><!-- End Profile Iamge Icon -->
 
-                        <ul
-                            class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-                        >
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6>Kevin Anderson</h6>
-                                <span>Web Designer</span>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-
-                            <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="users-profile.html"
-                                >
-                                    <i class="bi bi-person"></i>
-                                    <span>My Profile</span>
-                                </a>
+                                <h6>{{ Auth::user()->username }}</h6>
+                                <span>{{ Auth::user()->level }}</span>
                             </li>
                             <li>
                                 <hr class="dropdown-divider" />
@@ -115,19 +92,6 @@
                                 >
                                     <i class="bi bi-gear"></i>
                                     <span>Account Settings</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-
-                            <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="pages-faq.html"
-                                >
-                                    <i class="bi bi-question-circle"></i>
-                                    <span>Need Help?</span>
                                 </a>
                             </li>
                             <li>
@@ -190,12 +154,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/tasks" class="active">
+                            <a href="/guru/tasks" class="active">
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/tasks/create" >
+                            <a href="/guru/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -221,7 +185,7 @@
                 <h1>Dashboard</h1>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/guru">Dashboard</a></li>
                         <li class="breadcrumb-item active">Tasks Data</li>
                     </ol>
                 </nav>
@@ -250,8 +214,8 @@
                                                 <td>{{ date('d-M-Y H:i:s', strtotime($row->deadline)) }}</td>
                                                 <td class="text-center">
                                                     <form method="POST">
-                                                        <a href="{{ route('tasks.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('tasks.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        <a href="{{ route('guru.tasks.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
+                                                        <a href="{{ route('guru.tasks.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
                                                     </form>
                                                 </td>
                                             </tr>

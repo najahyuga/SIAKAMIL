@@ -52,7 +52,7 @@
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
             <div class="d-flex align-items-center justify-content-between">
-                <a href="/admin" class="logo d-flex align-items-center">
+                <a href="/guru" class="logo d-flex align-items-center">
                     <img src="{{asset('backend/assets/img/logopkbm.jpeg')}}" alt="IMAGELOGO" />
                     <span class="d-none d-lg-block">SIAKAMIL</span>
                 </a>
@@ -168,12 +168,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/tasks" >
+                            <a href="/guru/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/tasks/create" >
+                            <a href="/guru/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -209,7 +209,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Selamat Datang, Anda login Sebagai</h5>{{-- {{ Auth::user()->username }} {{ Auth::user()->level }} --}}
+                                <h5 class="card-title">Selamat Datang {{ Auth::user()->username}}, Anda login Sebagai {{ Auth::user()->level }}</h5>
                             </div>
                         </div>
                     </div>
