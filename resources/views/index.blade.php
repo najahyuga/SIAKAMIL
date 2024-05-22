@@ -26,6 +26,11 @@
 
     <!-- Main CSS File -->
     <link href="{{asset('frontend/assets/css/main.css')}}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {{-- <style>
+        .mySlides {display:none;}
+    </style> --}}
 </head>
 
 <body>
@@ -68,7 +73,7 @@
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
 
-            <a class="btn-getstarted" href="/admin">Get To ADMIN</a>
+            {{-- <a class="btn-getstarted" href="/admin">Get To ADMIN</a> --}}
             <a class="btn-getstarted" href="/login">LOGIN</a>
         </div>
     </header>
@@ -78,7 +83,12 @@
         <!-- Hero Section -->
         <section id="hero" class="hero section">
 
-            <img src="{{asset('frontend/assets/img/hero-bg.jpg')}}" alt="" data-aos="fade-in">
+            <div class="w3-content w3-section">{{-- style="max-width:500px" --}}
+                <img src="{{asset('frontend/assets/img/pkbmm.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{asset('frontend/assets/img/pkbm11.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{asset('frontend/assets/img/pkbm22.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{asset('frontend/assets/img/pkbm33.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
+            </div>
 
             <div class="container">
                 <h2 data-aos="fade-up" data-aos-delay="100" class="">Learning Today,<br>Leading Tomorrow</h2>
@@ -542,6 +552,21 @@
 
     <!-- session success &  error -->
     <script>
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        myIndex++;
+        if (myIndex > x.length) {myIndex = 1}
+        x[myIndex-1].style.display = "block";
+        setTimeout(carousel, 2000); // Change image every 2 seconds
+        }
+
         //message with sweetalert
         @if(session('success'))
             Swal.fire({
