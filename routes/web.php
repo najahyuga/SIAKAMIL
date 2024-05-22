@@ -37,5 +37,5 @@ Route::middleware(['auth'])->group(function () {
 Route::prefix('guru')->name('guru.')->middleware('UsersAkses:guru')->group(function () {
     Route::get('/', [AuthController::class, 'indexGuru']);
     Route::resource('tasks', TasksController::class);
+    Route::resource('students', StudentsController::class);
 });
-

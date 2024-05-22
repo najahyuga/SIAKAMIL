@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-        <title>Management Siswa - SIAKAMIL</title>
+        <title>Guru - Management Siswa - SIAKAMIL</title>
         <meta content="" name="description" />
         <meta content="" name="keywords" />
 
@@ -52,7 +52,7 @@
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
             <div class="d-flex align-items-center justify-content-between">
-                <a href="/admin" class="logo d-flex align-items-center">
+                <a href="/guru" class="logo d-flex align-items-center">
                     <img src="{{asset('backend/assets/img/logopkbm.jpeg')}}" alt="IMAGELOGO" />
                     <span class="d-none d-lg-block">SIAKAMIL</span>
                 </a>
@@ -69,50 +69,24 @@
                     </li>
 
                     <li class="nav-item dropdown pe-3">
-                        <a
-                            class="nav-link nav-profile d-flex align-items-center pe-0"
-                            href="#"
-                            data-bs-toggle="dropdown"
-                        >
-                            <img
-                                src="{{asset('backend/assets/img/profile-img.jpg')}}"
-                                alt="Profile"
-                                class="rounded-circle"
-                            />
-                            <span class="d-none d-md-block dropdown-toggle ps-2"
-                                >K. Anderson</span
-                            > </a
-                        ><!-- End Profile Iamge Icon -->
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="{{asset('backend/assets/img/profile-img.jpg')}}" alt="Profile" class="rounded-circle"/>
+                            <span class="d-none d-md-block dropdown-toggle ps-2">
+                                {{ Auth::user()->username }}
+                            </span>
+                        </a><!-- End Profile Iamge Icon -->
 
-                        <ul
-                            class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-                        >
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6>Kevin Anderson</h6>
-                                <span>Web Designer</span>
+                                <h6>{{ Auth::user()->username }}</h6>
+                                <span>{{ Auth::user()->level }}</span>
                             </li>
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
 
                             <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="users-profile.html"
-                                >
-                                    <i class="bi bi-person"></i>
-                                    <span>My Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-
-                            <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="users-profile.html"
-                                >
+                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                                     <i class="bi bi-gear"></i>
                                     <span>Account Settings</span>
                                 </a>
@@ -122,23 +96,7 @@
                             </li>
 
                             <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="pages-faq.html"
-                                >
-                                    <i class="bi bi-question-circle"></i>
-                                    <span>Need Help?</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-
-                            <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="#"
-                                >
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span>Sign Out</span>
                                 </a>
@@ -158,95 +116,11 @@
             <ul class="sidebar-nav" id="sidebar-nav">
                 <!-- Start Dashboard Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="/admin">
+                    <a class="nav-link collapsed" href="/guru">
                         <i class="bi bi-grid"></i>
                         <span>Dashboard</span>
                     </a>
                 </li><!-- End Dashboard Nav -->
-
-                <!-- Start Management Users Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="/users">
-                        <i class="ri ri-folder-user-line"></i>
-                        <span>Management Users</span>
-                    </a>
-                </li><!-- End Management Users Nav -->
-
-                <!-- Start Management educationLevels Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Education Levels</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="educationLevels-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/educationLevels" >
-                            <i class="bi bi-circle"></i><span>Education Levels Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/educationLevels/create" >
-                            <i class="bi bi-circle"></i><span>Insert Education Levels Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management educationLevels Nav -->
-
-                <!-- Start Management Teachers Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#teachers-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>Management Teachers</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="teachers-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/teacher">
-                            <i class="bi bi-circle"></i><span>Teacher Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/teacher/create">
-                            <i class="bi bi-circle"></i><span>Insert Teacher Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Teachers Nav -->
-
-                <!-- Start Management semesters Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#semesters-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Semesters</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="semesters-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/semesters" >
-                            <i class="bi bi-circle"></i><span>Semesters Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/semesters/create">
-                            <i class="bi bi-circle"></i><span>Insert Semesters Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management semester Nav -->
-
-                <!-- Start Management Classrooms Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#Classrooms-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Classrooms</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="Classrooms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/classrooms" >
-                            <i class="bi bi-circle"></i><span>Classrooms Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/classrooms/create">
-                            <i class="bi bi-circle"></i><span>Insert Classroom Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Classrooms Nav -->
 
                 <!-- Start Management Students Nav -->
                 <li class="nav-item">
@@ -255,55 +129,17 @@
                     </a>
                     <ul id="students-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/students" class="active">
+                            <a href="/guru/students" class="active">
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/students/create" >
+                            <a href="/guru/students/create" >
                             <i class="bi bi-circle"></i><span>Insert Student Data</span>
                             </a>
                         </li>
                     </ul>
                 </li><!-- End Management Students Nav -->
-
-                <!-- Start Management Category Courses Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/categoryCourses" >
-                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/categoryCourses/create">
-                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Category Courses Nav -->
-
-                <!-- Start Management Courses Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#course-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Courses</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/courses" >
-                            <i class="bi bi-circle"></i><span>Courses Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/courses/create">
-                            <i class="bi bi-circle"></i><span>Insert Course Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Courses Nav -->
 
                 <!-- Start Management Tasks Nav -->
                 <li class="nav-item">
@@ -312,12 +148,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/tasks" >
+                            <a href="/guru/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/tasks/create" >
+                            <a href="/guru/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -343,7 +179,7 @@
                 <h1>Dashboard</h1>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/guru">Dashboard</a></li>
                         <li class="breadcrumb-item active">Students Data</li>
                     </ol>
                 </nav>
@@ -382,8 +218,8 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <form method="POST">
-                                                        <a href="{{ route('students.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('students.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        <a href="{{ route('guru.students.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
+                                                        <a href="{{ route('guru.students.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
                                                         @csrf
                                                     </form>
                                                 </td>

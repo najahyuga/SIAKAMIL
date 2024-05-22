@@ -149,12 +149,12 @@
                     </a>
                     <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/students">
+                            <a href="/guru/students">
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/students/create">
+                            <a href="/guru/students/create">
                             <i class="bi bi-circle"></i><span>Insert Students Data</span>
                             </a>
                         </li>
