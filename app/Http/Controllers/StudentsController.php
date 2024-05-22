@@ -9,6 +9,8 @@ use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,9 +21,24 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        // get data to display index page
-        $students = Students::all();
-        return view('admin.students.index', compact('students'));
+        try {
+            // get data to display index page
+            $students = Students::all();
+
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman index students admin
+                return view('admin.students.index', compact('students'));
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman index students guru
+                return view('guru.students.index', compact('students'));
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menampilkan halaman index ". $th->getMessage());
+            response()->json([
+                'status' => false,
+                'message' => 'Tidak dapat menampilkan halaman index'
+            ], 500);
+        }
     }
 
     /**
@@ -29,12 +46,26 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        // get data to display create page
-        // $user_id = User::select('id', 'username')->get(); 'user_id' => $user_id,
-        $education_levels_id = EducationLevels::select('id', 'name')->get();
-        $classrooms_id = Classrooms::select('id', 'name')->get();
+        try {
+            // get data to display create page
+            // $user_id = User::select('id', 'username')->get(); 'user_id' => $user_id,
+            $education_levels_id = EducationLevels::select('id', 'name')->get();
+            $classrooms_id = Classrooms::select('id', 'name')->get();
 
-        return view('admin.students.create', [ 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id]);
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman create student admin
+                return view('admin.students.create', [ 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id]);
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman create student guru
+                return view('guru.students.create', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id]);
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
+            response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat menampilkan halaman'
+            ], 500);
+        }
     }
 
     /**
@@ -42,63 +73,72 @@ class StudentsController extends Controller
      */
     public function store(Request $request) : RedirectResponse
     {
+        try {
+            //validate form
+            $request->validate([
+                'name'                  => 'required|min:4',
+                'nik'                   => 'required|numeric|min:16',
+                'noAkteLahir'           => 'required|numeric|min:4',
+                'nis'                   => 'required|numeric|min:5',
+                'nisn'                  => 'required|numeric|min:10',
+                'noHP'                  => 'required|numeric|min:11',
+                'agama'                 => 'required',
+                'gender'                => 'required',
+                'dateOfBirth'           => 'required',
+                'address'               => 'required|min:10',
+                'image'                 => 'required|image|mimes:jpeg,jpg,png|max:2048',
+                'status'                => 'required',
+                'education_levels_id'   => 'required',
+                'classrooms_id'         => 'required',
 
-        //validate form
-        $request->validate([
-            'name'                  => 'required|min:4',
-            'nik'                   => 'required|numeric|min:16',
-            'noAkteLahir'           => 'required|numeric|min:4',
-            'nis'                   => 'required|numeric|min:5',
-            'nisn'                  => 'required|numeric|min:10',
-            'noHP'                  => 'required|numeric|min:11',
-            'agama'                 => 'required',
-            'gender'                => 'required',
-            'dateOfBirth'           => 'required',
-            'address'               => 'required|min:10',
-            'image'                 => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'status'                => 'required',
-            'education_levels_id'   => 'required',
-            'classrooms_id'         => 'required',
+                'username'                  => 'required|min:4',
+                'email'                     => 'required|min:5|email',
+                'password'                  => 'required|min:6',
+                'level'                     => 'required'
+            ]);
 
-            'username'                  => 'required|min:4',
-            'email'                     => 'required|min:5|email',
-            'password'                  => 'required|min:6',
-            'level'                     => 'required'
-        ]);
+            //upload image
+            $image = $request->file('image');
+            $image->storeAs('public/images', $image->hashName());
 
-        //upload image
-        $image = $request->file('image');
-        $image->storeAs('public/images', $image->hashName());
+            //create data student
+            $students = Students::create([
+                'name'                  => $request->name,
+                'nik'                   => $request->nik,
+                'noAkteLahir'           => $request->noAkteLahir,
+                'nis'                   => $request->nis,
+                'nisn'                  => $request->nisn,
+                'noHP'                  => $request->noHP,
+                'agama'                 => $request->agama,
+                'gender'                => $request->gender,
+                'dateOfBirth'           => $request->dateOfBirth,
+                'address'               => $request->address,
+                'image'                 => $image->hashName(),
+                'status'                => $request->status,
+                'education_levels_id'   => $request->education_levels_id,
+                'classrooms_id'         => $request->classrooms_id,
+            ]);
 
-        //create data student
-        $students = Students::create([
-            'name'                  => $request->name,
-            'nik'                   => $request->nik,
-            'noAkteLahir'           => $request->noAkteLahir,
-            'nis'                   => $request->nis,
-            'nisn'                  => $request->nisn,
-            'noHP'                  => $request->noHP,
-            'agama'                 => $request->agama,
-            'gender'                => $request->gender,
-            'dateOfBirth'           => $request->dateOfBirth,
-            'address'               => $request->address,
-            'image'                 => $image->hashName(),
-            'status'                => $request->status,
-            'education_levels_id'   => $request->education_levels_id,
-            'classrooms_id'         => $request->classrooms_id,
-        ]);
+            // create data user
+            User::create([
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => $request->password,
+                'level'         => $request->level,
+                'students_id'   => $students->id
+            ]);
 
-        // create data user
-        User::create([
-            'username'      => $request->username,
-            'email'         => $request->email,
-            'password'      => $request->password,
-            'level'         => $request->level,
-            'students_id'   => $students->id
-        ]);
-
-        //redirect to index
-        return redirect('students')->with(['success' => 'Data Berhasil Disimpan!']);
+            if (Auth::user()->level == 'admin') {
+                // redirect to admin students index
+                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
+            } elseif (Auth::user()->level == 'guru') {
+                // redirect to guru students index
+                return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
+            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
+        }
     }
 
     /**
@@ -106,26 +146,7 @@ class StudentsController extends Controller
      */
     public function show(string $id)
     {
-        // get data based on id and name
-        $education_levels_id = EducationLevels::select('id', 'name')->get();
-        $classrooms_id = Classrooms::select('id', 'name')->get();
-
-        // get data based on id and level
-        $user = User::select('id', 'level')->get();
-
-        // display data based on ID
-        // menampilkan data berdasarkan ID
-        $student = Students::findOrFail($id);
-
-        // mengembalikan ke halaman show
-        return view('admin.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
+        try {
             // get data based on id and name
             $education_levels_id = EducationLevels::select('id', 'name')->get();
             $classrooms_id = Classrooms::select('id', 'name')->get();
@@ -137,8 +158,54 @@ class StudentsController extends Controller
             // menampilkan data berdasarkan ID
             $student = Students::findOrFail($id);
 
-            // mengembalikan ke halaman show
-            return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman admin students show
+                return view('admin.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student'));
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman guru students show
+                return view('guru.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student'));
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengambil data ". $th->getMessage());
+            response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat mengambil data'
+            ], 500);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        try {
+            // get data based on id and name
+            $education_levels_id = EducationLevels::select('id', 'name')->get();
+            $classrooms_id = Classrooms::select('id', 'name')->get();
+
+            // get data based on id and level
+            $user = User::select('id', 'level')->get();
+
+            // display data based on ID
+            // menampilkan data berdasarkan ID
+            $student = Students::findOrFail($id);
+
+            if (Auth::user()->level == 'admin') {
+                // mengembalikan ke halaman admin students edit
+                return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
+            } elseif (Auth::user()->level == 'guru') {
+                // mengembalikan ke halaman guru students edit
+                return view('guru.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengambil data ". $th->getMessage());
+            response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat mengambil data'
+            ], 500);
+        }
     }
 
     /**
@@ -166,7 +233,7 @@ class StudentsController extends Controller
                 'username'                  => 'required|min:4',
                 'email'                     => 'required|min:5|email',
                 'password'                  => 'required|min:6',
-                'level'                     => 'required'
+                'level'                     => 'required|string'
             ]);
 
             // get data by id
@@ -216,29 +283,31 @@ class StudentsController extends Controller
                     'classrooms_id'         => $request->classrooms_id
                 ]);
             }
+
             // update table user
-            if ($student->save()) {
-                $user = User::findOrFail($id);
-                $user->update([
-                    'username'      => $request->username,
-                    'email'         => $request->email,
-                    'password'      => $request->password,
-                    'level'         => $request->level,
-                    'students_id'   => $student->id
-                ]);
+            $user = User::where('students_id', $student->id)->firstOrFail();
+            $user->update([
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => Hash::make($request->password), // Hash password
+                'level'         => $request->level,
+                'students_id'   => $student->id
+            ]);
+
+            // Redirect based on user level
+            $authUser = Auth::user();
+
+            if ($authUser->level == 'admin') {
+                // redirect to admin students index page
+                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
+            } elseif ($authUser->level == 'guru') {
+                // redirect to guru students index page
+                return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
             }
-            $user->save();
-
-            // redirect to index
-            return redirect()->route('students.index')->with(['success' => 'Data Berhasil Diubah!']);
         } catch (\Throwable $th) {
-            Log::error('Gagal Mengubah Data. '.$th->getMessage());
-            return response()->json([
-                'status'    => false,
-                'message'   => 'Gagal Mengubah data'
-            ], 500);
+            Log::error("Tidak dapat mengubah data student ID {$id}: " . $th->getMessage());
+            return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
         }
-
     }
 
     /**
