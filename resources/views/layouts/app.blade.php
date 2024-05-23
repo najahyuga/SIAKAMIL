@@ -97,12 +97,12 @@
                 </a>
                 <ul id="semesters-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="/semesters" >
+                        <a href="/admin/semesters" >
                         <i class="bi bi-circle"></i><span>Semesters Data</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/semesters/create">
+                        <a href="/admin/semesters/create">
                         <i class="bi bi-circle"></i><span>Insert Semesters Data</span>
                         </a>
                     </li>
@@ -116,12 +116,12 @@
                 </a>
                 <ul id="Classrooms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="/classrooms" >
+                        <a href="/admin/classrooms" >
                         <i class="bi bi-circle"></i><span>Classrooms Data</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/classrooms/create">
+                        <a href="/admin/classrooms/create">
                         <i class="bi bi-circle"></i><span>Insert Classroom Data</span>
                         </a>
                     </li>
@@ -154,12 +154,12 @@
                 </a>
                 <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="/categoryCourses" >
+                        <a href="/admin/categoryCourses" >
                         <i class="bi bi-circle"></i><span>Category Courses Data</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/categoryCourses/create">
+                        <a href="/admin/categoryCourses/create">
                         <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
                         </a>
                     </li>
