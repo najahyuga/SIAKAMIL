@@ -180,7 +180,7 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/guru">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/students">Students Data</a></li>
+                        <li class="breadcrumb-item"><a href="/guru/students">Students Data</a></li>
                         <li class="breadcrumb-item active">Edit Student Data</li>
                     </ol>
                 </nav>
@@ -335,7 +335,16 @@
 
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Foto</label>
-                                        <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded mb-1" style="width: 10%" alt="image"><br>
+                                        @if ($student->image != '')
+                                            <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded mb-1" style="width: 10%" alt="image">
+                                        @else
+                                            @if ($student->gender == 'Laki-Laki')
+                                                <img src="{{asset('imgDefault/man.png')}}" class="rounded mb-1" style="width: 10%" alt="image">
+                                            @elseif (($student->gender == 'Perempuan'))
+                                                <img src="{{asset('imgDefault/muslimah.png')}}" class="rounded mb-1" style="width: 10%" alt="image">
+                                            @endif
+                                        @endif
+                                        <br>
                                         <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span>
                                         <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
 
@@ -447,7 +456,7 @@
                                         <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
                                             <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->id }}. {{ $student->classrooms->name }}</option>
                                             @foreach ($classrooms_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                <option value="{{ $data->id }}">{{ $data->id }}. {{ $data->name }}</option>
                                             @endforeach
                                         </select>
                                         <!-- error message untuk jenis kelamin -->

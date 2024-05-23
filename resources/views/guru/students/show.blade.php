@@ -180,7 +180,7 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/guru">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/students">Students Data</a></li>
+                        <li class="breadcrumb-item"><a href="/guru/students">Students Data</a></li>
                         <li class="breadcrumb-item active">Show Student Data</li>
                     </ol>
                 </nav>
@@ -191,14 +191,36 @@
                     <div class="col-xl-4">
                         <div class="card">
                             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded-circle" style="width: 70%" alt="image">
-                                <h2>{{ $student->name }}</h2>
-                                <div class="social-links mt-2">
-                                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                                </div>
+                                @if ($student->image != '')
+                                    <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded-circle" style="width: 70%" alt="image">
+                                    <h2>{{ $student->name }}</h2>
+                                    <div class="social-links mt-2">
+                                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                    </div>
+                                @else
+                                    @if ($student->gender == 'Laki-Laki')
+                                        <img src="{{asset('imgDefault/man.png')}}" class="rounded-circle" style="width: 70%" alt="image">
+                                        <h2>{{ $student->name }}</h2>
+                                        <div class="social-links mt-2">
+                                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                        </div>
+                                    @elseif (($student->gender == 'Perempuan'))
+                                        <img src="{{asset('imgDefault/muslimah.png')}}" class="rounded-circle" style="width: 70%" alt="image">
+                                        <h2>{{ $student->name }}</h2>
+                                        <div class="social-links mt-2">
+                                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                        </div>
+                                    @endif
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -312,7 +334,16 @@
                                             <div class="row mb-3">
                                                 <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                                 <div class="col-md-8 col-lg-9">
-                                                    <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded" style="width: 30%" alt="image"><br>
+                                                    @if ($student->image != '')
+                                                    <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded pe-2" style="width: 30%" alt="image">
+                                                    @else
+                                                        @if ($student->gender == 'Laki-Laki')
+                                                            <img src="{{asset('imgDefault/man.png')}}" class="rounded" style="width: 30%" alt="image">
+                                                        @elseif (($student->gender == 'Perempuan'))
+                                                            <img src="{{asset('imgDefault/muslimah.png')}}" class="rounded" style="width: 30%" alt="image">
+                                                        @endif
+                                                    @endif
+                                                    <br>
                                                     <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span>
                                                     <div class="pt-1">
                                                         <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image">

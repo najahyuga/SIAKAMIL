@@ -180,7 +180,7 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/guru">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/students">Students Data</a></li>
+                        <li class="breadcrumb-item"><a href="/guru/students">Students Data</a></li>
                         <li class="breadcrumb-item active">Insert Student Data</li>
                     </ol>
                 </nav>
