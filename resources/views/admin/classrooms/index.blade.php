@@ -124,7 +124,7 @@
 
                 <!-- Start Management Users Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="/users">
+                    <a class="nav-link collapsed" href="/admin/users">
                         <i class="ri ri-folder-user-line"></i>
                         <span>Management Users</span>
                     </a>
@@ -137,12 +137,12 @@
                     </a>
                     <ul id="educationLevels-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/educationLevels" >
+                            <a href="/admin/educationLevels" >
                             <i class="bi bi-circle"></i><span>Education Levels Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/educationLevels/create" >
+                            <a href="/admin/educationLevels/create" >
                             <i class="bi bi-circle"></i><span>Insert Education Levels Data</span>
                             </a>
                         </li>
@@ -156,12 +156,12 @@
                     </a>
                     <ul id="teachers-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/teacher">
+                            <a href="/admin/teacher">
                             <i class="bi bi-circle"></i><span>Teacher Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/teacher/create">
+                            <a href="/admin/teacher/create">
                             <i class="bi bi-circle"></i><span>Insert Teacher Data</span>
                             </a>
                         </li>
@@ -175,12 +175,12 @@
                     </a>
                     <ul id="semesters-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/semesters" >
+                            <a href="/admin/semesters" >
                             <i class="bi bi-circle"></i><span>Semesters Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/semesters/create">
+                            <a href="/admin/semesters/create">
                             <i class="bi bi-circle"></i><span>Insert Semesters Data</span>
                             </a>
                         </li>
@@ -194,12 +194,12 @@
                     </a>
                     <ul id="Classrooms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/classrooms" class="active">
+                            <a href="/admin/classrooms" class="active">
                             <i class="bi bi-circle"></i><span>Classrooms Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/classrooms/create">
+                            <a href="/admin/classrooms/create">
                             <i class="bi bi-circle"></i><span>Insert Classroom Data</span>
                             </a>
                         </li>
@@ -213,12 +213,12 @@
                     </a>
                     <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/students">
+                            <a href="/admin/students">
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/students/create">
+                            <a href="/admin/students/create">
                             <i class="bi bi-circle"></i><span>Insert Students Data</span>
                             </a>
                         </li>
@@ -232,12 +232,12 @@
                     </a>
                     <ul id="categoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/categoryCourses" >
+                            <a href="/admin/categoryCourses" >
                             <i class="bi bi-circle"></i><span>Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/categoryCourses/create">
+                            <a href="/admin/categoryCourses/create">
                             <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
                             </a>
                         </li>
@@ -251,12 +251,12 @@
                     </a>
                     <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/courses" >
+                            <a href="/admin/courses" >
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/courses/create">
+                            <a href="/admin/courses/create">
                             <i class="bi bi-circle"></i><span>Insert Course Data</span>
                             </a>
                         </li>
@@ -270,12 +270,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/tasks" >
+                            <a href="/admin/tasks" >
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/tasks/create" >
+                            <a href="/admin/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -330,7 +330,7 @@
                                                 <td>{{ $row->semesters->name }}</td>
                                                 <td class="text-center">
                                                     <form method="POST">
-                                                        <a href="{{ route('classrooms.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
+                                                        <a href="{{ route('admin.classrooms.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
                                                         @csrf
                                                     </form>
                                                 </td>
