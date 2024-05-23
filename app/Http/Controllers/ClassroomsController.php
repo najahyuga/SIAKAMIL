@@ -47,7 +47,7 @@ class ClassroomsController extends Controller
         ]);
 
         //redirect to index
-        return redirect('classrooms')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.classrooms.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -102,7 +102,7 @@ class ClassroomsController extends Controller
         ]);
 
         //redirect to index
-        return redirect('classrooms')->with(['success' => 'Data Berhasil Diubah!']);
+        return redirect()->route('admin.classrooms.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
     /**

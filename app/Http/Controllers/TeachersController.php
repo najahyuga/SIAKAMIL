@@ -78,7 +78,7 @@ class TeachersController extends Controller
         ]);
 
         //redirect to index
-        return redirect('teacher')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.teacher.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -188,7 +188,7 @@ class TeachersController extends Controller
         }
         $user->save();
         // redirect to index
-        return redirect()->route('teacher.index')->with(['success' => 'Data Berhasil Diubah!']);
+        return redirect()->route('admin.teacher.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
     /**

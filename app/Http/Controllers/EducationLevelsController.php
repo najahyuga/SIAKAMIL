@@ -43,7 +43,7 @@ class EducationLevelsController extends Controller
         ]);
 
         // mengembalikan ke halaman index
-        return redirect('educationLevels')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.educationLevels.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**

@@ -74,7 +74,7 @@ class UsersController extends Controller
             ]);
 
             // mengembalikan ke halaman index
-            return redirect('users')->with(['success' => 'Data Berhasil Disimpan!']);
+            return redirect()->route('admin.users.index')->with(['success' => 'Data Berhasil Disimpan!']);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menyimpan data ". $th->getMessage());
             response()->json([
@@ -152,7 +152,7 @@ class UsersController extends Controller
             ]);
 
             // mengembalikan ke halaman index
-            return redirect('users')->with(['success' => 'Data Berhasil Diubah!']);
+            return redirect()->route('admin.users.index')->with(['success' => 'Data Berhasil Diubah!']);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengubah data ". $th->getMessage());
             response()->json([

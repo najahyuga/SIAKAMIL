@@ -61,7 +61,7 @@ class SemestersController extends Controller
         ]);
 
         // redirect to index
-        return redirect('semesters')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('admin.semesters.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
@@ -121,7 +121,7 @@ class SemestersController extends Controller
         ]);
 
         // redirect to index
-        return redirect('semesters')->with(['success' => 'Data Berhasil Diubah!']);
+        return redirect()->route('admin.semesters.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
     /**

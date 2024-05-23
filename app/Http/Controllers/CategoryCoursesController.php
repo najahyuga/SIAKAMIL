@@ -62,7 +62,7 @@ class CategoryCoursesController extends Controller
             ]);
 
             // mengembalikan ke halaman index
-            return redirect('categoryCourses')->with(['success' => 'Data Berhasil Disimpan!']);
+            return redirect()->route('admin.categoryCourses.index')->with(['success' => 'Data Berhasil Disimpan!']);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menyimpan data ". $th->getMessage());
             response()->json([
@@ -132,7 +132,7 @@ class CategoryCoursesController extends Controller
             ]);
 
             // mengembalikan ke halaman index
-            return redirect('categoryCourses')->with(['success' => 'Data Berhasil Diubah!']);
+            return redirect()->route('admin.categoryCourses.index')->with(['success' => 'Data Berhasil Diubah!']);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengubah data ". $th->getMessage());
             response()->json([
