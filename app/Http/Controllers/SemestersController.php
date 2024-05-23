@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Classrooms;
 use App\Models\EducationLevels;
 use App\Models\Semesters;
 use Illuminate\Http\RedirectResponse;
@@ -20,8 +19,7 @@ class SemestersController extends Controller
         try {
             // get data to display on index page
             $semesters = Semesters::with('classrooms')->get();
-            $classrooms = Classrooms::select('name')->get();
-            return view('admin.semesters.index', ['classrooms'=>$classrooms], compact('semesters'));
+            return view('admin.semesters.index', ['semesters' => $semesters]);
         } catch (\Throwable $th) {
             Log::error("Failed Get Data Semesters" . $th->getMessage());
             return response()->json([
