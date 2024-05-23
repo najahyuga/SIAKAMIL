@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryCoursesController;
+use App\Http\Controllers\ClassroomsController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\EducationLevelsController;
+use App\Http\Controllers\SemestersController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\TeachersController;
@@ -18,19 +20,20 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/register',[AuthController::class, 'indexRegister']);
     Route::post('/storeRegister',[AuthController::class, 'storeRegister'])->name('storeRegister');
 });
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin', [AuthController::class, 'indexAdmin'])->middleware('UsersAkses:admin'); // pembatasan hak akses hanya untuk admin
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-
+// Rute untuk admin
+Route::prefix('admin')->name('admin.')->middleware('UsersAkses:admin')->group(function () {
+    Route::get('/', [AuthController::class, 'indexAdmin']);
     Route::resource('/educationLevels', EducationLevelsController::class);
     Route::resource('/teacher', TeachersController::class);
-    Route::resource('/semesters', App\Http\Controllers\SemestersController::class);
-    Route::resource('/classrooms', App\Http\Controllers\ClassroomsController::class);
+    Route::resource('/semesters', SemestersController::class);
+    Route::resource('/classrooms', ClassroomsController::class);
     Route::resource('/students', StudentsController::class);
     Route::resource('/users', UsersController::class);
     Route::resource('/categoryCourses', CategoryCoursesController::class);
     Route::resource('/courses', CoursesController::class);
+    Route::resource('tasks', TasksController::class);
 });
 
 // Rute untuk guru
