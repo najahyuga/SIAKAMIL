@@ -329,6 +329,11 @@
                                         <h6 class="card-title">Kelas</h6>
 
                                         <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Jenjang Pendidikan</div>
+                                            <div class="col-lg-9 col-md-8">{{ $classroom->semesters->education_levels->name }}</div>
+                                        </div>
+
+                                        <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Nama Kelas</div>
                                             <div class="col-lg-9 col-md-8">{{ $classroom->name }}</div>
                                         </div>
@@ -339,27 +344,66 @@
                                         </div>
 
                                         <h6 class="card-title">Details</h6>
-
-                                        <table class="table datatable">
+                                        <table class="table table-striped table-bordered border-primary">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th>Jenjang Pendidikan</th> --}}
+                                                    <th>Kategori Mata Pelajaran</th>
+                                                    <th>Nama Mata Pelajaran</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td>
+                                                    @if($classroom->courses->isNotEmpty())
+                                                        {{ $classroom->courses->first()->category_courses->name }}
+                                                    @else
+                                                        <div class="alert alert-danger">
+                                                            Data Kategori Mata Pelajaran <br> belum Tersedia / Kosong.
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @forelse ($classroom->courses as $item)
+                                                        {{ $loop->iteration }}.
+                                                        {{ $item->name }}<br>
+                                                    @empty
+                                                        <div class="alert alert-danger">
+                                                            Data Mata Pelajaran belum Tersedia.
+                                                        </div>
+                                                    @endforelse
+                                                </td>
+                                            </tbody>
+                                        </table>
+
+                                        <table class="table table-striped table-bordered border-primary">
+                                            <thead>
+                                                <tr>
                                                     <th>List Nama Siswa</th>
                                                     <th>List Nama Guru</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    {{-- <td>{{ $semester->education_levels->name }}</td> --}}
                                                     <td>
-                                                        @forelse ($classroom->semesters->education_levels->students as $student)
-                                                            {{ $loop->iteration }}.
-                                                            {{ $student->name }} <br>
-                                                        @empty
-                                                            <div class="alert alert-danger">
-                                                                Data Siswa belum Tersedia.
-                                                            </div>
-                                                        @endforelse
+                                                        <table class="table table-striped table-bordered border-primary">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No</th>
+                                                                    <th>Nama Siswa</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @forelse ($classroom->semesters->education_levels->students as $student)
+                                                                    <tr>
+                                                                        <td>{{ $loop->iteration }}</td>
+                                                                        <td>{{ $student->name }} <br></td>
+                                                                    </tr>
+                                                                @empty
+                                                                    <div class="alert alert-danger">
+                                                                        Data Siswa belum Tersedia.
+                                                                    </div>
+                                                                @endforelse
+                                                            </tbody>
+                                                        </table>
                                                     </td>
                                                     <td>
                                                         @forelse ($classroom->semesters->education_levels->teachers as $teacher)
