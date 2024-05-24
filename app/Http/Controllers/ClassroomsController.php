@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Classrooms;
+use App\Models\Courses;
 use App\Models\Semesters;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,6 +59,7 @@ class ClassroomsController extends Controller
         // get data based on id and name
         // mendapatkan data berdasarkan id dan name
         $semesters = Semesters::with('education_levels')->get();
+        $courses = Courses::select('id', 'name')->get();
 
         // displays data based on ID
         // menampilkan data berdasarkan id
