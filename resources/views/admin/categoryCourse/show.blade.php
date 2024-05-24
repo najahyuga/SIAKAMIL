@@ -326,11 +326,35 @@
                                 <div class="tab-content pt-2">
                                     {{-- Start List --}}
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
-
                                         <h6 class="card-title">Kategori Mata Pelajaran</h6>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Jenis Kategori Mata Pelajaran</div>
                                             <div class="col-lg-9 col-md-8">{{ $categoryCourse->name }}</div>
+                                        </div>
+
+                                        <h6 class="card-title">Details Mata Pelajaran</h6>
+                                        <div class="row">
+                                            <table class="table table-striped table-bordered border-primary">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama Mata Pelajaran</th>
+                                                    </tr>
+                                                    {{-- <div class="col-lg-3 col-md-4 label"></div> --}}
+                                                </thead>
+                                                <tbody>
+                                                    @forelse ($categoryCourse->courses as $data)
+                                                        <tr>
+                                                            <th>{{ $loop->iteration }}</th>
+                                                            <td>{{ $data->name }} <br></td>
+                                                        </tr>
+                                                    @empty
+                                                        <div class="alert alert-danger">
+                                                            Data Mata Pelajaran belum Tersedia.
+                                                        </div>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>{{-- End List --}}
 

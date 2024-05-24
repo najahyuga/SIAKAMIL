@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CategoryCourses;
+use App\Models\Courses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -80,10 +81,10 @@ class CategoryCoursesController extends Controller
         try {
             // get data based on id
             // menampilkan data berdasarkan ID
-            $categoryCourse = CategoryCourses::findOrfail($id);
+            $categoryCourse = CategoryCourses::with('courses')->findOrfail($id);
 
             // mengembalikan ke halaman show
-            return view('admin.categoryCourse.show', compact('categoryCourse'));
+            return view('admin.categoryCourse.show', ['categoryCourse' => $categoryCourse]);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
             response()->json([
