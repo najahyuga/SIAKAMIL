@@ -23,7 +23,7 @@ Route::middleware(['guest'])->group(function () {
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Rute untuk admin
-Route::prefix('admin')->name('admin.')->middleware('UsersAkses:admin')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->group(function () {
     Route::get('/', [AuthController::class, 'indexAdmin']);
     Route::resource('/educationLevels', EducationLevelsController::class);
     Route::resource('/teacher', TeachersController::class);
@@ -37,7 +37,7 @@ Route::prefix('admin')->name('admin.')->middleware('UsersAkses:admin')->group(fu
 });
 
 // Rute untuk guru
-Route::prefix('guru')->name('guru.')->middleware('UsersAkses:guru')->group(function () {
+Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->group(function () {
     Route::get('/', [AuthController::class, 'indexGuru']);
     Route::resource('tasks', TasksController::class);
     Route::resource('students', StudentsController::class);
