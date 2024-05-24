@@ -419,10 +419,21 @@
                                             <div class="col-lg-6 col-md-8">{{ $student->user->level }}</div>
                                         </div>
 
-                                        <h6 class="card-title">Teaching at the Educational Level</h6>
+                                        <h6 class="card-title">Jenjang Pendidikan Yang Diambil</h6>
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-4 label">Education Level</div>
+                                            <div class="col-lg-6 col-md-4 label">Jenjang Pendidikan</div>
                                             <div class="col-lg-6 col-md-8">{{ $student->education_levels->name }}</div>
+                                        </div>
+
+                                        <h6 class="card-title">Kelas Yang Diambil</h6>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-4 label">Kelas</div>
+                                            <div class="col-lg-6 col-md-8">{{ $student->classrooms->name }}</div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-4 label">Semester</div>
+                                            <div class="col-lg-6 col-md-8">{{ $student->classrooms->semesters->name }}</div>
                                         </div>
                                     </div>
 
@@ -670,9 +681,10 @@
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Pilih Kategori Jenjang Pendidikan</label>
                                                 <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
-                                                    <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->id }}. {{ $student->education_levels->name }}</option>
+                                                    <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
                                                     @foreach ($education_levels_id as $data)
                                                         <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                        {{-- {{ old('education_levels_id', $data->name) }} --}}
                                                     @endforeach
                                                 </select>
                                                 <!-- error message untuk jenis kelamin -->
@@ -686,7 +698,7 @@
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
                                                 <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
-                                                    <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->id }}. {{ $student->classrooms->name }}</option>
+                                                    <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} {{ $student->classrooms->semesters->name }}</option>
                                                     @foreach ($classrooms_id as $data)
                                                         <option value="{{ $data->id }}">{{ $data->name }}</option>
                                                     @endforeach

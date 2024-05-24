@@ -530,7 +530,7 @@
                                             <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Calon Siswa</span>
                                         </label>
                                         <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                            <option value="{{ $student->user->level }}">{{ $student->user->id }}. {{ $student->user->level }}</option>
+                                            <option value="{{ $student->user->level }}">{{ $student->user->level }}</option>
                                             {{-- @foreach ($user as $data)
                                                 <option value="{{ $data->id }}">{{ $data->level }}</option>
                                             @endforeach --}}
@@ -550,9 +550,9 @@
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Pilih Kategori Jenjang Pendidikan</label>
                                         <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
-                                            <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->id }}. {{ $student->education_levels->name }}</option>
+                                            <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
                                             @foreach ($education_levels_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->id }}. {{ $data->name }}</option>
+                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
                                                 {{-- {{ old('education_levels_id', $data->name) }} --}}
                                             @endforeach
                                         </select>
@@ -567,9 +567,9 @@
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
                                         <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
-                                            <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->id }}. {{ $student->classrooms->name }}</option>
+                                            <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} {{ $student->classrooms->semesters->name }}</option>
                                             @foreach ($classrooms_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                <option value="{{ $data->id }}">{{ $data->name }} {{ $data->semesters->name }}</option>
                                             @endforeach
                                         </select>
                                         <!-- error message untuk jenis kelamin -->

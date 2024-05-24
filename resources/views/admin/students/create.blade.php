@@ -570,7 +570,7 @@
                                             <option selected>Pilih Kelas yang Sesuai Data Siswa</option>
                                             <option value="">=================</option>
                                             @foreach ($classrooms_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                <option value="{{ $data->id }}">{{ $data->name }} {{$data->semesters->name}}</option>
                                             @endforeach
                                         </select>
                                         <!-- error message untuk Pilih Kelas yang Sesuai -->
