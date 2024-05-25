@@ -343,28 +343,28 @@
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
                                         <h4 class="card-title">Profile Details</h4>
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->name }}</div>
+                                            <div class="col-lg-4 col-md-4 label ">Full Name</div>
+                                            <div class="col-lg-8 col-md-8">{{ $teacher->name }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label ">Alamat</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->address }}</div>
+                                            <div class="col-lg-4 col-md-4 label ">Alamat</div>
+                                            <div class="col-lg-8 col-md-8">{{ $teacher->address }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Jenis Kelamin</div>
-                                            <div class="col-lg-9 col-md-8">{{ ($teacher->gender) }}</div>
+                                            <div class="col-lg-4 col-md-4 label">Jenis Kelamin</div>
+                                            <div class="col-lg-8 col-md-8">{{ ($teacher->gender) }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Tanggal Lahir</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->dateOfBirth }}</div>
+                                            <div class="col-lg-4 col-md-4 label">Tanggal Lahir</div>
+                                            <div class="col-lg-8 col-md-8">{{ $teacher->dateOfBirth }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Status</div>
-                                            <div class="col-lg-9 col-md-8">
+                                            <div class="col-lg-4 col-md-4 label">Status</div>
+                                            <div class="col-lg-8 col-md-8">
                                                 @if ($teacher->status == 'active')
                                                     <span class="badge rounded-pill bg-success">Active</span>
                                                 @else
@@ -376,24 +376,18 @@
                                         <h6 class="card-title">Akun Profile Details</h6>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Username Akun</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->user->username }}</div>
+                                            <div class="col-lg-4 col-md-4 label">Username Akun</div>
+                                            <div class="col-lg-8 col-md-8">{{ $teacher->user->username }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Email Akun</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->user->email }}</div>
+                                            <div class="col-lg-4 col-md-4 label">Email Akun</div>
+                                            <div class="col-lg-8 col-md-8">{{ $teacher->user->email }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Role Level</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->user->level }}</div>
-                                        </div>
-
-                                        <h6 class="card-title">Teaching at the Educational Level</h6>
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Education Level</div>
-                                            <div class="col-lg-9 col-md-8">{{ $teacher->education_levels->name }}</div>
+                                            <div class="col-lg-4 col-md-4 label">Role Level</div>
+                                            <div class="col-lg-8 col-md-8">{{ $teacher->user->level }}</div>
                                         </div>
                                     </div>
 
