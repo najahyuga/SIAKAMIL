@@ -318,6 +318,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Pelajaran</th>
+                                            <th>Nama Kelas</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -326,6 +327,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration}}</td>
                                                 <td>{{ $row->name }}</td>
+                                                <td>{{ $row->classrooms->name }} / {{ $row->classrooms->semesters->name }}</td>
                                                 <td class="text-center">
                                                     <form method="POST">
                                                         <a href="{{ route('admin.courses.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
