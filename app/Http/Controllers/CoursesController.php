@@ -95,14 +95,14 @@ class CoursesController extends Controller
     public function show(string $id)
     {
         try {
-            // get data based on id and name
-            $teachers_id = Teachers::select('id', 'name')->get();
-            $classrooms_id = Classrooms::select('id', 'name')->get();
-            $category_courses_id = CategoryCourses::select('id', 'name')->get();
-
             // display data based on ID
             // menampilkan data berdasarkan ID
-            $course = Courses::findOrFail($id);
+            $course = Courses::with('teachers', 'classrooms', 'category_courses')->findOrFail($id);
+
+            // get data based on id and name
+            $teachers_id = Teachers::where('id', '!=', $course->teachers_id)->get(['id', 'name']);
+            $classrooms_id = Classrooms::where('id', '!=', $course->classrooms_id)->get();
+            $category_courses_id = CategoryCourses::where('id', '!=', $course->category_courses_id)->get(['id', 'name']);
 
             // mengembalikan ke halaman show
             return view('admin.courses.show', ['teachers_id' => $teachers_id, 'classrooms_id' => $classrooms_id, 'category_courses_id' => $category_courses_id], compact('course'));

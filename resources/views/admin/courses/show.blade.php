@@ -341,7 +341,7 @@
 
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Kelas</div>
-                                            <div class="col-lg-9 col-md-8">{{ $course->classrooms->name }}</div>
+                                            <div class="col-lg-9 col-md-8">{{ $course->classrooms->name }} / {{ $course->classrooms->semesters->name }}</div>
                                         </div>
 
 
@@ -373,7 +373,7 @@
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Pilih Guru untuk Mengajar</label>
                                                 <select class="form-select @error('teachers_id') is-invalid @enderror" name="teachers_id" aria-label="Default select example">
-                                                    <option value="{{ $course->teachers->id }}">{{ $course->teachers->id }}. {{ $course->teachers->name }}</option>
+                                                    <option value="{{ $course->teachers->id }}">{{ $course->teachers->name }}</option>
                                                     @foreach ($teachers_id as $data)
                                                         <option value="{{ $data->id }}">{{ $data->name }}</option>
                                                     @endforeach
@@ -389,9 +389,9 @@
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
                                                 <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Pilih Kelas yang Sesuai">
-                                                    <option value="{{ $course->classrooms->id }}">{{ $course->classrooms->id }}. {{ $course->classrooms->name }}</option>
+                                                    <option value="{{ $course->classrooms->id }}">{{ $course->classrooms->name }} / {{ $course->classrooms->semesters->name }}</option>
                                                     @foreach ($classrooms_id as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                        <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->semesters->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 <!-- error message untuk Pilih Kelas -->
@@ -405,7 +405,7 @@
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Pilih Kategori Pelajaran</label>
                                                 <select class="form-select @error('category_courses_id') is-invalid @enderror" name="category_courses_id" aria-label="Pilih Kategori Pelajaran">
-                                                    <option value="{{ $course->category_courses->id }}">{{ $course->category_courses->id }}. {{ $course->category_courses->name }}</option>
+                                                    <option value="{{ $course->category_courses->id }}">{{ $course->category_courses->name }}</option>
                                                     @foreach ($category_courses_id as $data)
                                                         <option value="{{ $data->id }}">{{ $data->name }}</option>
                                                     @endforeach
