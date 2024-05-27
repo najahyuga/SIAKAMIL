@@ -42,3 +42,9 @@ Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->gro
     Route::resource('tasks', TasksController::class);
     Route::resource('students', StudentsController::class);
 });
+
+// Rute untuk siswa
+Route::prefix('siswa')->name('siswa.')->middleware('auth', 'UsersAkses:siswa')->group(function () {
+    Route::get('/', [AuthController::class, 'indexSiswa']);
+    Route::resource('tasks', TasksController::class);
+});

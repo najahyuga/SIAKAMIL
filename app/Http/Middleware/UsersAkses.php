@@ -24,10 +24,13 @@ class UsersAkses
         if (auth()->user()->level == 'admin') {
             // mengembalikan ke halaman dashboard admin
             return redirect('admin');
-        }elseif (auth()->user()->level == 'guru') {
+        } elseif (auth()->user()->level == 'guru') {
             // mengembalikan ke halaman dashboard guru
             return redirect('guru');
-        }else {
+        } elseif (auth()->user()->level == 'siswa') {
+            // mengembalikan ke halaman dashboard guru
+            return redirect('siswa');
+        } else {
             // mengembalikan ke halaman dashboard utama
             return redirect('/');
         }
