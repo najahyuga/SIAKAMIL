@@ -26,6 +26,11 @@ class AuthController extends Controller
         return view('guru.index');
     }
 
+    // view to page dashboard siswa index
+    public function indexSiswa(){
+        return view('siswa.index');
+    }
+
     // view to page login
     public function indexLogin() {
         return view('login');
@@ -59,7 +64,7 @@ class AuthController extends Controller
                 return redirect('/guru')->with(['success' => 'Login Berhasil! Selamat Datang Guru ' . Auth::user()->username]);
             } elseif (Auth::user()->level == 'siswa') {
                 // mengembalikan ke halaman dashboard siswa
-                return redirect('/siswa')->with(['success' => 'Login Berhasil! Selamat Datang Siswa' . Auth::user()->username]);
+                return redirect('/siswa')->with(['success' => 'Login Berhasil! Selamat Datang Siswa ' . Auth::user()->username]);
             } else {
                 // mengembalikan ke halaman dashboard calonSiswa
                 return redirect('/')->with(['success' => 'Login Berhasil! Selamat Datang Siswa' . Auth::user()->username]);
