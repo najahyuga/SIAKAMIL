@@ -38,7 +38,7 @@ class ClassroomsController extends Controller
         //validate form
         $request->validate([
             'name'          => 'required|min:4',
-            'semesters_id'   => 'required'
+            'semesters_id'   => 'required|exists:semesters,id'
         ]);
 
         //create data classrooms
@@ -56,17 +56,16 @@ class ClassroomsController extends Controller
      */
     public function show(string $id)
     {
-        // get data based on id and name
-        // mendapatkan data berdasarkan id dan name
-        $semesters = Semesters::with('education_levels')->get();
-        $courses = Courses::select('id', 'name')->get();
-
         // displays data based on ID
         // menampilkan data berdasarkan id
-        $classroom = Classrooms::findOrFail($id);
+        $classroom = Classrooms::with('semesters')->findOrFail($id);
+
+        // get data
+        // mendapatkan data
+        $semesters_id = Semesters::where('id', '!=', $classroom->semesters_id)->get();
 
         // mengembalikan ke halaman show
-        return view('admin.classrooms.show', ['semesters' => $semesters], compact('classroom'));
+        return view('admin.classrooms.show', ['semesters_id' => $semesters_id], compact('classroom'));
     }
 
     /**
@@ -74,13 +73,13 @@ class ClassroomsController extends Controller
      */
     public function edit(string $id)
     {
-        // get data based on id and name
-        // mendapatkan data berdasarkan id dan name
-        $semesters = Semesters::select('id', 'name')->get();
-
         // displays data based on ID
         // menampilkan data berdasarkan id
-        $classroom = Classrooms::findOrFail($id);
+        $classroom = Classrooms::with('semesters')->findOrFail($id);
+
+        // get data
+        // mendapatkan data
+        $semesters = Semesters::where('id', '!=', $classroom->semesters)->get();
 
         // mengembalikan ke halaman show
         return view('admin.classrooms.show', ['semesters' => $semesters], compact('classroom'));
@@ -94,7 +93,7 @@ class ClassroomsController extends Controller
         //validate form
         $request->validate([
             'name'          => 'required|min:4',
-            'semesters_id'   => 'required'
+            'semesters_id'   => 'required|exists:semesters,id'
         ]);
 
         //create data classrooms

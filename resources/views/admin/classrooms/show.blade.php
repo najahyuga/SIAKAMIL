@@ -444,7 +444,7 @@
                                                 <label class="font-weight-bold">Pilih Semester</label>
                                                 <select class="form-select @error('semesters_id') is-invalid @enderror" name="semesters_id" aria-label="Default select example">
                                                     <option value="{{ $classroom->semesters->id }}">{{ $classroom->semesters->name }} {{ date('Y', strtotime($classroom->semesters->startDate)) }}/{{ date('Y', strtotime($classroom->semesters->endDate)) }}</option>
-                                                    @foreach ($semesters as $data)
+                                                    @foreach ($semesters_id as $data)
                                                         <option value="{{ $data->id }}">{{ $data->name }} {{ date('Y', strtotime($data->startDate)) }}/{{ date('Y', strtotime($data->endDate)) }}</option>
                                                     @endforeach
                                                 </select>
