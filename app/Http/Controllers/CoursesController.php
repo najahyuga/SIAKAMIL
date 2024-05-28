@@ -81,10 +81,7 @@ class CoursesController extends Controller
             return redirect()->route('admin.courses.index')->with(['success' => 'Data Berhasil Disimpan!']);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menyimpan data ". $th->getMessage());
-            response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat menyimpan data'
-            ], 500);
+            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
         }
 
     }
@@ -172,10 +169,7 @@ class CoursesController extends Controller
             return redirect()->route('admin.courses.index')->with(['success' => 'Data Berhasil Diubah!']);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengubah data ". $th->getMessage());
-            response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat mengubah data'
-            ], 500);
+            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
         }
 
     }
