@@ -147,16 +147,16 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         try {
+            // display data based on ID
+            // menampilkan data berdasarkan ID
+            $student = Students::with(['education_levels', 'classrooms'])->findOrFail($id);
+
             // get data based on id and name
-            $education_levels_id = EducationLevels::select('id', 'name')->get();
-            $classrooms_id = Classrooms::select('id', 'name')->get();
+            $education_levels_id = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
+            $classrooms_id = Classrooms::where('id', '!=', $student->classrooms_id)->get();
 
             // get data based on id and level
             $user = User::select('id', 'level')->get();
-
-            // display data based on ID
-            // menampilkan data berdasarkan ID
-            $student = Students::findOrFail($id);
 
             if (Auth::user()->level == 'admin') {
                 // mengembalikan ke halaman admin students show

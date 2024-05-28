@@ -313,14 +313,36 @@
                     <div class="col-xl-4">
                         <div class="card">
                             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded-circle" style="width: 70%" alt="image">
-                                <h2>{{ $student->name }}</h2>
-                                <div class="social-links mt-2">
-                                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                                </div>
+                                @if ($student->image != '')
+                                    <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded-circle" style="width: 70%" alt="image">
+                                    <h2>{{ $student->name }}</h2>
+                                    <div class="social-links mt-2">
+                                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                    </div>
+                                @else
+                                    @if ($student->gender == 'Laki-Laki')
+                                        <img src="{{asset('imgDefault/man.png')}}" class="rounded-circle" style="width: 70%" alt="image">
+                                        <h2>{{ $student->name }}</h2>
+                                        <div class="social-links mt-2">
+                                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                        </div>
+                                    @elseif (($student->gender == 'Perempuan'))
+                                        <img src="{{asset('imgDefault/muslimah.png')}}" class="rounded-circle" style="width: 70%" alt="image">
+                                        <h2>{{ $student->name }}</h2>
+                                        <div class="social-links mt-2">
+                                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                        </div>
+                                    @endif
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -336,6 +358,10 @@
 
                                     <li class="nav-item">
                                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#detail-mapel">Details</button>
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-2">
@@ -752,6 +778,46 @@
                                         </form><!-- End Profile Edit Form -->
                                     </div><!-- End Profile Edit Form -->
                                 </div><!-- End Bordered Tabs -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="tab-content pt-2">
+                                    <div class="tab-pane fade show active detail-mapel" id="detail-mapel">
+                                        <h6 class="card-title">Details</h6>
+                                        <table class="table table-striped table-bordered border-primary">
+                                            <thead>
+                                                <tr>
+                                                    <th>Kategori Mata Pelajaran</th>
+                                                    <th>Nama Mata Pelajaran</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td>
+                                                    @if($student->classrooms->courses->isNotEmpty())
+                                                        {{ $student->classrooms->courses->first()->category_courses->name }}
+                                                    @else
+                                                        <div class="alert alert-danger">
+                                                            Data Kategori Mata Pelajaran <br> belum Tersedia / Kosong.
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @forelse ($student->classrooms->courses as $item)
+                                                        {{ $loop->iteration }}.
+                                                        {{ $item->name }}<br>
+                                                    @empty
+                                                        <div class="alert alert-danger">
+                                                            Data Mata Pelajaran belum Tersedia.
+                                                        </div>
+                                                    @endforelse
+                                                </td>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
