@@ -88,8 +88,8 @@ class StudentsController extends Controller
                 'address'               => 'required|min:10',
                 'image'                 => 'required|image|mimes:jpeg,jpg,png|max:2048',
                 'status'                => 'required',
-                'education_levels_id'   => 'required',
-                'classrooms_id'         => 'required',
+                'education_levels_id'   => 'required|exists:education_levels,id',
+                'classrooms_id'         => 'required|exists:classrooms,id',
 
                 'username'                  => 'required|min:4',
                 'email'                     => 'required|min:5|email',
@@ -137,6 +137,12 @@ class StudentsController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
+            if ($th instanceof \Illuminate\Validation\ValidationException) {
+                $errors = $th->validator->errors()->all();
+                foreach ($errors as $error) {
+                    Log::error($error);
+                }
+            }
             return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
         }
     }
