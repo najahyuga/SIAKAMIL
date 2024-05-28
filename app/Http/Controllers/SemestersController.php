@@ -49,7 +49,7 @@ class SemestersController extends Controller
             'name'                      => 'required|min:6',
             'startDate'                 => 'required|date',
             'endDate'                   => 'required|date',
-            'education_levels_id'       => 'required'
+            'education_levels_id'       => 'required|exists:education_levels,id'
         ]);
 
         // create data semester
@@ -108,7 +108,7 @@ class SemestersController extends Controller
             'name'                      => 'required|min:6',
             'startDate'                 => 'required|date',
             'endDate'                   => 'required|date',
-            'education_levels_id'       => 'required'
+            'education_levels_id'       => 'required|exists:education_levels,id'
         ]);
 
 
