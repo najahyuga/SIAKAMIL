@@ -7,6 +7,7 @@ use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\EducationLevelsController;
 use App\Http\Controllers\SemestersController;
 use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\StudentsCoursesController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\TeachersController;
 use App\Http\Controllers\UsersController;
@@ -34,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
     Route::resource('/categoryCourses', CategoryCoursesController::class);
     Route::resource('/courses', CoursesController::class);
     Route::resource('tasks', TasksController::class);
+    Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
 });
 
 // Rute untuk guru
