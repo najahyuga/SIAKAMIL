@@ -30,4 +30,11 @@ class Courses extends Model
     {
         return $this->belongsTo(CategoryCourses::class);
     }
+
+    public function students()
+    {
+        return $this->belongsToMany(Students::class, 'students_courses')
+        ->withPivot('result_value', 'status')
+        ->withTimestamps();
+    }
 }

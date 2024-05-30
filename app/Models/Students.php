@@ -40,4 +40,11 @@ class Students extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Courses::class, 'students_courses')
+        ->withPivot('result_value', 'status')
+        ->withTimestamps();
+    }
 }
