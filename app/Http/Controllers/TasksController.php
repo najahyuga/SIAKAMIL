@@ -243,4 +243,38 @@ class TasksController extends Controller
     {
         //
     }
+
+    public function detail(string $id)
+    {
+        try {
+            // get data to display in create page
+            $courses_id = Courses::select('id', 'name')->get();
+
+            // display data based on ID
+            // menampilkan data berdasarkan ID
+            $task = Tasks::with('courses')->findOrFail($id);
+
+            // Redirect based on user level
+            $user = Auth::user();
+
+            if ($user->level == 'admin') {
+                // Redirect to admin tasks show
+                // mengembalikan ke halaman show
+                return view('admin.tasks.detail', ['courses_id' => $courses_id], compact('task'));
+            } elseif ($user->level == 'guru') {
+                // Redirect to guru tasks show
+                // mengembalikan ke halaman show
+                return view('guru.tasks.show', ['courses_id' => $courses_id], compact('task'));
+            } else {
+                // Redirect to a default route if level is not recognized
+                return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengambil data ". $th->getMessage());
+            response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat mengambil data'
+            ], 500);
+        }
+    }
 }

@@ -303,7 +303,8 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="/admin/tasks">Tasks Data</a></li>
-                        <li class="breadcrumb-item active">Show Task Data</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.tasks.show', $task->id) }}">Show Task Data</a></li>
+                        <li class="breadcrumb-item active">Details Task Data</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -313,126 +314,51 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body pt-3">
-                                <!-- Bordered Tabs -->
-                                <ul class="nav nav-tabs nav-tabs-bordered">
-                                    <li class="nav-item">
-                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview Tugas</button>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Tugas</button>
-                                    </li>
-
-                                    <li class="nav-item collapsed">
-                                        <a href="{{ route('admin.tasks.detail', $task->id) }}">
-                                            <button class="nav-link collapsed">Detail Tugas</button>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content pt-2">
+                                <div class="tab-content pt-3">
+                                    <!-- Bordered Tabs -->
+                                    <ul class="nav nav-tabs nav-tabs-bordered">
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.tasks.detail', $task->id) }}">
+                                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Detail Tugas</button>
+                                            </a>
+                                        </li>
+                                    </ul>
                                     {{-- Start List --}}
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                        <h6 class="card-title">Tugas Details</h6>
+                                        <h6 class="card-title">List tugas dari setiap siswa</h6>
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label mb-2">Nama Tugas</div>
-                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->name }}</div>
+                                            <div class="col-lg-3 col-md-4 label mb-2">Kelas</div>
+                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->courses->classrooms->name }}</div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label mb-2">Deskripsi Tugas</div>
-                                            <div class="col-lg-9 col-md-8 mb-2">{!! $task->description !!}</div>
+                                            <div class="col-lg-3 col-md-4 label mb-2">Nama Pelajaran</div>
+                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->courses->name }}</div>
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label mb-2">Deadline Tugas</div>
-                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->deadline }}</div>
-                                        </div>
 
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">File Tugas</div>
-                                            <div class="col-lg-9 col-md-8">
-                                                <iframe src="{{ asset('/storage/file/'.$task->file) }}" width="100%" height="500px"></iframe>
-                                            </div>
-                                        </div>
+                                        <table class="table table-striped table-bordered border-primary">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Siswa</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse ($task->courses->classrooms->semesters->education_levels->students as $student)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $student->name }}</td>
+                                                        <td><a href="{{ route('admin.tasks.detail', $task->id) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
+                                                    </tr>
+                                                @empty
+
+                                                @endforelse
+                                            </tbody>
+                                        </table>
                                     </div>{{-- End List --}}
-
-                                    <!-- Start Profile Edit Form -->
-                                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                        <form action="{{ route('admin.tasks.update', $task->id) }}" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold mb-2">Nama Tugas</label>
-                                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $task->name) }}" placeholder="Masukkan Kategori Mata Pelajaran!">
-
-                                                <!-- error message untuk name -->
-                                                @error('name')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold mb-2">Deskripsi Tugas</label>
-                                                <textarea class="tinymce-editor form-control @error('description') is-invalid @enderror" name="description" placeholder="Masukkan Deskripsi dari Tugas yang Akan Diberikan!">{{ old('name', $task->description) }}</textarea>
-
-                                                <!-- error message untuk name -->
-                                                @error('description')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Batas Waktu Pengumpulan Tugas</label>
-                                                <input type="datetime-local" class="form-control @error('deadline') is-invalid @enderror" name="deadline" value="{{ old('deadline', $task->deadline) }}" placeholder="Masukkan Batas Waktu Pengumpulan Tugas!">
-
-                                                <!-- error message untuk name -->
-                                                @error('deadline')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">File Tugas</label>
-                                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
-
-                                                <!-- error message untuk image -->
-                                                @error('file')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Tugas Dari Pelajaran</label>
-                                                <select class="form-select @error('courses_id') is-invalid @enderror" name="courses_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
-                                                    <option value="{{ $task->courses->id }}">{{ $task->courses->id }}. {{ $task->courses->name }}</option>
-                                                    @foreach ($courses_id as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->id }}. {{ $data->name }}</option>
-                                                        {{-- {{ old('education_levels_id', $data->name) }} --}}
-                                                    @endforeach
-                                                </select>
-                                                <!-- error message untuk jenis kelamin -->
-                                                @error('courses_id')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                            </div>
-                                        </form><!-- End Profile Edit Form -->
-                                    </div><!-- End Profile Edit Form -->
                                 </div>
                                 <!-- End Bordered Tabs -->
                             </div>
