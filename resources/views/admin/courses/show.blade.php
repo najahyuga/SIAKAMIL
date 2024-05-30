@@ -335,21 +335,40 @@
 
                                         <h6 class="card-title">Details</h6>
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Guru</div>
-                                            <div class="col-lg-9 col-md-8">{{ $course->teachers->name }}</div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Kelas</div>
-                                            <div class="col-lg-9 col-md-8">{{ $course->classrooms->name }} / {{ $course->classrooms->semesters->name }}</div>
-                                        </div>
-
-
-                                        <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Kategori Pelajaran</div>
                                             <div class="col-lg-9 col-md-8">{{ $course->category_courses->name }}</div>
                                         </div>
 
+                                        <div class="row mb-1">
+                                            <div class="col-lg-3 col-md-4 label">Guru</div>
+                                            <div class="col-lg-9 col-md-8">{{ $course->teachers->name }}</div>
+                                        </div>
+
+                                        <table class="table table-striped table-bordered border-primary">
+                                            <thead>
+                                                <tr>
+                                                    <td>Kelas</td>
+                                                    <td>Semester</td>
+                                                    <td>Siswa</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ $course->classrooms->name }}</td>
+                                                    <td>{{ $course->classrooms->semesters->name }}</td>
+                                                    <td>
+                                                        @forelse ($course->students as $student)
+                                                            {{ $loop->iteration }}.
+                                                            {{ $student->name }} <br>
+                                                        @empty
+                                                            <div class="alert alert-danger">
+                                                                Tidak Ada Siswa Yang Mengambil Mata Pelajaran.
+                                                            </div>
+                                                        @endforelse
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     {{-- End List --}}
 
