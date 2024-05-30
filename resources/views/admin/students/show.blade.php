@@ -461,6 +461,17 @@
                                             <div class="col-lg-6 col-md-4 label">Semester</div>
                                             <div class="col-lg-6 col-md-8">{{ $student->classrooms->semesters->name }}</div>
                                         </div>
+
+                                        <h6>Mata Pelajaran yang Diambil:</h6>
+                                        <ul>
+                                            @forelse ($student->courses as $mapel)
+                                                <li>{{ $mapel->name }} ({{ $mapel->category_courses->name }})</li>
+                                            @empty
+                                                <div class="alert alert-danger">
+                                                    Tidak Ada Mata Pelajaran yang diambil oleh siswa.
+                                                </div>
+                                            @endforelse
+                                        </ul>
                                     </div>
 
                                     <!-- Start Profile Edit Form -->
@@ -687,7 +698,7 @@
                                                     <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Calon Siswa</span>
                                                 </label>
                                                 <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                                    <option value="{{ $student->user->id }}">{{ $student->user->id }}. {{ $student->user->level }}</option>
+                                                    <option value="{{ $student->user->level }}">{{ $student->user->level }}</option>
                                                     {{-- @foreach ($user as $data)
                                                         <option value="{{ $data->id }}">{{ $data->level }}</option>
                                                     @endforeach --}}
@@ -696,7 +707,7 @@
                                                     <option value="siswa" {{ (old('level')=='siswa') ? 'selected' : '' }}>Siswa</option>
                                                     <option value="calonSiswa" {{ (old('level')=='calonSiswa') ? 'selected' : '' }}>Calon Siswa</option>
                                                 </select>
-                                                <!-- error message untuk Role Level -->
+                                                <!-- error message untuk level -->
                                                 @error('level')
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $message }}
@@ -735,6 +746,25 @@
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Pilih Mata Pelajaran</label>
+                                                @foreach($category_courses_id as $kategori)
+                                                    <h6>{{ $kategori->name }}</h6>
+                                                    @forelse ($kategori->courses as $mapel)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="courses[]" value="{{ $mapel->id }}" id="mp_{{ $mapel->id }}" {{ $student->courses->contains($mapel) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="mp_{{ $mapel->id }}">
+                                                                {{ $mapel->name }}
+                                                            </label>
+                                                        </div>
+                                                    @empty
+                                                        <div class="alert alert-danger">
+                                                            Tidak ada Mata Pelajaran yang diambil oleh siswa.
+                                                        </div>
+                                                    @endforelse
+                                                @endforeach
                                             </div>
 
                                             {{-- <div class="row mb-3">
@@ -791,29 +821,42 @@
                                             <thead>
                                                 <tr>
                                                     <th>Kategori Mata Pelajaran</th>
-                                                    <th>Nama Mata Pelajaran</th>
+                                                    <th>Mata Pelajaran</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <td>
-                                                    @if($student->classrooms->courses->isNotEmpty())
-                                                        {{ $student->classrooms->courses->first()->category_courses->name }}
-                                                    @else
-                                                        <div class="alert alert-danger">
-                                                            Data Kategori Mata Pelajaran <br> belum Tersedia / Kosong.
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @forelse ($student->classrooms->courses as $item)
-                                                        {{ $loop->iteration }}.
-                                                        {{ $item->name }}<br>
+                                                {{--
+                                                    $student->courses : mengembalikan semua data courses yang dimiliki oleh student
+                                                    groupBy('category_courses_id') : mengelompokkan berdasarkan category_courses_id
+                                                --}}
+                                                @forelse($student->courses->groupBy('category_courses_id') as $id => $courses)
+                                                    @php
+                                                        // untuk mencari data CategoryCourses berdasarkan id
+                                                        $CategoryCourses = \App\Models\CategoryCourses::find($id);
+                                                    @endphp
+                                                    <tr>
+                                                        {{-- untuk menampilkan kategori pelajaran --}}
+                                                        <td rowspan="{{ $courses->count() + 1 }}">{{ $CategoryCourses->name }}</td>
+                                                    </tr>
+                                                    @forelse($courses as $mp)
+                                                        {{-- untuk menampilkan mata pelajaran yang sesuai dengan data siswa --}}
+                                                        <tr>
+                                                            <td>{{ $mp->name }}</td>
+                                                        </tr>
                                                     @empty
-                                                        <div class="alert alert-danger">
-                                                            Data Mata Pelajaran belum Tersedia.
-                                                        </div>
                                                     @endforelse
+                                                @empty
+                                                <td colspan="1">
+                                                    <div class="alert alert-danger">
+                                                        Tidak Ada Kategori Mata Pelajaran yang diambil oleh siswa.
+                                                    </div>
                                                 </td>
+                                                <td colspan="1">
+                                                    <div class="alert alert-danger">
+                                                        Tidak Ada Mata Pelajaran yang diambil oleh siswa.
+                                                    </div>
+                                                </td>
+                                                @endforelse
                                             </tbody>
                                         </table>
                                     </div>
