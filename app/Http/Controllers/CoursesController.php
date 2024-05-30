@@ -94,7 +94,7 @@ class CoursesController extends Controller
         try {
             // display data based on ID
             // menampilkan data berdasarkan ID
-            $course = Courses::with('teachers', 'classrooms', 'category_courses')->findOrFail($id);
+            $course = Courses::with('teachers', 'classrooms', 'category_courses', 'students')->findOrFail($id);
 
             // get data based on id and name
             $teachers_id = Teachers::where('id', '!=', $course->teachers_id)->get(['id', 'name']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoryCourses;
 use App\Models\Classrooms;
 use App\Models\EducationLevels;
 use App\Models\Students;
@@ -48,13 +49,13 @@ class StudentsController extends Controller
     {
         try {
             // get data to display create page
-            // $user_id = User::select('id', 'username')->get(); 'user_id' => $user_id,
-            $education_levels_id = EducationLevels::select('id', 'name')->get();
+            $education_levels_id = EducationLevels::all();
             $classrooms_id = Classrooms::with('semesters')->get();
+            $category_courses_id = CategoryCourses::with('courses')->get();
 
             if (Auth::user()->level == 'admin') {
                 // mengembalikan ke halaman create student admin
-                return view('admin.students.create', [ 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id]);
+                return view('admin.students.create', [ 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'category_courses_id' => $category_courses_id]);
             } elseif (Auth::user()->level == 'guru') {
                 // mengembalikan ke halaman create student guru
                 return view('guru.students.create', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id]);
@@ -91,10 +92,12 @@ class StudentsController extends Controller
                 'education_levels_id'   => 'required|exists:education_levels,id',
                 'classrooms_id'         => 'required|exists:classrooms,id',
 
-                'username'                  => 'required|min:4',
-                'email'                     => 'required|min:5|email',
-                'password'                  => 'required|min:6',
-                'level'                     => 'required'
+                'username'              => 'required|min:4',
+                'email'                 => 'required|min:5|email',
+                'password'              => 'required|min:6',
+                'level'                 => 'required',
+
+                'courses'               => 'array|required', // Input mata pelajaran sebagai array
             ]);
 
             //upload image
@@ -118,6 +121,8 @@ class StudentsController extends Controller
                 'education_levels_id'   => $request->education_levels_id,
                 'classrooms_id'         => $request->classrooms_id,
             ]);
+
+            $students->courses()->attach($request->courses);
 
             // create data user
             User::create([
@@ -155,18 +160,19 @@ class StudentsController extends Controller
         try {
             // display data based on ID
             // menampilkan data berdasarkan ID
-            $student = Students::with(['education_levels', 'classrooms'])->findOrFail($id);
+            $student = Students::with(['education_levels', 'classrooms', 'courses.category_courses'])->findOrFail($id);
 
             // get data based on id and name
             $education_levels_id = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
             $classrooms_id = Classrooms::where('id', '!=', $student->classrooms_id)->get();
+            $category_courses_id = CategoryCourses::with('courses')->get();
 
             // get data based on id and level
             $user = User::select('id', 'level')->get();
 
             if (Auth::user()->level == 'admin') {
                 // mengembalikan ke halaman admin students show
-                return view('admin.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student'));
+                return view('admin.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student', 'category_courses_id'));
             } elseif (Auth::user()->level == 'guru') {
                 // mengembalikan ke halaman guru students show
                 return view('guru.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student'));
@@ -193,11 +199,13 @@ class StudentsController extends Controller
             // get data based on id and name
             $education_levels_id = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
             $classrooms_id = Classrooms::where('id', '!=', $student->classrooms_id)->get();
+            $category_courses_id = CategoryCourses::with('courses')->get();
+
             // get data based on id and level
             $user = User::where('id', '!=', $student->user)->get();
             if (Auth::user()->level == 'admin') {
                 // mengembalikan ke halaman admin students edit
-                return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
+                return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student', 'category_courses_id'));
             } elseif (Auth::user()->level == 'guru') {
                 // mengembalikan ke halaman guru students edit
                 return view('guru.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
@@ -237,7 +245,10 @@ class StudentsController extends Controller
                 'username'                  => 'required|min:4',
                 'email'                     => 'required|min:5|email',
                 'password'                  => 'required|min:6',
-                'level'                     => 'required|string'
+                'level'                     => 'required|string',
+
+                'courses'                   => 'nullable|array', // Field mata_pelajaran optional karena bisa tidak dipilih
+                'courses.*'                   => 'exists:courses,id' // Validasi tiap mata pelajaran harus ada di database
             ]);
 
             // get data by id
@@ -287,6 +298,14 @@ class StudentsController extends Controller
                     'classrooms_id'         => $request->classrooms_id
                 ]);
             }
+
+            // Update relasi many-to-many mata pelajaran
+            if ($request->has('courses')) {
+                $student->courses()->sync($request->courses);
+            } else {
+                // Jika tidak ada mata pelajaran yang dipilih, kosongkan relasi
+                $student->courses()->detach();
+    }
 
             // update table user
             $user = User::where('students_id', $student->id)->firstOrFail();
