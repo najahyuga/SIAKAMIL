@@ -17,15 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('level', ['admin', 'guru', 'siswa', 'calonSiswa'])->default('calonSiswa');
             // $table->rememberToken();
-            $table->unsignedBigInteger('teachers_id')->nullable();
-            $table->foreign('teachers_id')
-            ->references('id')->on('teachers')->cascadeOnDelete();
-
-            $table->unsignedBigInteger('students_id')->nullable();
-            $table->foreign('students_id')
-            ->references('id')->on('students')->cascadeOnDelete();
             $table->timestamps();
         });
 

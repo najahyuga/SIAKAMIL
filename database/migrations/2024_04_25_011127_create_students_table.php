@@ -23,16 +23,20 @@ return new class extends Migration
             $table->enum('gender', ['Laki-Laki', 'Perempuan']);
             $table->date('dateOfBirth');
             $table->text('address');
-            $table->string('image');
             $table->enum('status', ['active', 'non-active'])->default('active');
 
             $table->unsignedBigInteger('education_levels_id');
-            $table->foreign('education_levels_id')
-                ->references('id')->on('education_levels')->cascadeOnDelete();
+            $table->foreign('education_levels_id')->references('id')->on('education_levels')->cascadeOnDelete();
 
             $table->unsignedBigInteger('classrooms_id');
-            $table->foreign('classrooms_id')
-                ->references('id')->on('classrooms')->cascadeOnDelete();
+            $table->foreign('classrooms_id')->references('id')->on('classrooms')->cascadeOnDelete();
+
+            $table->unsignedBigInteger('users_id');
+            $table->foreign('users_id')->references('id')->on('users')->cascadeOnDelete();
+
+            $table->unsignedBigInteger('files_id');
+            $table->foreign('files_id')->references('id')->on('files')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

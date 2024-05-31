@@ -18,8 +18,7 @@ return new class extends Migration
             $table->date('startDate');
             $table->date('endDate');
             $table->unsignedBigInteger('education_levels_id');
-            $table->foreign('education_levels_id')
-                ->references('id')->on('education_levels')->cascadeOnDelete();
+            $table->foreign('education_levels_id')->references('id')->on('education_levels')->cascadeOnDelete();
             $table->timestamps();
         });
     }

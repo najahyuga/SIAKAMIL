@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students_courses', function (Blueprint $table) {
+        Schema::create('tasks_details', function (Blueprint $table) {
             $table->id();
-            $table->float('result_value');
-            $table->enum('status', ['A', 'B', 'C', 'D', 'E', 'F']);
+            $table->text('description');
+            $table->string('file');
+            $table->float('result')->nullable();
 
             $table->unsignedBigInteger('students_id');
-            $table->foreign('students_id')->references('id')->on('students');
+            $table->foreign('students_id')->references('id')->on('students')->cascadeOnDelete();
 
-            $table->unsignedBigInteger('courses_id');
-            $table->foreign('courses_id')->references('id')->on('courses');
+            $table->unsignedBigInteger('tas ks_id');
+            $table->foreign('tasks_id')->references('id')->on('tasks')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students_courses');
+        Schema::dropIfExists('grades');
     }
 };
