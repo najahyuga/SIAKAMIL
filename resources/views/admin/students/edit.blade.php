@@ -567,9 +567,9 @@
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
                                         <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
-                                            <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} {{ $student->classrooms->semesters->name }}</option>
+                                            <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} / {{ $student->classrooms->semesters->name }}</option>
                                             @foreach ($classrooms_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }} {{ $data->semesters->name }}</option>
+                                                <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->semesters->name }}</option>
                                             @endforeach
                                         </select>
                                         <!-- error message untuk jenis kelamin -->
