@@ -389,7 +389,7 @@
 
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Nomor HP
-                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal Inputan 15 Angka</span>
+                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimal Inputan 15 Angka</span>
                                         </label>
                                         <input type="number" class="form-control @error('noHP') is-invalid @enderror" name="noHP" value="{{ old('noHP') }}" placeholder="Masukkan Nomor HP Anda!">
 
