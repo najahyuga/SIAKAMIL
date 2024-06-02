@@ -13,10 +13,7 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->enum('level', ['admin', 'guru', 'siswa', 'calonSiswa'])->default('calonSiswa');
-
-            $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->enum('level', ['admin', 'guru', 'siswa', 'calonSiswa'])->default('calonSiswa')->unique();
             $table->timestamps();
         });
     }
