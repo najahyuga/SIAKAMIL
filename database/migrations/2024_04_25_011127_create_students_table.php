@@ -34,8 +34,8 @@ return new class extends Migration
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users')->cascadeOnDelete();
 
-            $table->unsignedBigInteger('files_id');
-            $table->foreign('files_id')->references('id')->on('files')->cascadeOnDelete();
+            $table->unsignedBigInteger('files_uploads_id');
+            $table->foreign('files_uploads_id')->references('id')->on('files_uploads')->cascadeOnDelete();
 
             $table->timestamps();
         });

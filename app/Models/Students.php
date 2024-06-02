@@ -20,10 +20,11 @@ class Students extends Model
         'gender',
         'dateOfBirth',
         'address',
-        'image',
         'status',
         'education_levels_id',
-        'classrooms_id'
+        'classrooms_id',
+        'users_id',
+        'files_uploads_id'
     ];
 
     public function education_levels()
@@ -38,7 +39,12 @@ class Students extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function fileUpload()
+    {
+        return $this->belongsTo(FilesUploads::class);
     }
 
     public function courses()
