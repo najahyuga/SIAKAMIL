@@ -18,9 +18,8 @@ class MasterCategoryCoursesFactory extends Factory
      */
     public function definition(): array
     {
-        $names = ['muatan wajib', 'muatan pemberdayaan dan keterampilan'];
         return [
-            'name' => $this->faker->randomElement($names),
+            'name' => $this->faker->randomElement(['Muatan Wajib', 'Muatan Pemberdayaan dan Keterampilan']),
         ];
     }
 }

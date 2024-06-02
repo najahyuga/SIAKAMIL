@@ -12,6 +12,15 @@ class MasterCategoryCoursesSeeder extends Seeder
      */
     public function run(): void
     {
-        MasterCategoryCourses::factory()->count(2)->create();
+        $categories = [
+            'Muatan Wajib',
+            'Muatan Pemberdayaan dan Keterampilan',
+        ];
+
+        foreach ($categories as $category) {
+            MasterCategoryCourses::create([
+                'name' => $category,
+            ]);
+        }
     }
 }
