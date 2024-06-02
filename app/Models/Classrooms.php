@@ -19,6 +19,11 @@ class Classrooms extends Model
         return $this->belongsTo(Semesters::class);
     }
 
+    public function students()
+    {
+        return $this->hasMany(Students::class);
+    }
+
     public function courses()
     {
         return $this->hasMany(Courses::class);
