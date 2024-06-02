@@ -14,19 +14,26 @@ class Teachers extends Model
         'address',
         'gender',
         'dateOfBirth',
-        'image',
         'status',
-        'education_levels_id'
+        'experience',
+        'education_levels_id',
+        'users_id',
+        'files_uploads_id'
     ];
-
-    public function user()
-    {
-        return $this->hasOne(User::class);
-    }
 
     public function education_levels()
     {
         return $this->belongsTo(EducationLevels::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function files_uploads()
+    {
+        return $this->belongsTo(FilesUploads::class);
     }
 
     public function courses()
