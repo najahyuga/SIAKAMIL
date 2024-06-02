@@ -21,4 +21,9 @@ class EducationLevels extends Model
         return $this->hasMany(Students::class);
     }
 
+    public function semesters()
+    {
+        return $this->hasMany(Semesters::class);
+    }
+
 }
