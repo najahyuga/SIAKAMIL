@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EducationLevels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EducationLevelsController extends Controller
 {
@@ -14,10 +15,18 @@ class EducationLevelsController extends Controller
      */
     public function index()
     {
-        // retrieve data and display on the index page
-        // mengambil data dan menampilkan data pada halaman index
-        $educationLevels = EducationLevels::all();
-        return view('admin.educationLevels.index', compact('educationLevels'));
+        try {
+            // retrieve data and display on the index page
+            // mengambil data dan menampilkan data pada halaman index
+            $educationLevels = EducationLevels::all();
+            return view('admin.educationLevels.index', compact('educationLevels'));
+        } catch (\Throwable $th) {
+            Log::error("Failed Get Data EducationLevels" . $th->getMessage());
+            return response()->json([
+                'status'    => false,
+                'message'   => 'failed'
+            ], 500);
+        }
     }
 
     /**
@@ -25,7 +34,15 @@ class EducationLevelsController extends Controller
      */
     public function create()
     {
-        return view('admin.educationLevels.create');
+        try {
+            return view('admin.educationLevels.create');
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
+            response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat menampilkan halaman'
+            ], 500);
+        }
     }
 
     /**
@@ -33,17 +50,22 @@ class EducationLevelsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //validate form
-        $request->validate([
-            'name' => 'required'
-        ]);
+        try {
+            //validate form
+            $request->validate([
+                'name' => 'required'
+            ]);
 
-        EducationLevels::create([
-            'name' => $request->name
-        ]);
+            EducationLevels::create([
+                'name' => $request->name
+            ]);
 
-        // mengembalikan ke halaman index
-        return redirect()->route('admin.educationLevels.index')->with(['success' => 'Data Berhasil Disimpan!']);
+            // mengembalikan ke halaman index
+            return redirect()->route('admin.educationLevels.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menyimpan data ". $th->getMessage());
+            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
+        }
     }
 
     /**
@@ -51,12 +73,20 @@ class EducationLevelsController extends Controller
      */
     public function show(string $id)
     {
-        // displays data based on ID
-        // menampilkan data berdasarkan id
-        $educationLevel = EducationLevels::findOrFail($id);
+        try {
+            // displays data based on ID
+            // menampilkan data berdasarkan id
+            $educationLevel = EducationLevels::findOrFail($id);
 
-        // mengembalikan ke halaman show
-        return view('admin.educationLevels.show', compact('educationLevel'));
+            // mengembalikan ke halaman show
+            return view('admin.educationLevels.show', compact('educationLevel'));
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengambil data ". $th->getMessage());
+            response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat mengambil data'
+            ], 500);
+        }
     }
 
     /**
