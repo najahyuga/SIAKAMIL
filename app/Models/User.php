@@ -59,4 +59,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Roles::class, 'users_roles');
     }
+
+    // Cek jik users memiliki peran tertentu
+    public function hasRole($level)
+    {
+        return $this->roles()->where('level', $level)->exists();
+    }
 }
