@@ -54,24 +54,56 @@ class AuthController extends Controller
             'password'      => $request->password
         ];
 
-        // cek multiple level
         if (Auth::attempt($login)) {
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman dashboard admin
-                return redirect('/admin')->with(['success' => 'Login Berhasil! Selamat Datang Admin ' . Auth::user()->username]);
-            } elseif (Auth::user()->level == 'guru') {
-                // mengembalikan ke halaman dashboard guru
-                return redirect('/guru')->with(['success' => 'Login Berhasil! Selamat Datang Guru ' . Auth::user()->username]);
-            } elseif (Auth::user()->level == 'siswa') {
-                // mengembalikan ke halaman dashboard siswa
-                return redirect('/siswa')->with(['success' => 'Login Berhasil! Selamat Datang Siswa ' . Auth::user()->username]);
-            } else {
-                // mengembalikan ke halaman dashboard calonSiswa
-                return redirect('/')->with(['success' => 'Login Berhasil! Selamat Datang Siswa' . Auth::user()->username]);
-            }
+            $user = Auth::user();
+            // Asumsi apabila users setidaknya memiliki satu role
+            $primaryRole = $user->roles->first()->level;
+
+            // Simpan peran utama dalam sesi
+            session(['current_role' => $primaryRole]);
+
+            return $this->redirectToRoleDashboard($primaryRole);
         } else {
-            // mengembalikan ke halaman login
-            return redirect('login')->with(['error' => 'Username dan Password Tidak Sesuai!']);
+            return redirect('login')->with('error', 'Username dan Password Tidak Sesuai!');
+        }
+    }
+
+    private function redirectToRoleDashboard($role) {
+        switch ($role) {
+            case 'admin':
+                return redirect('/admin')->with('success', 'Login Berhasil! Selamat Datang Admin ' . Auth::user()->username);
+            case 'guru':
+                return redirect('/guru')->with('success', 'Login Berhasil! Selamat Datang Guru ' . Auth::user()->username);
+            case 'siswa':
+                return redirect('/siswa')->with('success', 'Login Berhasil! Selamat Datang Siswa ' . Auth::user()->username);
+            case 'calonSiswa':
+                return redirect('/')->with('success', 'Login Berhasil! Selamat Datang Calon Siswa ' . Auth::user()->username);
+            default:
+                return redirect('login')->with('success', 'Login Berhasil, Anda Tidak Memiliki Akses Pengguna! Selamat Datang ' . Auth::user()->username);
+        }
+    }
+
+    public function switchRole(Request $request)
+    {
+        $role = $request->role;
+
+        // Cari users berdasarkan ID atau apapun yang sesuai
+        $user = Auth::user();
+
+        // Pastikan users ditemukan
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+
+        // Periksa apakah users memiliki peran yang diminta
+        if ($user->roles->where('level', $role)->isNotEmpty()) {
+            // Update peran dalam sesi
+            session(['current_role' => $role]);
+
+            // Arahkan users ke dashboard yang sesuai dengan peran yang dipilih
+            return $this->redirectToRoleDashboard($role);
+        } else {
+            return redirect()->back()->with('error', 'User does not have the requested role.');
         }
     }
 
