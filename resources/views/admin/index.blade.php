@@ -15,7 +15,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Selamat Datang {{ Auth::user()->username }}, Anda login Sebagai {{ Auth::user()->level }}</h5>
+                        <h5 class="card-title">Selamat Datang {{ Auth::user()->username }}, Anda login Sebagai {{ session('current_role') }}</h5>
                     </div>
                 </div>
             </div>

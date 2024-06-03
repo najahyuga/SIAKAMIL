@@ -284,6 +284,17 @@
         //     setTimeout(getSelamat, 1000);
         // }
 
+        // Message with SweetAlert if user tries to access unauthorized route
+        @if(session('unauthorized'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Akses Ditolak!',
+                text: '{{ session('unauthorized') }}',
+                showConfirmButton: true,
+                confirmButtonText: 'OK'
+            });
+        @endif
+
         //message with sweetalert
         @if(session('success'))
             Swal.fire({
