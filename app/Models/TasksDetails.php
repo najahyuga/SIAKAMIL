@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Grades extends Model
+class TasksDetails extends Model
 {
     use HasFactory;
 
@@ -17,5 +17,10 @@ class Grades extends Model
     public function tasks()
     {
         return $this->belongsTo(Tasks::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Students::class);
     }
 }
