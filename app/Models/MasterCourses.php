@@ -18,4 +18,9 @@ class MasterCourses extends Model
     {
         return $this->belongsTo(MasterCategoryCourses::class);
     }
+
+    public function courses()
+    {
+        return $this->hasMany(Courses::class);
+    }
 }

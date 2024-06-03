@@ -44,7 +44,7 @@ class Students extends Model
 
     public function fileUpload()
     {
-        return $this->belongsTo(FilesUploads::class);
+        return $this->hasOne(FilesUploads::class);
     }
 
     public function courses()
@@ -52,5 +52,10 @@ class Students extends Model
         return $this->belongsToMany(Courses::class, 'students_courses')
         ->withPivot('result_value', 'status')
         ->withTimestamps();
+    }
+
+    public function tasksDetails()
+    {
+        return $this->hasMany(TasksDetails::class);
     }
 }

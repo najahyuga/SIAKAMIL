@@ -22,8 +22,8 @@ class Tasks extends Model
         return $this->belongsTo(Courses::class);
     }
 
-    public function grades()
+    public function tasksDetails()
     {
-        return $this->hasMany(Grades::class);
+        return $this->hasMany(TasksDetails::class);
     }
 }

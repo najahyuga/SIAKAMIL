@@ -14,8 +14,8 @@ class Presences extends Model
         'courses_id'
     ];
 
-    public function courses()
+    public function presenceDetails()
     {
-        return $this->belongsTo(Courses::class);
+        return $this->hasMany(PresenceDetails::class);
     }
 }

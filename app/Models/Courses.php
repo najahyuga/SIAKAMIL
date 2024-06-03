@@ -26,9 +26,9 @@ class Courses extends Model
         return $this->belongsTo(Classrooms::class);
     }
 
-    public function category_courses()
+    public function masterCourse()
     {
-        return $this->belongsTo(CategoryCourses::class);
+        return $this->belongsTo(MasterCourses::class);
     }
 
     public function students()
@@ -36,5 +36,10 @@ class Courses extends Model
         return $this->belongsToMany(Students::class, 'students_courses')
         ->withPivot('result_value', 'status')
         ->withTimestamps();
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Tasks::class);
     }
 }
