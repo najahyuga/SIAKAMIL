@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('students_courses', function (Blueprint $table) {
             $table->id();
-            $table->float('result_value');
-            $table->enum('status', ['A', 'B', 'C', 'D', 'E', 'F']);
+            $table->float('result_value')->nullable();
+            $table->enum('status', ['A', 'B', 'C', 'D', 'E', 'F'])->nullable();
 
             $table->unsignedBigInteger('students_id');
             $table->foreign('students_id')->references('id')->on('students');
