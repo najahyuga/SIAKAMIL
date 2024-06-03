@@ -69,60 +69,60 @@
                     </li>
 
                     <li class="nav-item dropdown pe-3">
-                        <a
-                            class="nav-link nav-profile d-flex align-items-center pe-0"
-                            href="#"
-                            data-bs-toggle="dropdown"
-                        >
-                            <img
-                                src="{{asset('backend/assets/img/profile-img.jpg')}}"
-                                alt="Profile"
-                                class="rounded-circle"
-                            />
-                            <span class="d-none d-md-block dropdown-toggle ps-2">
-                                {{ Auth::user()->username}}
-                            </span>
-                        </a><!-- End Profile Iamge Icon -->
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="{{ asset('backend/assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle" />
+                            <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->username }}</span>
+                        </a><!-- End Profile Image Icon -->
 
-                        <ul
-                            class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-                        >
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6>{{ Auth::user()->username}}</h6>
-                                <span>{{ Auth::user()->level}}</span>
+                                <h6>{{ Auth::user()->username }}</h6>
+                                <span>{{ session('current_role') }}</span>
                             </li>
+                            <li><hr class="dropdown-divider" /></li>
+
+                            <li class="dropdown-header">
+                                <h6>Pindah Akun</h6>
+                            </li>
+                            @foreach (Auth::user()->roles as $role)
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href=""
+                                        onclick="event.preventDefault(); document.getElementById('switch-role-{{ $role->level }}').submit();">
+                                        <i class="bi bi-people"></i>
+                                        <span>{{ ucfirst($role->level) }}</span>
+                                        @if($role->level == 'siswa')
+                                            <span class="badge bg-primary rounded-pill ms-auto">{{ ucfirst($role->level) }}</span>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill ms-auto">{{ ucfirst($role->level) }}</span>
+                                        @endif
+                                    </a>
+                                    <form id="switch-role-{{ $role->level }}" action="{{ route('switch-role') }}" method="POST" style="display: none;">
+                                        @csrf
+                                        <input type="hidden" name="role" value="{{ $role->level }}">
+                                    </form>
+                                </li>
+                            @endforeach
+
                             <li>
-                                <hr class="dropdown-divider" />
+                                <hr class="dropdown-divider"/>
                             </li>
 
                             <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-
-                            <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="users-profile.html"
-                                >
+                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                                     <i class="bi bi-gear"></i>
                                     <span>Account Settings</span>
                                 </a>
                             </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
+
+                            <li><hr class="dropdown-divider" /></li>
 
                             <li>
-                                <a
-                                    class="dropdown-item d-flex align-items-center"
-                                    href="{{ route('logout') }}"
-                                >
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span>Sign Out</span>
                                 </a>
                             </li>
-                        </ul>
-                        <!-- End Profile Dropdown Items -->
+                        </ul><!-- End Profile Dropdown Items -->
                     </li>
                     <!-- End Profile Nav -->
                 </ul>
@@ -190,7 +190,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Selamat Datang {{ Auth::user()->username}}, Anda login Sebagai {{ Auth::user()->level }}</h5>
+                                <h5 class="card-title">Selamat Datang {{ Auth::user()->username}}, Anda login Sebagai {{ session('current_role') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -275,6 +275,17 @@
             //     }
             //     setTimeout(getSelamat, 1000);
             // }
+
+        // Message with SweetAlert if user tries to access unauthorized route
+        @if(session('unauthorized'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Akses Ditolak!',
+                text: '{{ session('unauthorized') }}',
+                showConfirmButton: true,
+                confirmButtonText: 'OK'
+            });
+        @endif
 
             //message with sweetalert
             @if(session('success'))
