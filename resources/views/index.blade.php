@@ -73,8 +73,11 @@
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
 
-            {{-- <a class="btn-getstarted" href="/admin">Get To ADMIN</a> --}}
-            <a class="btn-getstarted" href="/login">LOGIN</a>
+            @if(Auth::check())
+                <a class="btn-getstarted" href="{{ route('logout') }}">LOGOUT</a>
+            @else
+                <a class="btn-getstarted" href="{{ route('login') }}">LOGIN</a>
+            @endif
         </div>
     </header>
 
