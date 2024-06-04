@@ -33,7 +33,7 @@ class Teachers extends Model
 
     public function files_uploads()
     {
-        return $this->hasOne(FilesUploads::class);
+        return $this->belongsTo(FilesUploads::class, 'files_uploads_id');
     }
 
     public function courses()
