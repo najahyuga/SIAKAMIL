@@ -47,12 +47,12 @@ class User extends Authenticatable
 
     public function teacher()
     {
-        return $this->hasOne(Teachers::class);
+        return $this->hasOne(Teachers::class, 'users_id');
     }
 
     public function student()
     {
-        return $this->hasOne(Students::class);
+        return $this->hasOne(Students::class, 'users_id');
     }
 
     public function roles()
