@@ -348,23 +348,19 @@
                                                 <td>{{ $loop->iteration}}</td>
                                                 <td>{{ $row->username }}</td>
                                                 <td>
-                                                    @if ($row->level == 'admin')
-                                                        <div class="card-body">
-                                                            <span class="badge rounded-pill bg-success">Admin</span>
-                                                        </div>
-                                                    @elseif ($row->level == 'guru')
-                                                        <div class="card-body">
-                                                            <span class="badge rounded-pill bg-primary">Guru</span>
-                                                        </div>
-                                                    @elseif ($row->level == 'siswa')
-                                                        <div class="card-body">
-                                                            <span class="badge rounded-pill bg-info">Siswa</span>
-                                                        </div>
-                                                    @elseif ($row->level == 'calonSiswa')
-                                                        <div class="card-body">
-                                                            <span class="badge rounded-pill bg-secondary">Calon Siswa</span>
-                                                        </div>
-                                                    @endif
+                                                    <div class="card-body">
+                                                        @foreach ($row->roles as $role)
+                                                            @if ($role->level == 'admin')
+                                                                <span class="badge rounded-pill bg-success">Admin</span>
+                                                            @elseif ($role->level == 'guru')
+                                                                <span class="badge rounded-pill bg-primary">Guru</span>
+                                                            @elseif ($role->level == 'siswa')
+                                                                <span class="badge rounded-pill bg-info">Siswa</span>
+                                                            @elseif ($role->level == 'calonSiswa')
+                                                                <span class="badge rounded-pill bg-secondary">Calon Siswa</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                 </td>
                                                 <td class="text-center">
                                                     <form method="POST">

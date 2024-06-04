@@ -360,18 +360,32 @@
 
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Level</div>
-                                            <div class="col-lg-9 col-md-8">{{ $user->level }}</div>
+                                            <div class="col-lg-9 col-md-8">
+                                                @foreach ($user->roles as $role)
+                                                    @if ($role->level == 'admin')
+                                                        <span class="badge rounded-pill bg-success">Admin</span>
+                                                    @elseif ($role->level == 'guru')
+                                                        <span class="badge rounded-pill bg-primary">Guru</span>
+                                                    @elseif ($role->level == 'siswa')
+                                                        <span class="badge rounded-pill bg-info">Siswa</span>
+                                                    @elseif ($role->level == 'calonSiswa')
+                                                        <span class="badge rounded-pill bg-secondary">Calon Siswa</span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         </div>
 
-                                        <div class="row">
-                                            @if ( $user->teachers_id != null )
-                                                <div class="col-lg-3 col-md-4 label">Teacher ID</div>
-                                                <div class="col-lg-9 col-md-8">{{ $user->teachers_id }}</div>
-                                            @else
-                                                <div class="col-lg-3 col-md-4 label">Students ID</div>
-                                                <div class="col-lg-9 col-md-8">{{ $user->students_id }}</div>
-                                            @endif
-                                        </div>
+                                        @if ($user->teacher)
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Teacher</div>
+                                                <div class="col-lg-9 col-md-8">{{ $user->teacher->name }}</div>
+                                            </div>
+                                        @elseif ($user->student)
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Student</div>
+                                                <div class="col-lg-9 col-md-8">{{ $user->student->name }}</div>
+                                            </div>
+                                        @endif
                                     </div>{{-- End List --}}
 
                                     <!-- Start Profile Edit Form -->
@@ -418,23 +432,17 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Role Levels
-                                                </label>
-                                                <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                                    <option value="{{ $user->id }}">{{ $user->id }}. {{ $user->level }}</option>
-                                                    {{-- @foreach ($user as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->level }}</option>
-                                                    @endforeach --}}
-                                                    <option value="admin" {{ (old('level')=='admin') ? 'selected' : '' }}>Admin</option>
-                                                    <option value="guru" {{ (old('level')=='guru') ? 'selected' : '' }}>Guru</option>
-                                                    <option value="siswa" {{ (old('level')=='siswa') ? 'selected' : '' }}>Siswa</option>
-                                                    <option value="calonSiswa" {{ (old('level')=='calonSiswa') ? 'selected' : '' }}>Calon Siswa</option>
-                                                </select>
-                                                <!-- error message untuk Role Level -->
-                                                @error('level')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
+                                                <label class="font-weight-bold">Role Levels</label>
+                                                @foreach ($roles as $role)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                                        @if($user->roles->contains($role->id)) checked @endif>
+                                                        <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
                                                     </div>
+                                                @endforeach
+                                                <!-- error message untuk roles -->
+                                                @error('roles')
+                                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                                 @enderror
                                             </div>
 
