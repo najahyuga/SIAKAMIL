@@ -103,25 +103,26 @@ class SemestersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // validate form
-        $request->validate([
-            'name'                      => 'required|min:6',
-            'startDate'                 => 'required|date',
-            'endDate'                   => 'required|date',
-            'education_levels_id'       => 'required|exists:education_levels,id'
-        ]);
+        try {
+            // validate form
+            $validatedData = $request->validate([
+                'name'                      => 'required|min:6',
+                'startDate'                 => 'required|date',
+                'endDate'                   => 'required|date',
+                'education_levels_id'       => 'required|exists:education_levels,id'
+            ]);
 
+            $semester = Semesters::findOrfail($id);
 
-        // create data semester
-        Semesters::findOrfail($id)->update([
-            'name'                      => $request->name,
-            'startDate'                 => $request->startDate,
-            'endDate'                   => $request->endDate,
-            'education_levels_id'       => $request->education_levels_id
-        ]);
+            // Update the semester data
+            $semester->update($validatedData);
 
-        // redirect to index
-        return redirect()->route('admin.semesters.index')->with(['success' => 'Data Berhasil Diubah!']);
+            // redirect to index
+            return redirect()->route('admin.semesters.index')->with(['success' => 'Data Berhasil Diubah!']);
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengubah data semester dengan id : {$id}: " . $th->getMessage());
+            return redirect()->back()->with(['error' => 'Terjadi kesalahan saat mengubah data'])->withInput();
+        }
     }
 
     /**
