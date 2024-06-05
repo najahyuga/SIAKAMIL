@@ -333,7 +333,7 @@
                     <div class="col-xl-4">
                         <div class="card">
                             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                <img src="{{ asset('/storage/images/'.$teacher->image) }}" class="rounded-circle" style="width: 70%" alt="image">
+                                <img src="{{ asset('/storage/images/' . $teacher->files_uploads->path) }}" class="rounded-circle" style="width: 70%" alt="image">
                                 <h2>{{ $teacher->name }}</h2>
                                 <h3>{{ $teacher->Expertise }}</h3>
                                 <div class="social-links mt-2">
@@ -406,8 +406,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-4 col-md-4 label">Role Level</div>
-                                            <div class="col-lg-8 col-md-8">{{ $teacher->user->level }}</div>
+                                            <div class="col-lg-4 col-md-4 label">Level</div>
+                                            <div class="col-lg-8 col-md-8">
+                                                @foreach ($teacher->user->roles as $role)
+                                                    @if ($role->level == 'admin')
+                                                        <span class="badge rounded-pill bg-success">Admin</span>
+                                                    @elseif ($role->level == 'guru')
+                                                        <span class="badge rounded-pill bg-primary">Guru</span>
+                                                    @elseif ($role->level == 'siswa')
+                                                        <span class="badge rounded-pill bg-info">Siswa</span>
+                                                    @elseif ($role->level == 'calonSiswa')
+                                                        <span class="badge rounded-pill bg-secondary">Calon Siswa</span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
 
@@ -419,20 +431,24 @@
                                             <div class="row mb-3">
                                                 <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                                 <div class="col-md-8 col-lg-9">
-                                                    <img src="{{ asset('/storage/images/'.$teacher->image) }}" class="rounded" style="width: 30%" alt="image"><br>
-                                                    <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span>
+                                                    @if ($teacher->files_uploads_id)
+                                                        <img src="{{ asset('/storage/images/' . $teacher->files_uploads->path) }}" class="rounded" style="width: 30%" alt="Profile Image"><br>
+                                                    @else
+                                                        <p>No profile image available</p>
+                                                    @endif
+                                                    <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maximum Size 2 MB</span>
                                                     <div class="pt-1">
-                                                        <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image">
-                                                            <input type="file" id="file_upload_id" style="display:none">
-                                                            <i class="bi bi-upload" onclick="_upload()"></i>
-                                                        </a>
+                                                        <label for="file_upload_id" class="btn btn-primary btn-sm" title="Upload new profile image">
+                                                            <input type="file" id="file_upload_id" style="display:none" name='path'>
+                                                            <i class="bi bi-upload" onclick="_upload()"></i> Upload
+                                                        </label>
                                                         {{-- <a href="" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a> --}}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Name</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $teacher->name) }}" placeholder="Masukkan Nama Anda!">
                                                 </div>
@@ -461,7 +477,6 @@
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Jenis Kelamin</label>
                                                 <select class="form-select @error('gender') is-invalid @enderror" name="gender" aria-label="Default select example">
-                                                    <option selected>Pilih Jenis kelamin</option>
                                                     <option value="Laki-Laki" {{ ($teacher->gender=='Laki-Laki') ? 'selected' : '' }}>Laki-Laki</option>
                                                     <option value="Perempuan" {{ ($teacher->gender=='Perempuan') ? 'selected' : '' }}>Perempuan</option>
                                                 </select>
@@ -505,7 +520,7 @@
 
                                             {{-- form input to users tabel --}}
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Nama</label>
+                                                <label class="font-weight-bold">Username</label>
                                                 <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $teacher->user->username) }}" placeholder="Masukkan Username Anda!">
 
                                                 <!-- error message untuk name -->
@@ -543,30 +558,24 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Role Levels
-                                                </label>
-                                                <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                                    <option value="{{ $teacher->user->id }}">{{ $teacher->user->id }}. {{ $teacher->user->level }}</option>
-                                                    {{-- @foreach ($user as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->level }}</option>
-                                                    @endforeach --}}
-                                                    <option value="admin" {{ (old('level')=='admin') ? 'selected' : '' }}>Admin</option>
-                                                    <option value="guru" {{ (old('level')=='guru') ? 'selected' : '' }}>Guru</option>
-                                                    <option value="siswa" {{ (old('level')=='siswa') ? 'selected' : '' }}>Siswa</option>
-                                                    <option value="calonSiswa" {{ (old('level')=='calonSiswa') ? 'selected' : '' }}>Calon Siswa</option>
-                                                </select>
-                                                <!-- error message untuk Role Level -->
-                                                @error('level')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
+                                                <label class="font-weight-bold">Role Levels</label>
+                                                @foreach ($roles as $role)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="level[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                                        @if($teacher->user->roles->contains($role->id)) checked @endif>
+                                                        <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
                                                     </div>
+                                                @endforeach
+                                                <!-- error message untuk roles -->
+                                                @error('roles')
+                                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                                 @enderror
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Jenjang Pendidikan</label>
+                                                <label class="font-weight-bold">Mengajar di Jenjang Pendidikan</label>
                                                 <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
-                                                    <option value="{{ $teacher->education_levels->id }}">{{ $teacher->education_levels->id }}. {{ $teacher->education_levels->name }}</option>
+                                                    <option value="{{ $teacher->education_levels->id }}">{{ $teacher->education_levels->name }}</option>
                                                     @foreach ($education_levels_id as $data)
                                                         <option value="{{ $data->id }}">{{ $data->name }}</option>
                                                     @endforeach

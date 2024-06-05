@@ -394,10 +394,12 @@
                                     <label class="font-weight-bold">Foto
                                         <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span><br>
                                     </label>
-                                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                                    <!-- Tampilkan gambar pratinjau -->
+                                    <div id="imagePreview" class="mt-0 mb-1"></div>
+                                    <input type="file" class="form-control @error('path') is-invalid @enderror" name="path" onchange="previewImage(this)">
 
                                     <!-- error message untuk image -->
-                                    @error('image')
+                                    @error('path')
                                         <div class="alert alert-danger mt-2">
                                             {{ $message }}
                                         </div>
@@ -461,16 +463,14 @@
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label class="font-weight-bold">Role Level
-                                        <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Calon Siswa</span><br>
-                                    </label>
-                                    <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                        <option >Pilih Role Level</option>
-                                        <option value="admin" {{ (old('level')=='admin') ? 'selected' : '' }}>Admin</option>
-                                        <option value="guru" {{ (old('level')=='guru') ? 'selected' : '' }}>Guru</option>
-                                        <option value="siswa" {{ (old('level')=='siswa') ? 'selected' : '' }}>Siswa</option>
-                                        <option selected value="calonSiswa" {{ (old('level')=='calonSiswa') ? 'selected' : '' }}>Calon Siswa</option>
-                                    </select>
+                                    <label class="font-weight-bold">Role Level</label>
+                                    @foreach ($roles as $role)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="level[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                            @if($roles->contains($role->id)) @endif>
+                                            <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
+                                        </div>
+                                    @endforeach
                                     <!-- error message untuk jenis kelamin -->
                                     @error('level')
                                         <div class="alert alert-danger mt-2">
@@ -584,6 +584,24 @@
             //     }
             //     setTimeout(getSelamat, 1000);
             // }
+
+            function previewImage(input) {
+                var preview = document.getElementById('imagePreview');
+                preview.innerHTML = '';
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var img = document.createElement('img');
+                        img.setAttribute('src', e.target.result);
+                        img.setAttribute('class', 'img-fluid rounded');
+                        img.style.width = '10%';
+                        img.style.border = '5px solid #ccc';
+                        preview.appendChild(img);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
 
             // Message with SweetAlert if user tries to access unauthorized route
             @if(session('unauthorized'))
