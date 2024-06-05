@@ -17,11 +17,36 @@ class ClassroomsFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
+        $classroomNames = [
+            'Kelas 1 Paket A Setara SD',
+            'Kelas 2 Paket A Setara SD',
+            'Kelas 3 Paket A Setara SD',
+            'Kelas 4 Paket A Setara SD',
+            'Kelas 5 Paket A Setara SD',
+            'Kelas 6 Paket A Setara SD',
+            'Kelas 1 Paket B Setara SMP',
+            'Kelas 2 Paket B Setara SMP',
+            'Kelas 3 Paket B Setara SMP',
+            'Kelas 1 Paket C Setara SMA',
+            'Kelas 2 Paket C Setara SMA',
+            'Kelas 3 Paket C Setara SMA',
+        ];
+
         return [
-            'name' => $this->faker->word,
-            'semesters_id' => Semesters::inRandomOrder()->first()->id,
+            'name' => $this->faker->unique()->randomElement($classroomNames),
+            'semesters_id' => function () {
+                return Semesters::inRandomOrder()->first()->id;
+            },
         ];
     }
+
+    // public function definition(): array
+    // {
+    //     return [
+    //         'name' => $this->faker->word,
+    //         'semesters_id' => Semesters::inRandomOrder()->first()->id,
+    //     ];
+    // }
 }
