@@ -334,8 +334,9 @@
                         <div class="card-body">
                             <h5 class="card-title">Forms Edit Semesters Data</h5>
                             <!-- Custom Styled Validation with Tooltips novalidate -->
-                            <form action="{{ route('admin.semesters.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.semesters.update', $semester->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
                                 <div class="form-group mb-3">
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Semester
