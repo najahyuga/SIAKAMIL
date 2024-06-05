@@ -342,35 +342,90 @@
                                             <th>Kelas</th>
                                             <th>Tahun Mulai</th>
                                             <th>Tahun Selesai</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($semesters as $row)
+                                        @php
+                                            $activeRows = [];
+                                            $expiredRows = [];
+                                        @endphp
+                                        @foreach ($semesters as $row)
+                                            @php
+                                                $startDate = date('d-m-Y', strtotime($row->startDate));
+                                                $endDate = date('d-m-Y', strtotime($row->endDate));
+                                                $status = strtotime($row->endDate) < strtotime('now') ? 'Expired' : 'Active';
+                                                $rowData = [
+                                                    'row' => $row,
+                                                    'status' => $status,
+                                                    'startDate' => $startDate,
+                                                    'endDate' => $endDate
+                                                ];
+                                                if ($status === 'Expired') {
+                                                    array_push($expiredRows, $rowData);
+                                                } else {
+                                                    array_push($activeRows, $rowData);
+                                                }
+                                            @endphp
+                                        @endforeach
+                                        @foreach ($activeRows as $activeRow)
                                             <tr>
-                                                <td>{{ $loop->iteration}}</td>
-                                                <td>{{ $row->name }}</td>
-                                                <td>{{ $row->education_levels->name }}</td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $activeRow['row']->name }}</td>
+                                                <td>{{ $activeRow['row']->education_levels->name }}</td>
                                                 <td>
-                                                    @foreach ($row->classrooms as $data)
-                                                    {{ $data->name }}
+                                                    @foreach ($activeRow['row']->classrooms as $data)
+                                                        {{ $data->name }}
                                                     @endforeach
                                                 </td>
-                                                <td>{{ date('Y', strtotime($row->startDate)) }}</td>
-                                                <td>{{ date('Y', strtotime($row->endDate)) }}</td>
+                                                <td>{{ $activeRow['startDate'] }}</td>
+                                                <td>{{ $activeRow['endDate'] }}</td>
+                                                <td>
+                                                    <span class="badge bg-success">{{ $activeRow['status'] }}</span>
+                                                </td>
                                                 <td class="text-center">
                                                     <form method="POST">
-                                                        <a href="{{ route('admin.semesters.show', $row->id) }}" class="btn btn-sm btn-dark mb-1">SHOW</a>
-                                                        <a href="{{ route('admin.semesters.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        <a href="{{ route('admin.semesters.show', $activeRow['row']->id) }}" class="btn btn-sm btn-dark mb-1">SHOW</a>
+                                                        <a href="{{ route('admin.semesters.edit', $activeRow['row']->id) }}" class="btn btn-sm btn-primary">EDIT</a>
                                                         @csrf
                                                     </form>
                                                 </td>
                                             </tr>
-                                        @empty
-                                            <div class="alert alert-danger">
-                                                Data Semester belum Tersedia.
-                                            </div>
-                                        @endforelse
+                                        @endforeach
+                                        @foreach ($expiredRows as $expiredRow)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $expiredRow['row']->name }}</td>
+                                                <td>{{ $expiredRow['row']->education_levels->name }}</td>
+                                                <td>
+                                                    @foreach ($expiredRow['row']->classrooms as $data)
+                                                        {{ $data->name }}
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $expiredRow['startDate'] }}</td>
+                                                <td>{{ $expiredRow['endDate'] }}</td>
+                                                <td>
+                                                    <span class="badge bg-danger">{{ $expiredRow['status'] }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <form method="POST">
+                                                        <a href="{{ route('admin.semesters.show', $expiredRow['row']->id) }}" class="btn btn-sm btn-dark mb-1">SHOW</a>
+                                                        <a href="{{ route('admin.semesters.edit', $expiredRow['row']->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        @csrf
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        @if (empty($activeRows) && empty($expiredRows))
+                                            <tr>
+                                                <td colspan="8" class="text-center">
+                                                    <div class="alert alert-danger">
+                                                        Data Semester belum Tersedia.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
