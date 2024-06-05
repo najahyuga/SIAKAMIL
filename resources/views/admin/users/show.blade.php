@@ -435,7 +435,7 @@
                                                 <label class="font-weight-bold">Role Levels</label>
                                                 @foreach ($roles as $role)
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                                        <input class="form-check-input" type="checkbox" name="level[]" value="{{ $role->id }}" id="role{{ $role->id }}"
                                                         @if($user->roles->contains($role->id)) checked @endif>
                                                         <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
                                                     </div>
