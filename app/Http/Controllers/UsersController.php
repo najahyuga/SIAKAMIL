@@ -144,9 +144,12 @@ class UsersController extends Controller
         try {
             // Validasi form
             $request->validate([
-                'username' => 'required|min:4',
-                'email' => 'required|min:5|email',
-                'password' => 'required|min:6'
+                'username'                  => 'required|min:4',
+                'email'                     => 'required|min:5|email',
+                'password'                  => 'required|min:6',
+
+                // table roles
+                'level.*'                   => 'exists:roles,id',
             ]);
 
             // Update data user
@@ -158,7 +161,20 @@ class UsersController extends Controller
             ]);
 
             // Update roles user
-            $user->roles()->sync($request->roles); // Di sini, $request->roles adalah array dari ID roles yang dipilih dari form.
+            // Tangani array nilai level
+            if ($request->has('level')) {
+                // Tetapkan nilai level yang dipilih ke atribut roles
+                $user->roles()->sync($request->input('level'));
+            } else {
+                // Tetapkan nilai default ke atribut roles jika tidak ada level yang dipilih
+                // Misalnya, default level sebagai calonSiswa
+                $defaultRole = Roles::where('level', 'calonSiswa')->first();
+                if ($defaultRole) {
+                    $user->roles()->sync([$defaultRole->id]);
+                }
+            }
+
+            // $user->roles()->sync($request->roles); // Di sini, $request->roles adalah array dari ID roles yang dipilih dari form.
 
             // Mengembalikan ke halaman index
             return redirect()->route('admin.users.index')->with(['success' => 'Data Berhasil Diubah!']);
@@ -167,7 +183,7 @@ class UsersController extends Controller
             return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
         }
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
