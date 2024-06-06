@@ -14,9 +14,9 @@ class MasterCourses extends Model
         'master_category_courses_id',
     ];
 
-    public function masterCategoryCourse()
+    public function master_category_course()
     {
-        return $this->belongsTo(MasterCategoryCourses::class);
+        return $this->belongsTo(MasterCategoryCourses::class, 'master_category_courses_id');
     }
 
     public function courses()
