@@ -9,7 +9,7 @@ class MasterCategoryCourses extends Model
 {
     use HasFactory;
 
-    protected $fillabel = ['name'];
+    protected $fillable = ['name'];
 
     public function masterCourses()
     {
