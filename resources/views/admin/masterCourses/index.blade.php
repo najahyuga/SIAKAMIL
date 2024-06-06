@@ -226,25 +226,6 @@
                     </ul>
                 </li><!-- End Management Classrooms Nav -->
 
-                <!-- Start Management Students Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/admin/students">
-                            <i class="bi bi-circle"></i><span>Students Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/students/create">
-                            <i class="bi bi-circle"></i><span>Insert Students Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Students Nav -->
-
                 <!-- Start Management Master Category Courses Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
@@ -283,14 +264,33 @@
                     </ul>
                 </li><!-- End Management Master Courses Nav -->
 
+                <!-- Start Management Students Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/admin/students">
+                            <i class="bi bi-circle"></i><span>Students Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/students/create">
+                            <i class="bi bi-circle"></i><span>Insert Students Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Students Nav -->
+
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#course-nav" data-bs-toggle="collapse" href="#">
+                    <a class="nav-link collapsed" data-bs-target="#course-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-menu-button-wide"></i><span>Management Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="course-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <ul id="course-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/admin/courses" class="active">
+                            <a href="/admin/courses">
                             <i class="bi bi-circle"></i><span>Courses Data</span>
                             </a>
                         </li>

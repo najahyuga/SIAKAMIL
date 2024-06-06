@@ -226,6 +226,44 @@
                     </ul>
                 </li><!-- End Management Classrooms Nav -->
 
+                <!-- Start Management Master Category Courses Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Master Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="masterCategoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/admin/masterCategoryCourses" >
+                            <i class="bi bi-circle"></i><span>Master Category Courses Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/masterCategoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Master Category Course Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Master Category Courses Nav -->
+
+                <!-- Start Management Master Courses Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#masterCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Master Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="masterCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/admin/masterCourses" >
+                            <i class="bi bi-circle"></i><span>Master Courses Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/masterCourses/create" >
+                            <i class="bi bi-circle"></i><span>Insert Master Course Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Master Courses Nav -->
+
                 <!-- Start Management Students Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
@@ -244,25 +282,6 @@
                         </li>
                     </ul>
                 </li><!-- End Management Students Nav -->
-
-                <!-- Start Management Master Category Courses Nav -->
-                <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Master Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="masterCategoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/admin/masterCategoryCourses" class="active">
-                            <i class="bi bi-circle"></i><span>Master Category Courses Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/masterCategoryCourses/create">
-                            <i class="bi bi-circle"></i><span>Insert Master Category Course Data</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Management Master Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
