@@ -42,9 +42,9 @@ class Students extends Model
         return $this->belongsTo(User::class, 'users_id');
     }
 
-    public function fileUpload()
+    public function files_uploads()
     {
-        return $this->hasOne(FilesUploads::class);
+        return $this->belongsTo(FilesUploads::class, 'files_uploads_id');
     }
 
     public function courses()

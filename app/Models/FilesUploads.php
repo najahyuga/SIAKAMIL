@@ -18,6 +18,6 @@ class FilesUploads extends Model
 
     public function students()
     {
-        return $this->belongsTo(Students::class);
+        return $this->hasOne(Students::class, 'files_uploads_id');
     }
 }
