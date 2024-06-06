@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CategoryCourses;
 use App\Models\Classrooms;
 use App\Models\EducationLevels;
+use App\Models\MasterCategoryCourses;
+use App\Models\Roles;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -26,12 +28,14 @@ class StudentsController extends Controller
             // get data to display index page
             $students = Students::all();
 
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman index students admin
-                return view('admin.students.index', compact('students'));
-            } elseif (Auth::user()->level == 'guru') {
-                // mengembalikan ke halaman index students guru
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'guru') {
+                // Mengembalikan ke halaman index students guru
                 return view('guru.students.index', compact('students'));
+            } elseif ($activeRole === 'admin') {
+                // Mengembalikan ke halaman index students admin
+                return view('admin.students.index', compact('students'));
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menampilkan halaman index ". $th->getMessage());
@@ -51,14 +55,19 @@ class StudentsController extends Controller
             // get data to display create page
             $education_levels_id = EducationLevels::all();
             $classrooms_id = Classrooms::with('semesters')->get();
-            $category_courses_id = CategoryCourses::with('courses')->get();
+            $category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
 
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman create student admin
-                return view('admin.students.create', [ 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'category_courses_id' => $category_courses_id]);
-            } elseif (Auth::user()->level == 'guru') {
-                // mengembalikan ke halaman create student guru
-                return view('guru.students.create', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id]);
+            $roles = Roles::all();
+
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'guru') {
+                // Mengembalikan ke halaman create students guru
+                return view('guru.students.create', compact('students'));
+            } elseif ($activeRole === 'admin') {
+                // Mengembalikan ke halaman create students admin
+                return view('admin.students.create', compact('students'));
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
@@ -133,12 +142,15 @@ class StudentsController extends Controller
                 'students_id'   => $students->id
             ]);
 
-            if (Auth::user()->level == 'admin') {
-                // redirect to admin students index
-                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
-            } elseif (Auth::user()->level == 'guru') {
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'guru') {
                 // redirect to guru students index
                 return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
+            } elseif ($activeRole === 'admin') {
+                // redirect to admin students index
+                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
@@ -165,17 +177,20 @@ class StudentsController extends Controller
             // get data based on id and name
             $education_levels_id = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
             $classrooms_id = Classrooms::where('id', '!=', $student->classrooms_id)->get();
-            $category_courses_id = CategoryCourses::with('courses')->get();
+            $category_courses_id = MasterCategoryCourses::with('courses')->get();
 
             // get data based on id and level
             $user = User::select('id', 'level')->get();
 
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman admin students show
-                return view('admin.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student', 'category_courses_id'));
-            } elseif (Auth::user()->level == 'guru') {
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'guru') {
                 // mengembalikan ke halaman guru students show
                 return view('guru.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student'));
+            } elseif ($activeRole === 'admin') {
+                // mengembalikan ke halaman admin students show
+                return view('admin.students.show', ['education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id, 'user' => $user], compact('student', 'category_courses_id'));
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
@@ -199,18 +214,21 @@ class StudentsController extends Controller
             // get data based on id and name
             $education_levels_id = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
             $classrooms_id = Classrooms::where('id', '!=', $student->classrooms_id)->get();
-            $category_courses_id = CategoryCourses::with('courses')->get();
+            $category_courses_id = MasterCategoryCourses::with('courses')->get();
 
             // get data based on id and level
             $user = User::where('id', '!=', $student->user)->get();
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman admin students edit
-                return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student', 'category_courses_id'));
-            } elseif (Auth::user()->level == 'guru') {
+
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'guru') {
                 // mengembalikan ke halaman guru students edit
                 return view('guru.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student'));
+            } elseif ($activeRole === 'admin') {
+                // mengembalikan ke halaman admin students edit
+                return view('admin.students.edit', ['user' => $user, 'education_levels_id' => $education_levels_id, 'classrooms_id' => $classrooms_id], compact('student', 'category_courses_id'));
             }
-
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
             response()->json([
@@ -305,7 +323,7 @@ class StudentsController extends Controller
             } else {
                 // Jika tidak ada mata pelajaran yang dipilih, kosongkan relasi
                 $student->courses()->detach();
-    }
+            }
 
             // update table user
             $user = User::where('students_id', $student->id)->firstOrFail();
@@ -317,15 +335,15 @@ class StudentsController extends Controller
                 'students_id'   => $student->id
             ]);
 
-            // Redirect based on user level
-            $authUser = Auth::user();
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
 
-            if ($authUser->level == 'admin') {
-                // redirect to admin students index page
-                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
-            } elseif ($authUser->level == 'guru') {
+            if ($activeRole === 'guru') {
                 // redirect to guru students index page
                 return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
+            } elseif ($activeRole === 'admin') {
+                // redirect to admin students index page
+                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengubah data student ID {$id}: " . $th->getMessage());
