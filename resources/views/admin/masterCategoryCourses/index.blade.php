@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-        <title>Management Category Courses - SIAKAMIL</title>
+        <title>Management Master Category Courses - SIAKAMIL</title>
         <meta content="" name="description" />
         <meta content="" name="keywords" />
 
@@ -39,7 +39,6 @@
             href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
             rel="stylesheet"
         />
-
 
         <!--Get your own code at fontawesome.com-->
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -155,7 +154,7 @@
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-menu-button-wide"></i><span>Management Education Levels</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="educationLevels-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <ul id="educationLevels-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
                             <a href="/admin/educationLevels" >
                             <i class="bi bi-circle"></i><span>Education Levels Data</span>
@@ -245,24 +244,24 @@
                     </ul>
                 </li><!-- End Management Students Nav -->
 
-                <!-- Start Management Category Courses Nav -->
+                <!-- Start Management Master Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link " data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Master Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="categoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <ul id="masterCategoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/admin/categoryCourses" class="active">
-                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
+                            <a href="/admin/masterCategoryCourses" class="active">
+                            <i class="bi bi-circle"></i><span>Master Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/categoryCourses/create">
-                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
+                            <a href="/admin/masterCategoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Master Category Course Data</span>
                             </a>
                         </li>
                     </ul>
-                </li><!-- End Management Category Courses Nav -->
+                </li><!-- End Management Master Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -322,8 +321,7 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/categoryCourses">Category Courses Data</a></li>
-                        <li class="breadcrumb-item active">Show Category Course Data</li>
+                        <li class="breadcrumb-item active">Master Category Courses Data</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -332,79 +330,36 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
-                            <div class="card-body pt-3">
-                                <!-- Bordered Tabs -->
-                                <ul class="nav nav-tabs nav-tabs-bordered">
-                                    <li class="nav-item">
-                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Education Level</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content pt-2">
-                                    {{-- Start List --}}
-                                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                        <h6 class="card-title">Kategori Mata Pelajaran</h6>
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Jenis Kategori Mata Pelajaran</div>
-                                            <div class="col-lg-9 col-md-8">{{ $categoryCourse->name }}</div>
-                                        </div>
-
-                                        <h6 class="card-title">Details Mata Pelajaran</h6>
-                                        <div class="row">
-                                            <table class="table table-striped table-bordered border-primary">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Mata Pelajaran</th>
-                                                    </tr>
-                                                    {{-- <div class="col-lg-3 col-md-4 label"></div> --}}
-                                                </thead>
-                                                <tbody>
-                                                    @forelse ($categoryCourse->courses as $data)
-                                                        <tr>
-                                                            <th>{{ $loop->iteration }}</th>
-                                                            <td>{{ $data->name }} <br></td>
-                                                        </tr>
-                                                    @empty
-                                                        <div class="alert alert-danger">
-                                                            Data Mata Pelajaran belum Tersedia.
-                                                        </div>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>{{-- End List --}}
-
-                                    <!-- Start Profile Edit Form -->
-                                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                        <form action="{{ route('admin.categoryCourses.update', $categoryCourse->id) }}" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-
-                                            <div class="row mb-3">
-                                                <label class="font-weight-bold">Kategori Mata Pelajaran
-                                                    <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon me-1"></i>Contoh: Kelompok Umum</span>
-                                                </label>
-                                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $categoryCourse->name) }}" placeholder="Masukkan Kategori Mata Pelajaran!">
-
-                                                <!-- error message untuk name -->
-                                                @error('name')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
+                            <div class="card-body">
+                                <h5 class="card-title">Data Master Kategori Mata Pelajaran</h5>
+                                <table class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kategori Mata Pelajaran</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($masterCategoryCourses as $row)
+                                            <tr>
+                                                <td>{{ $loop->iteration}}</td>
+                                                <td>{{ $row->name }}</td>
+                                                <td class="text-center">
+                                                    <form method="POST">
+                                                        <a href="{{ route('admin.masterCategoryCourses.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
+                                                        <a href="{{ route('admin.masterCategoryCourses.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        @csrf
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <div class="alert alert-danger">
+                                                Data Master Kategori Mata Pelajaran belum Tersedia.
                                             </div>
-
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                            </div>
-                                        </form><!-- End Profile Edit Form -->
-                                    </div><!-- End Profile Edit Form -->
-                                </div>
-                                <!-- End Bordered Tabs -->
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -421,6 +376,7 @@
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
         </footer><!-- End Footer -->
+
 
         <a
             href="#"
@@ -440,6 +396,9 @@
 
         <!-- Template Main JS File -->
         <script src="{{asset('backend/assets/js/main.js')}}"></script>
+
+        {{-- Library Sweatalert --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
             // get datetime to view in header

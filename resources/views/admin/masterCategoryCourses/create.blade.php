@@ -245,24 +245,24 @@
                     </ul>
                 </li><!-- End Management Students Nav -->
 
-                <!-- Start Management Category Courses Nav -->
+                <!-- Start Management Master Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link " data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Master Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="categoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <ul id="masterCategoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/admin/categoryCourses" class="active">
-                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
+                            <a href="/admin/masterCategoryCourses" >
+                            <i class="bi bi-circle"></i><span>Master Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/categoryCourses/create">
-                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
+                            <a href="/admin/masterCategoryCourses/create" class="active">
+                            <i class="bi bi-circle"></i><span>Insert Master Category Course Data</span>
                             </a>
                         </li>
                     </ul>
-                </li><!-- End Management Category Courses Nav -->
+                </li><!-- End Management Master Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -322,8 +322,8 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/categoryCourses">Category Courses Data</a></li>
-                        <li class="breadcrumb-item active">Edit Category Course Data</li>
+                        <li class="breadcrumb-item"><a href="/admin/masterCategoryCourses">Master Category Courses Data</a></li>
+                        <li class="breadcrumb-item active">Insert Master Category Course Data</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -332,25 +332,21 @@
                 <div class="row">
                     <div class="card col-lg">
                         <div class="card-body">
-                            <h5 class="card-title">Forms Edit Category Course Data</h5>
+                            <h5 class="card-title">Forms Add Master Category Course Data</h5>
                             <!-- Custom Styled Validation with Tooltips novalidate -->
-                            <form action="{{ route('admin.categoryCourses.update', $categoryCourse->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.masterCategoryCourses.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
                                 <div class="form-group mb-3">
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Kategori Mata Pelajaran
-                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon me-1"></i>Contoh: Kelompok Umum</span>
-                                        </label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $categoryCourse->name) }}" placeholder="Masukkan Kategori Mata Pelajaran!">
-
-                                        <!-- error message untuk name -->
-                                        @error('name')
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
+                                    <label class="font-weight-bold">Master Kategori Mata Pelajaran
+                                        <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon me-1"></i>Contoh: Kelompok Umum</span>
+                                    </label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name') }}" placeholder="Masukkan Kategori Mata Pelajaran!">
+                                    <!-- error message untuk name -->
+                                    @error('name')
+                                        <div class="alert alert-danger mt-2">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <button type="submit" class="btn btn-md btn-primary me-3">SAVE</button>
@@ -392,9 +388,6 @@
 
         <!-- Template Main JS File -->
         <script src="{{asset('backend/assets/js/main.js')}}"></script>
-
-        {{-- Library Sweatalert --}}
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
             // get datetime to view in header

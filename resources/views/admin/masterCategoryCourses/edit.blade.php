@@ -245,24 +245,24 @@
                     </ul>
                 </li><!-- End Management Students Nav -->
 
-                <!-- Start Management Category Courses Nav -->
+                <!-- Start Management Master Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link " data-bs-target="#categoryCourses-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link " data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Master Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="categoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <ul id="masterCategoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/admin/categoryCourses" class="active">
-                            <i class="bi bi-circle"></i><span>Category Courses Data</span>
+                            <a href="/admin/masterCategoryCourses" class="active">
+                            <i class="bi bi-circle"></i><span>Master Category Courses Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/categoryCourses/create">
-                            <i class="bi bi-circle"></i><span>Insert Category Course Data</span>
+                            <a href="/admin/masterCategoryCourses/create">
+                            <i class="bi bi-circle"></i><span>Insert Master Category Course Data</span>
                             </a>
                         </li>
                     </ul>
-                </li><!-- End Management Category Courses Nav -->
+                </li><!-- End Management Master Category Courses Nav -->
 
                 <!-- Start Management Courses Nav -->
                 <li class="nav-item">
@@ -322,46 +322,41 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Education Levels Data</li>
+                        <li class="breadcrumb-item"><a href="/admin/masterCategoryCourses">Master Category Courses Data</a></li>
+                        <li class="breadcrumb-item active">Edit Master Category Course Data</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
 
-            <section class="section dashboard">
+            <section class="section">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Data Jenjang Pendidikan</h5>
-                                <table class="table datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Kategori Mata Pelajaran</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($categoryCourses as $row)
-                                            <tr>
-                                                <td>{{ $loop->iteration}}</td>
-                                                <td>{{ $row->name }}</td>
-                                                <td class="text-center">
-                                                    <form method="POST">
-                                                        <a href="{{ route('admin.categoryCourses.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('admin.categoryCourses.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                                        @csrf
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <div class="alert alert-danger">
-                                                Data Kategori Mata Pelajaran belum Tersedia.
+                    <div class="card col-lg">
+                        <div class="card-body">
+                            <h5 class="card-title">Forms Edit Master Category Course Data</h5>
+                            <!-- Custom Styled Validation with Tooltips novalidate -->
+                            <form action="{{ route('admin.masterCategoryCourses.update', $masterCategoryCourses->id) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group mb-3">
+                                    <div class="form-group mb-3">
+                                        <label class="font-weight-bold">Master Kategori Mata Pelajaran
+                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon me-1"></i>Contoh: Kelompok Umum</span>
+                                        </label>
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $masterCategoryCourses->name) }}" placeholder="Masukkan Master Kategori Mata Pelajaran!">
+
+                                        <!-- error message untuk name -->
+                                        @error('name')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
                                             </div>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-md btn-primary me-3">SAVE</button>
+                                <button type="reset" class="btn btn-md btn-warning">RESET</button>
+                            </form>
+                            <!-- End Custom Styled Validation with Tooltips -->
                         </div>
                     </div>
                 </div>
