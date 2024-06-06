@@ -56,16 +56,24 @@ class ClassroomsController extends Controller
      */
     public function show(string $id)
     {
-        // displays data based on ID
-        // menampilkan data berdasarkan id
-        $classroom = Classrooms::with('semesters')->findOrFail($id);
+        try {
+            // Dapatkan data kelas berdasarkan ID
+            $classroom = Classrooms::with('semesters', 'courses.masterCourses.master_category_course')->findOrFail($id);
 
-        // get data
-        // mendapatkan data
-        $semesters_id = Semesters::where('id', '!=', $classroom->semesters_id)->get();
+            // Jika kelas tidak ditemukan, lemparkan exception
+            if (!$classroom) {
+                throw new \Exception('Kelas tidak ditemukan.');
+            }
 
-        // mengembalikan ke halaman show
-        return view('admin.classrooms.show', ['semesters_id' => $semesters_id], compact('classroom'));
+            // Dapatkan data semester selain semester kelas tersebut
+            $semesters_id = Semesters::where('id', '!=', $classroom->semesters_id)->get();
+
+            // Kembalikan ke halaman tampilan kelas dengan data yang diperlukan
+            return view('admin.classrooms.show', ['semesters_id' => $semesters_id], compact('classroom'));
+        } catch (\Exception $e) {
+            // Tangani exception jika kelas tidak ditemukan
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
