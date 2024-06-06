@@ -391,25 +391,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <td>
-                                                    @if($classroom->courses->isNotEmpty())
-                                                        {{ $classroom->courses->first()->category_courses->name }}
-                                                    @else
-                                                        <div class="alert alert-danger">
-                                                            Data Kategori Mata Pelajaran <br> belum Tersedia / Kosong.
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @forelse ($classroom->courses as $item)
-                                                        {{ $loop->iteration }}.
-                                                        {{ $item->name }}<br>
-                                                    @empty
-                                                        <div class="alert alert-danger">
-                                                            Data Mata Pelajaran belum Tersedia.
-                                                        </div>
-                                                    @endforelse
-                                                </td>
+                                                @forelse ($classroom->courses as $course)
+                                                    @php
+                                                        $masterCoursesGrouped = $course->masterCourses->groupBy('master_category_course_id');
+                                                    @endphp
+                                                    @foreach ($masterCoursesGrouped as $masterCategoryCourseId => $masterCourses)
+                                                        @php
+                                                            $firstMasterCourse = $masterCourses->first();
+                                                        @endphp
+                                                        <tr>
+                                                            <td rowspan="{{ $masterCourses->count() }}">
+                                                                {{ $firstMasterCourse->master_category_course->name }}
+                                                            </td>
+                                                            <td>
+                                                                @foreach ($masterCourses as $index => $masterCourse)
+                                                                    {{ $index + 1 }}. {{ $masterCourse->name }}<br>
+                                                                @endforeach
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="alert alert-danger">
+                                                                Data Pelajaran belum Tersedia.
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
                                             </tbody>
                                         </table>
 
