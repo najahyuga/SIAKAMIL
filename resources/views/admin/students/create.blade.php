@@ -266,17 +266,17 @@
 
                 <!-- Start Management Students Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+                    <a class="nav-link " data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-menu-button-wide"></i><span>Management Students</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="students-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <ul id="students-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
                             <a href="/admin/students">
                             <i class="bi bi-circle"></i><span>Students Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/students/create">
+                            <a href="/admin/students/create" class="active">
                             <i class="bi bi-circle"></i><span>Insert Students Data</span>
                             </a>
                         </li>
