@@ -228,12 +228,12 @@
 
                 <!-- Start Management Master Category Courses Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
+                    <a class="nav-link " data-bs-target="#masterCategoryCourses-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-menu-button-wide"></i><span>Management Master Category Courses</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="masterCategoryCourses-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <ul id="masterCategoryCourses-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/admin/masterCategoryCourses" >
+                            <a href="/admin/masterCategoryCourses" class="active">
                             <i class="bi bi-circle"></i><span>Master Category Courses Data</span>
                             </a>
                         </li>
