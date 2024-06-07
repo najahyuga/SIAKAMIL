@@ -14,32 +14,24 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
 
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
         <!--Get your own code at fontawesome.com-->
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -363,27 +355,96 @@
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-2">
+                                    <style>
+                                        .card {
+                                            margin-top: 20px;
+                                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                        }
+
+                                        .card-header {
+                                            background-color: #007bff;
+                                            color: #fff;
+                                            border-bottom: none;
+                                        }
+
+                                        .card-body {
+                                            padding: 1.25rem;
+                                        }
+
+                                        .label {
+                                            font-weight: bold;
+                                        }
+
+                                        .table {
+                                            width: 100%;
+                                            margin-bottom: 1rem;
+                                            color: #212529;
+                                        }
+
+                                        .table th,
+                                        .table td {
+                                            padding: 0.75rem;
+                                            vertical-align: top;
+                                            border-top: 1px solid #dee2e6;
+                                        }
+
+                                        .table thead th {
+                                            vertical-align: bottom;
+                                            border-bottom: 2px solid #dee2e6;
+                                        }
+
+                                        .table tbody + tbody {
+                                            border-top: 2px solid #dee2e6;
+                                        }
+
+                                        .table-striped tbody tr:nth-of-type(odd) {
+                                            background-color: rgba(0, 0, 0, 0.05);
+                                        }
+
+                                        .table-bordered {
+                                            border: 1px solid #dee2e6;
+                                        }
+
+                                        .table-bordered th,
+                                        .table-bordered td {
+                                            border: 1px solid #dee2e6;
+                                        }
+                                    </style>
                                     {{-- Start List --}}
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                        <h6 class="card-title">Nama Pelajaran</h6>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Pelajaran</div>
-                                            <div class="col-lg-9 col-md-8">{{ $course->name }}</div>
+                                        <div class="card">
+                                            <div class="card-header bg-primary text-white">
+                                                <h4 class="mb-1">Details Mata Pelajaran</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-1">
+                                                    <div class="col-lg-3 col-md-4 label">Guru</div>
+                                                    <div class="col-lg-9 col-md-8">{{ $course->teachers->name }}</div>
+                                                </div>
+                                                <div class="table-responsive mt-2">
+                                                    <table class="table table-striped table-bordered datatable">
+                                                        <thead class="thead-dark">
+                                                            <tr>
+                                                                <th class="text-center">No</th>
+                                                                <th class="text-center">Kategori Mata Pelajaran</th>
+                                                                <th class="text-center">Nama Mata Pelajaran</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($course->masterCourses as $masterCourse)
+                                                                <tr>
+                                                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                                                    <td class="text-center">{{ $masterCourse->master_category_course->name }}</td>
+                                                                    <td class="text-center">{{ $masterCourse->name }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <h6 class="card-title">Details</h6>
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label">Kategori Pelajaran</div>
-                                            <div class="col-lg-9 col-md-8">{{ $course->category_courses->name }}</div>
-                                        </div>
-
-                                        <div class="row mb-1">
-                                            <div class="col-lg-3 col-md-4 label">Guru</div>
-                                            <div class="col-lg-9 col-md-8">{{ $course->teachers->name }}</div>
-                                        </div>
-
-                                        <table class="table table-striped table-bordered border-primary">
+                                        {{-- <table class="table table-striped table-bordered border-primary">
                                             <thead>
                                                 <tr>
                                                     <td>Kelas</td>
@@ -407,7 +468,7 @@
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </table> --}}
                                     </div>
                                     {{-- End List --}}
 
@@ -416,17 +477,6 @@
                                         <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
-
-                                            <div class="form-group mb-3">
-                                                <label for="fullName" class="font-weight-bold">Nama Pelajaran</label>
-                                                <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $course->name) }}" placeholder="Masukkan Nama Pelajaran!">
-                                                <!-- error message untuk nama -->
-                                                @error('name')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
 
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">Pilih Guru untuk Mengajar</label>
@@ -460,16 +510,30 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Pilih Kategori Pelajaran</label>
-                                                <select class="form-select @error('category_courses_id') is-invalid @enderror" name="category_courses_id" aria-label="Pilih Kategori Pelajaran">
-                                                    <option value="{{ $course->category_courses->id }}">{{ $course->category_courses->name }}</option>
-                                                    @foreach ($category_courses_id as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                            <div class="form-group mb-3 custom-checkbox">
+                                                <label class="font-weight-bold">Pilih Master Kategori Pelajaran</label>
+                                                <div class="row">
+                                                    @php $count = 0; @endphp
+                                                    @foreach ($master_category_courses_id as $master_category)
+                                                        <div class="col-md-6">
+                                                            <p class="font-weight-bold">{{ $master_category->name }}</p>
+                                                            @foreach ($master_category->masterCourses as $master_course)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" value="{{ $master_course->id }}" name="masterCourses[]" id="master_course_{{ $master_course->id }}" {{ $course->masterCourses->contains($master_course->id) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="master_course_{{ $master_course->id }}">
+                                                                        {{ $master_course->name }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        @php $count++; @endphp
+                                                        @if($count % 2 == 0)
+                                                            </div><div class="row">
+                                                        @endif
                                                     @endforeach
-                                                </select>
-                                                <!-- error message untuk Pilih Guru untuk Mengajar -->
-                                                @error('category_courses_id')
+                                                </div>
+                                                <!-- error message untuk Pilih Master Kategori Pelajaran -->
+                                                @error('master_courses_id')
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $message }}
                                                     </div>
@@ -514,7 +578,6 @@
         <script src="{{asset('backend/assets/vendor/chart.js/chart.umd.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/echarts/echarts.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/quill/quill.min.js')}}"></script>
-        <script src="{{asset('backend/assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/tinymce/tinymce.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/php-email-form/validate.js')}}"></script>
 
@@ -525,6 +588,10 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            $(document).ready(function() {
+                $('.datatable').DataTable();
+            });
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();

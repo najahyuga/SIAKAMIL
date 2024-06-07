@@ -360,19 +360,6 @@
                                     @method('PUT')
 
                                     <div class="form-group mb-3">
-                                        <label for="fullName" class="font-weight-bold">Nama Pelajaran</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $course->name) }}" placeholder="Masukkan Nama Pelajaran!">
-                                        </div>
-                                        <!-- error message untuk nama -->
-                                        @error('name')
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group mb-3">
                                         <label class="font-weight-bold">Pilih Guru untuk Mengajar</label>
                                         <select class="form-select @error('teachers_id') is-invalid @enderror" name="teachers_id" aria-label="Default select example">
                                             <option value="{{ $course->teachers->id }}">{{ $course->teachers->name }}</option>
@@ -404,16 +391,30 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Pilih Kategori Pelajaran</label>
-                                        <select class="form-select @error('category_courses_id') is-invalid @enderror" name="category_courses_id" aria-label="Pilih Kategori Pelajaran">
-                                            <option value="{{ $course->category_courses->id }}">{{ $course->category_courses->name }}</option>
-                                            @foreach ($category_courses_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                    <div class="form-group mb-3 custom-checkbox">
+                                        <label class="font-weight-bold">Pilih Master Kategori Pelajaran</label>
+                                        <div class="row">
+                                            @php $count = 0; @endphp
+                                            @foreach ($master_category_courses_id as $master_category)
+                                                <div class="col-md-6">
+                                                    <p class="font-weight-bold">{{ $master_category->name }}</p>
+                                                    @foreach ($master_category->masterCourses as $master_course)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="{{ $master_course->id }}" name="masterCourses[]" id="master_course_{{ $master_course->id }}" {{ $course->masterCourses->contains($master_course->id) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="master_course_{{ $master_course->id }}">
+                                                                {{ $master_course->name }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                @php $count++; @endphp
+                                                @if($count % 2 == 0)
+                                                    </div><div class="row">
+                                                @endif
                                             @endforeach
-                                        </select>
-                                        <!-- error message untuk Pilih Guru untuk Mengajar -->
-                                        @error('category_courses_id')
+                                        </div>
+                                        <!-- error message untuk Pilih Master Kategori Pelajaran -->
+                                        @error('master_courses_id')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
                                             </div>

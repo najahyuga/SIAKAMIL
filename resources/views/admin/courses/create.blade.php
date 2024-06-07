@@ -46,6 +46,7 @@
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{asset('backend/assets/css/custom-checkbox.css')}}">
     </head>
 
     <body>
@@ -356,26 +357,12 @@
 
                                 <!-- Custom Styled Validation with Tooltips novalidate -->
                                 <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
-
                                     @csrf
-
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Nama Pelajaran</label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama Pelajaran!">
-
-                                        <!-- error message untuk name -->
-                                        @error('name')
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
 
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Pilih Guru untuk Mengajar</label>
                                         <select class="form-select @error('teachers_id') is-invalid @enderror" name="teachers_id" aria-label="Pilih Guru untuk Mengajar">
                                             <option selected>Pilih Guru untuk Mengajar</option>
-                                            <option value="">=================</option>
                                             @foreach ($teachers_id as $data)
                                                 <option value="{{ $data->id }}">{{ $data->name }}</option>
                                             @endforeach
@@ -392,7 +379,6 @@
                                         <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
                                         <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Pilih Kelas yang Sesuai">
                                             <option selected>Pilih Kelas yang Sesuai Data</option>
-                                            <option value="">=================</option>
                                             @foreach ($classrooms_id as $data)
                                                 <option value="{{ $data->id }}">{{ $data->name }}</option>
                                             @endforeach
@@ -405,17 +391,30 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Pilih Kategori Pelajaran</label>
-                                        <select class="form-select @error('category_courses_id') is-invalid @enderror" name="category_courses_id" aria-label="Pilih Kategori Pelajaran">
-                                            <option selected>Pilih Kategori Pelajaran yang Sesuai</option>
-                                            <option value="">=================</option>
-                                            @foreach ($category_courses_id as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                    <div class="form-group mb-3 custom-checkbox">
+                                        <label class="font-weight-bold">Pilih Master Kategori Pelajaran</label>
+                                        <div class="row">
+                                            @php $count = 0; @endphp
+                                            @foreach ($master_category_courses_id as $master_category)
+                                                <div class="col-md-6">
+                                                    <p class="font-weight-bold">{{ $master_category->name }}</p>
+                                                    @foreach ($master_category->masterCourses as $master_course)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}">
+                                                            <label class="form-check-label" for="master_course_{{ $master_course->id }}">
+                                                                {{ $master_course->name }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                @php $count++; @endphp
+                                                @if($count % 2 == 0)
+                                                    </div><div class="row">
+                                                @endif
                                             @endforeach
-                                        </select>
-                                        <!-- error message untuk Pilih Guru untuk Mengajar -->
-                                        @error('category_courses_id')
+                                        </div>
+                                        <!-- error message untuk Pilih Master Kategori Pelajaran -->
+                                        @error('master_courses_id')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
                                             </div>

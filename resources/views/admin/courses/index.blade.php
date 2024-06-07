@@ -14,38 +14,32 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"        />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
+        {{-- <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" /> --}}
 
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
         <!--Get your own code at fontawesome.com-->
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
+
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     </head>
 
     <body>
@@ -346,42 +340,74 @@
                 </nav>
             </div><!-- End Page Title -->
 
+            <style>
+                .table-responsive {
+                    overflow-x: auto;
+                }
+                .table-striped tbody tr:nth-of-type(odd) {
+                    background-color: rgba(0,0,0,.05);
+                }
+                .table-bordered th, .table-bordered td {
+                    border: 1px solid #dee2e6;
+                }
+                .thead-dark th {
+                    background-color: #343a40;
+                    color: #fff;
+                }
+                .card-header {
+                    background-color: #007bff;
+                    color: #fff;
+                }
+            </style>
+
             <section class="section dashboard">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Daftar Pelajaran</h4>
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Data Mata Pelajaran</h5>
-                                <table class="table datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Pelajaran</th>
-                                            <th>Nama Kelas</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($courses as $row)
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered datatable">
+                                        <thead class="thead-dark">
                                             <tr>
-                                                <td>{{ $loop->iteration}}</td>
-                                                <td>{{ $row->name }}</td>
-                                                <td>{{ $row->classrooms->name }} / {{ $row->classrooms->semesters->name }}</td>
-                                                <td class="text-center">
-                                                    <form method="POST">
-                                                        <a href="{{ route('admin.courses.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('admin.courses.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                                        @csrf
-                                                    </form>
-                                                </td>
+                                                <th>No</th>
+                                                <th>Nama Pelajaran</th>
+                                                <th>Nama Kelas</th>
+                                                <th>Action</th>
                                             </tr>
-                                        @empty
-                                            <div class="alert alert-danger">
-                                                Data Pelajaran belum Tersedia.
-                                            </div>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @forelse ($courses as $row)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        @foreach ($row->masterCourses as $masterCourse)
+                                                            {{ $masterCourse->name }}{{ !$loop->last ? ', ' : '' }}
+                                                        @endforeach
+                                                    </td>
+                                                    <td>{{ $row->classrooms ? $row->classrooms->name : 'N/A' }} / {{ $row->classrooms && $row->classrooms->semesters ? $row->classrooms->semesters->name : 'N/A' }}</td>
+                                                    <td class="text-center">
+                                                        <form method="POST">
+                                                            <a href="{{ route('admin.courses.show', $row->id) }}" class="btn btn-sm btn-info">SHOW</a>
+                                                            <a href="{{ route('admin.courses.edit', $row->id) }}" class="btn btn-sm btn-warning">EDIT</a>
+                                                            @csrf
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <div class="alert alert-danger mb-0">
+                                                            Data Pelajaran belum Tersedia.
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -412,7 +438,6 @@
         <script src="{{asset('backend/assets/vendor/chart.js/chart.umd.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/echarts/echarts.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/quill/quill.min.js')}}"></script>
-        <script src="{{asset('backend/assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/tinymce/tinymce.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/php-email-form/validate.js')}}"></script>
 
@@ -423,6 +448,10 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            $(document).ready(function() {
+                $('.datatable').DataTable();
+            });
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();
