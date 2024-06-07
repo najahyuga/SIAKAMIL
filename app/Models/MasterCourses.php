@@ -21,6 +21,6 @@ class MasterCourses extends Model
 
     public function courses()
     {
-        return $this->hasMany(Courses::class);
+        return $this->belongsToMany(Courses::class, 'course_master_course', 'master_course_id', 'course_id');
     }
 }

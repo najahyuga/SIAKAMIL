@@ -10,10 +10,8 @@ class Courses extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'teachers_id',
-        'classrooms_id',
-        'category_courses_id'
+        'classrooms_id'
     ];
 
     public function teachers()
@@ -26,9 +24,9 @@ class Courses extends Model
         return $this->belongsTo(Classrooms::class);
     }
 
-    public function masterCourse()
+    public function masterCourses()
     {
-        return $this->belongsTo(MasterCourses::class);
+        return $this->belongsToMany(MasterCourses::class, 'course_master_course', 'course_id', 'master_course_id');
     }
 
     public function students()
