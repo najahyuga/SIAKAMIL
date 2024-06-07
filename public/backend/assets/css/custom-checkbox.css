@@ -1,0 +1,32 @@
+/* custom-checkbox.css */
+.custom-checkbox .form-check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 0.25em;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.custom-checkbox .form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.custom-checkbox .form-check-input:checked::after {
+    content: '\2713';
+    font-size: 1em;
+    color: #fff;
+    position: absolute;
+    top: 0.1em;
+    left: 0.3em;
+}
+
+.custom-checkbox .form-check-label {
+    margin-left: 1.5em;
+}
