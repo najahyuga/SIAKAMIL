@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CategoryCourses;
 use App\Models\Classrooms;
 use App\Models\Courses;
+use App\Models\MasterCategoryCourses;
+use App\Models\MasterCourses;
 use App\Models\Teachers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,16 +21,22 @@ class CoursesController extends Controller
     {
         try {
             // display data to index page
-            $courses = Courses::all();
+            $courses = Courses::with('masterCourses', 'classrooms')->get();
+
+            // Debugging data
+            foreach ($courses as $course) {
+                Log::info('Course:', ['course' => $course]);
+                Log::info('Master Courses:', ['masterCourses' => $course->masterCourses]);
+            }
+
             return view('admin.courses.index', compact('courses'));
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengambil data ". $th->getMessage());
-            response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat mengambil data'
+            Log::error("Tidak dapat menampilkan halaman index ". $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak dapat menampilkan halaman index'
             ], 500);
         }
-
     }
 
     /**
@@ -39,20 +46,20 @@ class CoursesController extends Controller
     {
         try {
             // get data to display create page
-            $teachers_id = Teachers::select('id', 'name')->get();
-            $classrooms_id = Classrooms::select('id', 'name')->get();
-            $category_courses_id = CategoryCourses::select('id', 'name')->get();
+            $teachers_id = Teachers::all();
+            $classrooms_id = Classrooms::all();
+            $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
+            // $master_courses_id = MasterCourses::all();
 
             // mengembalikan ke halaman create
-            return view('admin.courses.create', ['teachers_id' => $teachers_id, 'classrooms_id' => $classrooms_id, 'category_courses_id' => $category_courses_id]);
+            return view('admin.courses.create', ['teachers_id' => $teachers_id, 'classrooms_id' => $classrooms_id, 'master_category_courses_id' => $master_category_courses_id]);
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
+            Log::error("Tidak dapat menampilkan halaman create ". $th->getMessage());
             response()->json([
                 'status'    => false,
-                'message'   => 'Tidak dapat menampilkan halaman'
+                'message'   => 'Tidak dapat menampilkan halaman create'
             ], 500);
         }
-
     }
 
     /**
@@ -63,19 +70,25 @@ class CoursesController extends Controller
         try {
             //validate form
             $request->validate([
-                'name'                  => 'required|min:2',
-                'teachers_id'           => 'required',
-                'classrooms_id'         => 'required',
-                'category_courses_id'   => 'required'
+                'teachers_id'           => 'required|exists:teachers,id',
+                'classrooms_id'         => 'required|exists:classrooms,id',
+                'master_courses_id'     => 'nullable|array',
+                'master_courses_id.*'   => 'exists:master_courses,id'
             ]);
 
+            Log::info('Request Data:', $request->all());
+
             //create data courses
-            Courses::create([
-                'name'                  => $request->name,
+            $course = Courses::create([
                 'teachers_id'           => $request->teachers_id,
-                'classrooms_id'         => $request->classrooms_id,
-                'category_courses_id'   => $request->category_courses_id
+                'classrooms_id'         => $request->classrooms_id
             ]);
+
+            // Attach master courses
+            // untuk disimpan pada pivot table
+            if ($request->has('master_courses_id')) {
+                $course->masterCourses()->attach($request->master_courses_id);
+            }
 
             // mengembalikan ke halaman courses index
             return redirect()->route('admin.courses.index')->with(['success' => 'Data Berhasil Disimpan!']);
@@ -83,7 +96,6 @@ class CoursesController extends Controller
             Log::error("Tidak dapat menyimpan data ". $th->getMessage());
             return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
         }
-
     }
 
     /**
@@ -92,25 +104,30 @@ class CoursesController extends Controller
     public function show(string $id)
     {
         try {
-            // display data based on ID
-            // menampilkan data berdasarkan ID
-            $course = Courses::with('teachers', 'classrooms', 'category_courses', 'students')->findOrFail($id);
+            // Menampilkan data berdasarkan ID
+            $course = Courses::with('teachers', 'classrooms', 'masterCourses', 'students')->findOrFail($id);
 
-            // get data based on id and name
-            $teachers_id = Teachers::where('id', '!=', $course->teachers_id)->get(['id', 'name']);
+            // Mengambil data berdasarkan id dan nama
+            $teachers_id = Teachers::where('id', '!=', $course->teachers_id)->get();
             $classrooms_id = Classrooms::where('id', '!=', $course->classrooms_id)->get();
-            $category_courses_id = CategoryCourses::where('id', '!=', $course->category_courses_id)->get(['id', 'name']);
+            $master_courses_id = MasterCourses::where('id', '!=', $course->master_courses_id)->get();
+            $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
 
-            // mengembalikan ke halaman show
-            return view('admin.courses.show', ['teachers_id' => $teachers_id, 'classrooms_id' => $classrooms_id, 'category_courses_id' => $category_courses_id], compact('course'));
+            // Mengembalikan ke halaman show
+            return view('admin.courses.show', [
+                'teachers_id'       => $teachers_id,
+                'classrooms_id'     => $classrooms_id,
+                'master_courses_id' => $master_courses_id,
+                'master_category_courses_id' => $master_category_courses_id,
+                'course'            => $course
+            ]);
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
-            response()->json([
+            return response()->json([
                 'status'    => false,
                 'message'   => 'Tidak dapat mengambil data'
             ], 500);
         }
-
     }
 
     /**
@@ -122,14 +139,22 @@ class CoursesController extends Controller
 
             // display data based on ID
             // menampilkan data berdasarkan ID
-            $course = Courses::with('teachers', 'classrooms', 'category_courses')->findOrFail($id);
+            $course = Courses::with('teachers', 'classrooms', 'masterCourses', 'students')->findOrFail($id);
 
             // get data based on id and name
-            $teachers_id = Teachers::where('id', '!=', $course->teachers_id)->get(['id', 'name']);
+            $teachers_id = Teachers::where('id', '!=', $course->teachers_id)->get();
             $classrooms_id = Classrooms::where('id', '!=', $course->classrooms_id)->get();
-            $category_courses_id = CategoryCourses::where('id', '!=', $course->category_courses_id)->get(['id', 'name']);
-            // mengembalikan ke halaman edit
-            return view('admin.courses.edit', ['teachers_id' => $teachers_id, 'classrooms_id' => $classrooms_id, 'category_courses_id' => $category_courses_id], compact('course'));
+            // $master_courses_id = MasterCourses::where('id', '!=', $course->master_courses_id)->get();
+            $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
+
+            // mengembalikan ke halaman show
+            return view('admin.courses.edit', [
+                'teachers_id' => $teachers_id,
+                'classrooms_id' => $classrooms_id,
+                // 'master_courses_id' => $master_courses_id,
+                'master_category_courses_id' => $master_category_courses_id
+            ],
+                compact('course'));
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengambil data ". $th->getMessage());
             response()->json([
@@ -146,32 +171,32 @@ class CoursesController extends Controller
     public function update(Request $request, string $id): RedirectResponse
     {
         try {
-            //validate form
+            // Validate form
             $request->validate([
-                'name'                  => 'required|min:2',
-                'teachers_id'           => 'required',
-                'classrooms_id'         => 'required',
-                'category_courses_id'   => 'required'
+                'teachers_id'           => 'required|exists:teachers,id',
+                'classrooms_id'         => 'required|exists:classrooms,id',
+                'masterCourses'         => 'required|array',
+                'masterCourses.*'       => 'exists:master_courses,id'
             ]);
 
-            // get data by id
+            // Get data by ID
             $course = Courses::findOrFail($id);
 
-            //create data courses
+            // Update course data
             $course->update([
-                'name'                  => $request->name,
                 'teachers_id'           => $request->teachers_id,
                 'classrooms_id'         => $request->classrooms_id,
-                'category_courses_id'   => $request->category_courses_id
             ]);
 
-            // mengembalikan ke halaman courses index
+            // Sync master courses with the course
+            $course->masterCourses()->sync($request->masterCourses);
+
+            // Redirect to the courses index page with success message
             return redirect()->route('admin.courses.index')->with(['success' => 'Data Berhasil Diubah!']);
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengubah data ". $th->getMessage());
+            Log::error("Tidak dapat mengubah data: " . $th->getMessage());
             return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
         }
-
     }
 
     /**
