@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\CategoryCourses;
 use App\Models\Classrooms;
+use App\Models\CourseMasterCourse;
+use App\Models\Courses;
 use App\Models\EducationLevels;
+use App\Models\FilesUploads;
 use App\Models\MasterCategoryCourses;
 use App\Models\Roles;
 use App\Models\Students;
@@ -13,6 +16,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -54,8 +58,9 @@ class StudentsController extends Controller
         try {
             // get data to display create page
             $education_levels_id = EducationLevels::all();
-            $classrooms_id = Classrooms::with('semesters')->get();
-            $category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
+            // Ambil classrooms beserta kursusnya
+            $classrooms_id = Classrooms::with('courses')->get();
+            $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
 
             $roles = Roles::all();
 
@@ -64,18 +69,42 @@ class StudentsController extends Controller
 
             if ($activeRole === 'guru') {
                 // Mengembalikan ke halaman create students guru
-                return view('guru.students.create', compact('students'));
+                return view('guru.students.create', [
+                    'education_levels_id' => $education_levels_id,
+                    'classrooms_id' => $classrooms_id,
+                    'master_category_courses_id' => $master_category_courses_id,
+                    'roles' => $roles
+                ]);
             } elseif ($activeRole === 'admin') {
                 // Mengembalikan ke halaman create students admin
-                return view('admin.students.create', compact('students'));
+                return view('admin.students.create',  [
+                    'education_levels_id' => $education_levels_id,
+                    'classrooms_id' => $classrooms_id,
+                    'master_category_courses_id' => $master_category_courses_id,
+                    'roles' => $roles
+                ]);
             }
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
-            response()->json([
+            Log::error("Tidak dapat menampilkan halaman create". $th->getMessage());
+            return response()->json([
                 'status'    => false,
-                'message'   => 'Tidak dapat menampilkan halaman'
+                'message'   => 'Tidak dapat menampilkan halaman create'
             ], 500);
         }
+    }
+
+    public function getCoursesByClassroom($classroom_id)
+    {
+        Log::info("Fetching courses for classroom ID: " . $classroom_id);
+        $classroom = Classrooms::with('courses.masterCourses')->find($classroom_id);
+
+        if (!$classroom) {
+            Log::error("Classroom not found: " . $classroom_id);
+            return response()->json(['error' => 'Classroom not found'], 404);
+        }
+
+        Log::info("Courses found: " . $classroom->courses);
+        return response()->json($classroom->courses);
     }
 
     /**
@@ -84,8 +113,11 @@ class StudentsController extends Controller
     public function store(Request $request) : RedirectResponse
     {
         try {
-            //validate form
-            $request->validate([
+            // Debugging: log the request data
+            Log::debug('Request data:', $request->all());
+
+            // Validate form
+            $validatedData = $request->validate([
                 'name'                  => 'required|min:4',
                 'nik'                   => 'required|numeric|min:16',
                 'noAkteLahir'           => 'required|numeric|min:4',
@@ -96,22 +128,50 @@ class StudentsController extends Controller
                 'gender'                => 'required',
                 'dateOfBirth'           => 'required',
                 'address'               => 'required|min:10',
-                'image'                 => 'required|image|mimes:jpeg,jpg,png|max:2048',
                 'status'                => 'required',
                 'education_levels_id'   => 'required|exists:education_levels,id',
                 'classrooms_id'         => 'required|exists:classrooms,id',
-
+                'files_uploads_id'      => 'exists:files_uploads,id',
                 'username'              => 'required|min:4',
                 'email'                 => 'required|min:5|email',
                 'password'              => 'required|min:6',
-                'level'                 => 'required',
-
-                'courses'               => 'array|required', // Input mata pelajaran sebagai array
+                'level.*'               => 'exists:roles,id',
+                'master_courses_id.*'   => 'exists:master_courses,id',
             ]);
 
-            //upload image
-            $image = $request->file('image');
-            $image->storeAs('public/images', $image->hashName());
+            // Debugging: log validated data
+            Log::debug('Validated data:', $validatedData);
+
+            // Upload new image
+            $path = $request->file('path');
+            $path->getClientOriginalName();
+            $imagePath = $path->storeAs('public/images', $path->getClientOriginalName());
+
+            // create data user
+            $user = User::create([
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => $request->password,
+            ]);
+
+            // Tangani array  level
+            if ($request->has('level')) {
+                // Tetapkan nilai level yang dipilih ke atribut roles
+                $user->roles()->sync($request->input('level'));
+            } else {
+                // Tetapkan nilai default ke atribut roles jika tidak ada level yang dipilih
+                // Misalnya, default level sebagai calonSiswa
+                $defaultRole = Roles::where('level', 'calonSiswa')->first();
+                if ($defaultRole) {
+                    $user->roles()->sync([$defaultRole->id]);
+                }
+            }
+
+            // create data files_uploads record
+            $file_uploads = FilesUploads::updateOrCreate(
+                ['id' => $request->files_uploads_id],
+                ['path' => basename($imagePath)]
+            );
 
             //create data student
             $students = Students::create([
@@ -125,26 +185,31 @@ class StudentsController extends Controller
                 'gender'                => $request->gender,
                 'dateOfBirth'           => $request->dateOfBirth,
                 'address'               => $request->address,
-                'image'                 => $image->hashName(),
                 'status'                => $request->status,
                 'education_levels_id'   => $request->education_levels_id,
                 'classrooms_id'         => $request->classrooms_id,
+                'users_id'              => $user->id,
+                'files_uploads_id'      => $file_uploads->id
             ]);
 
-            $students->courses()->attach($request->courses);
+            // Attach courses with master_courses_id to the student
+            // Mengaitkan courses dengan master_courses_id ke student_courses
+            if ($request->has('master_courses_id')) {
+                foreach ($request->master_courses_id as $masterCourseId) {
+                    // Find corresponding course_id from course_master_course table
+                    // Mencari course_id yang sesuai dari tabel CourseMasterCourse berdasarkan master_course_id
+                    $courseId = CourseMasterCourse::where('master_course_id', $masterCourseId)->value('course_id');
 
-            // create data user
-            User::create([
-                'username'      => $request->username,
-                'email'         => $request->email,
-                'password'      => $request->password,
-                'level'         => $request->level,
-                'students_id'   => $students->id
-            ]);
+                    // Attach course_id to the student
+                    // menambahkan ke pivot table students_courses
+                    if ($courseId) {
+                        $students->courses()->attach($courseId);
+                    }
+                }
+            }
 
             // Check the role with higher priority first
             $activeRole = session('current_role');
-
             if ($activeRole === 'guru') {
                 // redirect to guru students index
                 return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
@@ -153,14 +218,14 @@ class StudentsController extends Controller
                 return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
             }
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
+            Log::error("Tidak dapat menyimpan data siswa: " . $th->getMessage());
             if ($th instanceof \Illuminate\Validation\ValidationException) {
                 $errors = $th->validator->errors()->all();
                 foreach ($errors as $error) {
                     Log::error($error);
                 }
             }
-            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
+            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data siswa']);
         }
     }
 
