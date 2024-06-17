@@ -21,7 +21,7 @@ class Courses extends Model
 
     public function classrooms()
     {
-        return $this->belongsTo(Classrooms::class);
+        return $this->belongsTo(Classrooms::class, 'classrooms_id');
     }
 
     public function masterCourses()
