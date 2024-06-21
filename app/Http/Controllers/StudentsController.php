@@ -241,58 +241,58 @@ class StudentsController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(string $id)
-    // {
-    //     try {
-    //         // Ambil siswa dengan semua data terkait
-    //         $student = Students::with(['education_levels', 'classrooms', 'user', 'files_uploads', 'courses.masterCourses.master_category_course'])->findOrFail($id);
+    public function show(string $id)
+    {
+        try {
+            // Ambil siswa dengan semua data terkait
+            $student = Students::with(['education_levels', 'classrooms', 'user', 'files_uploads', 'courses.masterCourses.master_category_course'])->findOrFail($id);
 
-    //         // Ambil kategori master
-    //         $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
+            // Ambil kategori master
+            $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
 
-    //         // Ambil data tambahan berdasarkan kebutuhan
-    //         $education_levels = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
-    //         $classrooms = Classrooms::where('id', '!=', $student->classrooms_id)->get();
-    //         $users = User::where('id', '!=', $student->users_id)->get();
-    //         $roles = Roles::all();
+            // Ambil data tambahan berdasarkan kebutuhan
+            $education_levels = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
+            $classrooms = Classrooms::where('id', '!=', $student->classrooms_id)->get();
+            $users = User::where('id', '!=', $student->users_id)->get();
+            $roles = Roles::all();
 
-    //         // Determine active role
-    //         $activeRole = session('current_role');
+            // Determine active role
+            $activeRole = session('current_role');
 
-    //         // Render view based on role
-    //         if ($activeRole === 'guru') {
-    //             return view('guru.students.show', [
-    //                 'education_levels' => $education_levels,
-    //                 'classrooms' => $classrooms,
-    //                 'user' => $users,
-    //                 'student' => $student,
-    //                 'roles' => $roles,
-    //             ]);
-    //         } elseif ($activeRole === 'admin') {
-    //             return view('admin.students.show', [
-    //                 'education_levels' => $education_levels,
-    //                 'classrooms' => $classrooms,
-    //                 'user' => $users,
-    //                 'student' => $student,
-    //                 'master_category_courses_id' => $master_category_courses_id,
-    //                 'roles' => $roles,
-    //             ]);
-    //         }
+            // Render view based on role
+            if ($activeRole === 'guru') {
+                return view('guru.students.show', [
+                    'education_levels' => $education_levels,
+                    'classrooms' => $classrooms,
+                    'user' => $users,
+                    'student' => $student,
+                    'roles' => $roles,
+                ]);
+            } elseif ($activeRole === 'admin') {
+                return view('admin.students.show', [
+                    'education_levels' => $education_levels,
+                    'classrooms' => $classrooms,
+                    'user' => $users,
+                    'student' => $student,
+                    'master_category_courses_id' => $master_category_courses_id,
+                    'roles' => $roles,
+                ]);
+            }
 
-    //         // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Peran tidak sah',
-    //         ], 403);
+            // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
+            return response()->json([
+                'status' => false,
+                'message' => 'Peran tidak sah',
+            ], 403);
 
-    //     } catch (\Throwable $th) {
-    //         Log::error("Gagal mengambil data: " . $th->getMessage());
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Gagal mengambil data',
-    //         ], 500);
-    //     }
-    // }
+        } catch (\Throwable $th) {
+            Log::error("Gagal mengambil data: " . $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data',
+            ], 500);
+        }
+    }
 
     /**
      * Show the form for editing the specified resource.
