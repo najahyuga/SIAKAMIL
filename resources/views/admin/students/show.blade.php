@@ -499,7 +499,344 @@
                                         </div>
                                     </div>
 
-                                    
+                                    <!-- Start Profile Edit Form -->
+                                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                        <form action="{{ route('admin.students.update', $student->id) }}" method="POST" enctype="multipart/form-data" id="updateForm">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="row mb-3">
+                                                <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    @if ($student->files_uploads_id)
+                                                        <img src="{{ asset('/storage/images/' . $student->files_uploads->path) }}" class="rounded" style="width: 30%" alt="Profile Image"><br>
+                                                    @else
+                                                        <p>No profile image available</p>
+                                                    @endif
+                                                    <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maximum Size 2 MB</span>
+                                                    <div class="pt-1">
+                                                        <label for="file_upload_id" class="btn btn-primary btn-sm" title="Upload new profile image">
+                                                            <input type="file" id="file_upload_id" style="display:none" name='path'>
+                                                            <i class="bi bi-upload" onclick="_upload()"></i> Upload
+                                                        </label>
+                                                        {{-- <a href="" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $student->name) }}" placeholder="Masukkan Nama Anda!">
+                                                </div>
+                                                <!-- error message untuk nama -->
+                                                @error('name')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Nomor Induk Kependudukan</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="nik" type="number" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik', $student->nik) }}" placeholder="Masukkan Nomor Induk Kependudukan Anda!">
+                                                </div>
+                                                <!-- error message untuk nama -->
+                                                @error('nik')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Nomor Akte Lahir</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="number" class="form-control @error('noAkteLahir') is-invalid @enderror" name="noAkteLahir" value="{{ old('noAkteLahir', $student->noAkteLahir) }}" placeholder="Masukkan Nomor Akte Lahir Anda!">
+                                                </div>
+
+                                                <!-- error message untuk noAkteLahir -->
+                                                @error('noAkteLahir')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Nomor Induk Siswa</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="number" class="form-control @error('nis') is-invalid @enderror" name="nis" value="{{ old('nis', $student->nis) }}" placeholder="Masukkan Nomor Induk Siswa Anda!">
+                                                </div>
+
+                                                <!-- error message untuk nik -->
+                                                @error('nis')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Nomor Induk Siswa Nasional</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="number" class="form-control @error('nisn') is-invalid @enderror" name="nisn" value="{{ old('nisn', $student->nisn) }}" placeholder="Masukkan Nomor Induk Siswa Nasional Anda!">
+                                                </div>
+
+                                                <!-- error message untuk nik -->
+                                                @error('nisn')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Nomor HP</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" class="form-control" id="noHP" name="noHP" value="{{ old('noHP', $student->noHP) }}" placeholder="Masukkan Nomor HP Anda!" aria-describedby="noHPHelpBlock">
+                                                    <div id="noHPHelpBlock" class="form-text text-muted">
+                                                        Nomor HP harus berupa angka.
+                                                    </div>
+                                                </div>
+
+                                                <!-- error message untuk nik -->
+                                                @error('noHP')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="font-weight-bold">Agama</label>
+                                                <select class="form-select @error('agama') is-invalid @enderror" name="agama" aria-label="Pilih Agama">
+                                                    <option selected>Pilih Agama</option>
+                                                    <option value="islam" {{ ($student->agama=='islam') ? 'selected' : '' }}>Islam</option>
+                                                    <option value="kristen" {{ ($student->agama=='kristen') ? 'selected' : '' }}>Kristen</option>
+                                                    <option value="katolik" {{ ($student->agama=='katolik') ? 'selected' : '' }}>Katolik</option>
+                                                    <option value="buddha" {{ ($student->agama=='buddha') ? 'selected' : '' }}>Buddha</option>
+                                                    <option value="hindu" {{ ($student->agama=='hindu') ? 'selected' : '' }}>Kristen</option>
+                                                    <option value="khonghucu" {{ ($student->agama=='khonghucu') ? 'selected' : '' }}>Khonghucu</option>
+                                                </select>
+                                                <!-- error message untuk agama -->
+                                                @error('agama')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Alamat</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <textarea name="address" type="text" class="form-control @error('address') is-invalid @enderror" placeholder="Masukkan Alamat Anda!">{{ old('address', $student->address) }}</textarea>
+                                                </div>
+
+                                                <!-- error message untuk alamat -->
+                                                @error('address')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Jenis Kelamin</label>
+                                                <select class="form-select @error('gender') is-invalid @enderror" name="gender" aria-label="Default select example">
+                                                    <option selected>Pilih Jenis kelamin</option>
+                                                    <option value="Laki-Laki" {{ ($student->gender=='Laki-Laki') ? 'selected' : '' }}>Laki-Laki</option>
+                                                    <option value="Perempuan" {{ ($student->gender=='Perempuan') ? 'selected' : '' }}>Perempuan</option>
+                                                </select>
+                                                <!-- error message untuk jenis kelamin -->
+                                                @error('gender')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Tanggal Lahir</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="date" class="form-control @error('dateOfBirth') is-invalid @enderror" name="dateOfBirth" value="{{ old('dateOfBirth', $student->dateOfBirth) }}" placeholder="Masukkan Tanggal Lahir Anda!">
+                                                </div>
+                                                <!-- error message untuk Tanggal Lahir -->
+                                                @error('dateOfBirth')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Status Keaktifan
+                                                    <span class="badge bg-success mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Active</span>
+                                                </label>
+                                                <select class="form-select @error('status') is-invalid @enderror" name="status" aria-label="Default select example">
+                                                    <option>Status Keaktifan</option>
+                                                    <option value="active" {{ ($student->status=='active') ? 'selected' : '' }}>Active</option>
+                                                    <option value="non-active" {{ ($student->status=='non-active') ? 'selected' : '' }}>Non-Active</option>
+                                                </select>
+                                                <!-- error message untuk jenis kelamin -->
+                                                @error('status')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            {{-- form input to users tabel --}}
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Username</label>
+                                                <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $student->user->username) }}" placeholder="Masukkan Username Anda!">
+
+                                                <!-- error message untuk name -->
+                                                @error('username')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Email</label>
+                                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->user->email) }}" placeholder="Masukkan Email Anda!">
+
+                                                <!-- error message untuk name -->
+                                                @error('email')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Password
+                                                    <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal 6 Karakter</span>
+                                                </label>
+                                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $student->user->password) }}" placeholder="Masukkan Password Anda!">
+
+                                                <!-- error message untuk name -->
+                                                @error('password')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Role Levels</label>
+                                                @foreach ($roles as $role)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="level[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                                        @if($student->user->roles->contains($role->id)) checked @endif>
+                                                        <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
+                                                    </div>
+                                                @endforeach
+                                                <!-- error message untuk roles -->
+                                                @error('roles')
+                                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Jenjang Pendidikan</label>
+                                                <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
+                                                    <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
+                                                    @foreach ($education_levels as $data)
+                                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <!-- error message untuk jenis kelamin -->
+                                                @error('education_levels_id')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="classrooms_id">Pilih Kelas</label>
+                                                <select name="classrooms_id" id="classrooms_id" class="form-control">
+                                                    <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} / {{ $student->classrooms->semesters->name }}</option>
+                                                    @foreach($classrooms as $classroom)
+                                                        <option value="{{ $classroom->id }}">{{ $classroom->name }} / {{ $classroom->semesters->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mb-3 custom-checkbox">
+                                                <label class="font-weight-bold">Pilih Master Kategori Pelajaran</label>
+                                                <div class="row">
+                                                    @php $count = 0; @endphp
+                                                    @foreach ($master_category_courses_id as $master_category)
+                                                        <div class="col-md-6">
+                                                            <p class="font-weight-bold">{{ $master_category->name }}</p>
+                                                            @foreach ($master_category->masterCourses as $master_course)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input course-checkbox" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}"
+                                                                        {{ $student->courses->pluck('id')->intersect($master_course->courses->pluck('id'))->isNotEmpty() ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="master_course_{{ $master_course->id }}">
+                                                                        {{ $master_course->name }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        @php $count++; @endphp
+                                                        @if($count % 2 == 0)
+                                                            </div><div class="row">
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                <!-- error message untuk Pilih Master Kategori Pelajaran -->
+                                                @error('master_courses_id')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            {{-- <div class="row mb-3">
+                                                <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
+                                                </div>
+                                            </div> --}}
+
+                                            {{-- <div class="row mb-3">
+                                                <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
+                                                </div>
+                                            </div> --}}
+
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form><!-- End Profile Edit Form -->
+                                    </div><!-- End Profile Edit Form -->
                                 </div><!-- End Bordered Tabs -->
                             </div>
                         </div>
@@ -646,59 +983,59 @@
                 $('.datatable').DataTable();
             });
 
-            // document.getElementById('classrooms_id').addEventListener('change', function() {
-            //     var classroomId = this.value;
-            //     if (classroomId) {
-            //         const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
-            //         console.log('Fetching URL:', url);
-            //         fetch(url)
-            //             .then(response => {
-            //                 if (!response.ok) {
-            //                     throw new Error('Network response was not ok ' + response.statusText);
-            //                 }
-            //                 return response.json();
-            //             })
-            //             .then(data => {
-            //                 console.log('Data received:', data);
-            //                 // Uncheck all checkboxes first
-            //                 document.querySelectorAll('.course-checkbox').forEach(checkbox => {
-            //                     checkbox.checked = false;
-            //                 });
-            //                 // Check the checkboxes that are in the data
-            //                 data.forEach(course => {
-            //                     course.master_courses.forEach(masterCourse => {
-            //                         document.getElementById(`master_course_${masterCourse.id}`).checked = true;
-            //                     });
-            //                 });
-            //             })
-            //             .catch(error => {
-            //                 console.error('Error:', error);
-            //             });
-            //     } else {
-            //         document.querySelectorAll('.course-checkbox').forEach(checkbox => {
-            //             checkbox.checked = false;
-            //         });
-            //     }
-            // });
+            document.getElementById('classrooms_id').addEventListener('change', function() {
+                var classroomId = this.value;
+                if (classroomId) {
+                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                    console.log('Fetching URL:', url);
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Data received:', data);
+                            // Uncheck all checkboxes first
+                            document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                            // Check the checkboxes that are in the data
+                            data.forEach(course => {
+                                course.master_courses.forEach(masterCourse => {
+                                    document.getElementById(`master_course_${masterCourse.id}`).checked = true;
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
+            });
 
-            // document.getElementById('updateForm').addEventListener('submit', function(event) {
-            //     let noHPInput = document.getElementById('noHP');
-            //     let noHPValue = noHPInput.value.trim();
+            document.getElementById('updateForm').addEventListener('submit', function(event) {
+                let noHPInput = document.getElementById('noHP');
+                let noHPValue = noHPInput.value.trim();
 
-            //     // Validasi menggunakan regex untuk memastikan hanya angka yang diterima
-            //     if (!/^\d+$/.test(noHPValue)) {
-            //         event.preventDefault(); // Mencegah pengiriman form
+                // Validasi menggunakan regex untuk memastikan hanya angka yang diterima
+                if (!/^\d+$/.test(noHPValue)) {
+                    event.preventDefault(); // Mencegah pengiriman form
 
-            //         // Tampilkan pesan SweetAlert
-            //         Swal.fire({
-            //             icon: 'error',
-            //             title: 'Oops...',
-            //             text: 'Nomor HP hanya boleh berisi angka.',
-            //         });
+                    // Tampilkan pesan SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor HP hanya boleh berisi angka.',
+                    });
 
-            //         noHPInput.focus();
-            //     }
-            // });
+                    noHPInput.focus();
+                }
+            });
 
             // get image in local
             function _upload(){
