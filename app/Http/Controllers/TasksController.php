@@ -22,18 +22,20 @@ class TasksController extends Controller
             // get data to display in index page
             $tasks = Tasks::all();
 
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman dashboard admin
-                return view('admin.tasks.index', compact('tasks'));
-            } elseif (Auth::user()->level == 'guru') {
-                // mengembalikan ke halaman dashboard guru
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'guru') {
+                // Mengembalikan ke halaman index students guru
                 return view('guru.tasks.index', compact('tasks'));
+            } elseif ($activeRole === 'admin') {
+                // Mengembalikan ke halaman index students admin
+                return view('admin.tasks.index', compact('tasks'));
             }
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengambil data ". $th->getMessage());
+            Log::error("Tidak dapat menampilkan halaman index ". $th->getMessage());
             response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat mengambil data'
+                'status' => false,
+                'message' => 'Tidak dapat menampilkan halaman index'
             ], 500);
         }
     }
