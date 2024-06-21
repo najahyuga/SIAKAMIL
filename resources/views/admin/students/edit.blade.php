@@ -495,13 +495,28 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Foto</label>
-                                        <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded mb-1" style="width: 10%" alt="image"><br>
-                                        <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span>
-                                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                                        <label class="font-weight-bold">Profile Image</label>
+                                        @if ($student->files_uploads_id)
+                                            <div class="d-flex align-items-center">
+                                                <!-- Tampilkan gambar lama -->
+                                                <div class="mr-3">
+                                                    <img src="{{ asset('/storage/images/' . $student->files_uploads->path) }}" class="rounded" style="width: 40%" alt="Profile Image"><br>
+                                                    <span class="badge bg-warning text-dark mb-1 mt-1" id="oldImageBadge" style="text-align: center;"><i class="bi bi-exclamation-octagon pe-2"></i>Profile Image Saat ini</span>
+                                                </div>
+                                                <!-- Tampilkan preview gambar baru -->
+                                                <div>
+                                                    <div id="imagePreview" class="mt-0 mb-1"></div>
+                                                    <span class="badge bg-warning text-dark mb-1 mt-1 d-none" id="updateImageBadge" style="text-align: center;"><i class="bi bi-exclamation-octagon pe-2"></i>Profile Image Baru</span>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <p>No profile image available</p>
+                                        @endif
+                                        <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maximum Size 2 MB</span>
+                                        <input type="file" class="form-control @error('path') is-invalid @enderror" name="path" onchange="previewImage(this)">
 
                                         <!-- error message untuk image -->
-                                        @error('image')
+                                        @error('path')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
                                             </div>
@@ -527,7 +542,7 @@
 
                                     {{-- form input to users tabel --}}
                                     <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Nama</label>
+                                        <label class="font-weight-bold">Username</label>
                                         <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $student->user->username) }}" placeholder="Masukkan Username Anda!">
 
                                         <!-- error message untuk name -->
@@ -542,7 +557,7 @@
                                         <label class="font-weight-bold">Email</label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->user->email) }}" placeholder="Masukkan Email Anda!">
 
-                                        <!-- error message untuk email -->
+                                        <!-- error message untuk name -->
                                         @error('email')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
@@ -552,11 +567,11 @@
 
                                     <div class="form-group mb-3">
                                         <label class="font-weight-bold">Password
-                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal Inputan 6 Karakter</span>
+                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal 6 Karakter</span>
                                         </label>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $student->user->password) }}" placeholder="Masukkan Password Anda!">
 
-                                        <!-- error message untuk password -->
+                                        <!-- error message untuk name -->
                                         @error('password')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
@@ -565,34 +580,15 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Role Level
-                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Calon Siswa</span>
-                                        </label>
-                                        <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                            <option value="{{ $student->user->level }}">{{ $student->user->level }}</option>
-                                            {{-- @foreach ($user as $data)
-                                                <option value="{{ $data->id }}">{{ $data->level }}</option>
-                                            @endforeach --}}
-                                            <option value="admin" {{ (old('level')=='admin') ? 'selected' : '' }}>Admin</option>
-                                            <option value="guru" {{ (old('level')=='guru') ? 'selected' : '' }}>Guru</option>
-                                            <option value="siswa" {{ (old('level')=='siswa') ? 'selected' : '' }}>Siswa</option>
-                                            <option value="calonSiswa" {{ (old('level')=='calonSiswa') ? 'selected' : '' }}>Calon Siswa</option>
-                                        </select>
-                                        <!-- error message untuk level -->
-                                        @error('level')
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                        
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Pilih Kategori Jenjang Pendidikan</label>
+                                        <label class="font-weight-bold">Jenjang Pendidikan</label>
                                         <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
                                             <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
-                                            @foreach ($education_levels_id as $data)
+                                            @foreach ($education_levels as $data)
                                                 <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                                {{-- {{ old('education_levels_id', $data->name) }} --}}
                                             @endforeach
                                         </select>
                                         <!-- error message untuk jenis kelamin -->
@@ -607,7 +603,7 @@
                                         <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
                                         <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
                                             <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} / {{ $student->classrooms->semesters->name }}</option>
-                                            @foreach ($classrooms_id as $data)
+                                            @foreach ($classrooms as $data)
                                                 <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->semesters->name }}</option>
                                             @endforeach
                                         </select>
@@ -708,6 +704,36 @@
             //     }
             //     setTimeout(getSelamat, 1000);
             // }
+
+            function previewImage(input) {
+                var preview = document.getElementById('imagePreview');
+                var updateImageBadge = document.getElementById('updateImageBadge');
+
+                preview.innerHTML = '';
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        var img = document.createElement('img');
+                        img.setAttribute('src', e.target.result);
+                        img.setAttribute('class', 'rounded');
+                        var imageSize = 40; // Ukuran gambar baru dalam persen
+                        img.style.width = imageSize + '%'; // Mengatur lebar gambar baru
+                        preview.appendChild(img);
+
+                        // Sembunyikan badge "Profile Image Saat ini" dan tampilkan badge "Profile Image Baru"
+                        updateImageBadge.classList.remove('d-none');
+                        // Atur lebar badge "Profile Image Baru" sesuai dengan ukuran gambar baru
+                        updateImageBadge.style.width = imageSize + '%';
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    // Tampilkan kembali badge "Profile Image Saat ini" dan sembunyikan badge "Profile Image Baru"
+                    updateImageBadge.classList.add('d-none');
+                }
+            }
 
             // Message with SweetAlert if user tries to access unauthorized route
             @if(session('unauthorized'))
