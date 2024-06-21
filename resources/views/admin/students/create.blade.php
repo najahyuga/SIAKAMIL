@@ -577,7 +577,7 @@
                                         <label class="font-weight-bold">Jenjang Pendidikan</label>
                                         <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
                                             <option selected>Pilih Jenjang Pendidikan Id</option>
-                                            @foreach ($education_levels_id as $data)
+                                            @foreach ($education_levels as $data)
                                                 <option value="{{ $data->id }}">{{ $data->name }}</option>
                                             @endforeach
                                         </select>
@@ -589,51 +589,40 @@
                                         @enderror
                                     </div>
 
+                                    <!-- Kelas -->
                                     <div class="form-group">
-                                        <label for="classrooms_id">Pilih Kelas</label>
+                                        <label for="classrooms_id" class="font-weight-bold">Pilih Kelas</label>
                                         <select name="classrooms_id" id="classrooms_id" class="form-control">
                                             <option value="">Pilih Kelas</option>
-                                            @foreach($classrooms_id as $classroom)
+                                            @foreach($classrooms as $classroom)
                                                 <option value="{{ $classroom->id }}">{{ $classroom->name }} / {{ $classroom->semesters->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
+                                    <!-- Mata Pelajaran -->
                                     <div class="form-group mb-3 custom-checkbox">
                                         <label class="font-weight-bold">Mata Pelajaran</label>
                                         <div class="row" id="course-container">
-                                            @php $count = 0; @endphp
-                                            @foreach ($master_category_courses_id as $master_category)
+                                            @foreach ($master_categories as $master_category)
                                                 <div class="col-md-6">
                                                     <p class="font-weight-bold">{{ $master_category->name }}</p>
                                                     @foreach ($master_category->masterCourses as $master_course)
                                                         <div class="form-check">
-                                                            <input class="form-check-input course-checkbox"
-                                                                    type="checkbox"
-                                                                    value="{{ $master_course->id }}"
-                                                                    name="master_courses_id[]"
-                                                                    id="master_course_{{ $master_course->id }}"
-                                                                    {{ in_array($master_course->id, old('master_courses_id', [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label"
-                                                                    for="master_course_{{ $master_course->id }}">
+                                                            <input class="form-check-input course-checkbox" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}" {{ in_array($master_course->id, old('master_courses_id', [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="master_course_{{ $master_course->id }}">
                                                                 {{ $master_course->name }}
                                                             </label>
                                                         </div>
                                                     @endforeach
                                                 </div>
-                                                @php $count++; @endphp
-                                                @if($count % 2 == 0)
-                                                    </div><div class="row">
-                                                @endif
                                             @endforeach
                                         </div>
                                         @error('master_courses_id')
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $message }}
-                                            </div>
+                                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    
+
                                     <button type="submit" class="btn btn-md btn-primary me-3">SAVE</button>
                                     <button type="reset" class="btn btn-md btn-warning">RESET</button>
                                 </form>
@@ -653,7 +642,6 @@
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
         </footer><!-- End Footer -->
-
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
             <i class="bi bi-arrow-up-short"></i>
