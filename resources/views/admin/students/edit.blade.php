@@ -580,7 +580,18 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        
+                                        <label class="font-weight-bold">Role Levels</label>
+                                        @foreach ($roles as $role)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="level[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                                @if($student->user->roles->contains($role->id)) checked @endif>
+                                                <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
+                                            </div>
+                                        @endforeach
+                                        <!-- error message untuk roles -->
+                                        @error('roles')
+                                            <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group mb-3">
