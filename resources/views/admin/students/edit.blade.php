@@ -355,7 +355,7 @@
                                 <h5 class="card-title">Forms Edit Student Data</h5>
 
                                 <!-- Custom Styled Validation with Tooltips novalidate -->
-                                <form action="{{ route('admin.students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('admin.students.update', $student->id) }}" method="POST" enctype="multipart/form-data" id="updateForm">
                                     @csrf
                                     @method('PUT')
 
@@ -424,9 +424,12 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="col-md-4 col-lg-3 col-form-label">Nomor HP
-                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal Inputan 15 Angka</span>
+                                            <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maximal Inputan 15 Angka</span>
                                         </label>
-                                        <input type="number" class="form-control @error('noHP') is-invalid @enderror" name="noHP" value="{{ old('noHP', $student->noHP) }}" placeholder="Masukkan Nomor HP Anda!">
+                                        <input type="text" class="form-control" id="noHP" name="noHP" value="{{ old('noHP', $student->noHP) }}" placeholder="Masukkan Nomor HP Anda!" aria-describedby="noHPHelpBlock">
+                                        <div id="noHPHelpBlock" class="form-text text-muted">
+                                            Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.
+                                        </div>
                                         <!-- error message untuk nik -->
                                         @error('noHP')
                                             <div class="alert alert-danger mt-2">
@@ -679,12 +682,9 @@
             </div>
         </footer><!-- End Footer -->
 
-
-        <a
-            href="#"
-            class="back-to-top d-flex align-items-center justify-content-center"
-            ><i class="bi bi-arrow-up-short"></i
-        ></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
 
         <!-- Vendor JS Files -->
         <script src="{{asset('backend/assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
@@ -736,6 +736,25 @@
                     document.querySelectorAll('.course-checkbox').forEach(checkbox => {
                         checkbox.checked = false;
                     });
+                }
+            });
+
+            document.getElementById('updateForm').addEventListener('submit', function(event) {
+                let noHPInput = document.getElementById('noHP');
+                let noHPValue = noHPInput.value.trim();
+
+                // Validasi menggunakan regex untuk memastikan hanya angka yang diterima
+                if (!/^\+?\d{10,15}$/.test(noHPValue)) {
+                    event.preventDefault(); // Mencegah pengiriman form
+
+                    // Tampilkan pesan SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.',
+                    });
+
+                    noHPInput.focus();
                 }
             });
 
