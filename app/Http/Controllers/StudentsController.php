@@ -93,31 +93,31 @@ class StudentsController extends Controller
         }
     }
 
-    // public function getCoursesByClassroom($classroom_id)
-    // {
-    //     try {
-    //         Log::info("Mengambil data kursus untuk kelas dengan ID: " . $classroom_id);
-    //         $classroom = Classrooms::with('courses.masterCourses')->find($classroom_id);
+    public function getCoursesByClassroom($classroom_id)
+    {
+        try {
+            Log::info("Mengambil data kursus untuk kelas dengan ID: " . $classroom_id);
+            $classroom = Classrooms::with('courses.masterCourses')->find($classroom_id);
 
-    //         if (!$classroom) {
-    //             Log::error("Kelas tidak ditemukan: " . $classroom_id);
-    //             return response()->json(['error' => 'Kelas tidak ditemukan'], 404);
-    //         }
+            if (!$classroom) {
+                Log::error("Kelas tidak ditemukan: " . $classroom_id);
+                return response()->json(['error' => 'Kelas tidak ditemukan'], 404);
+            }
 
-    //         // Ambil semua kursus dari kelas yang dipilih
-    //         $courses = $classroom->courses;
+            // Ambil semua kursus dari kelas yang dipilih
+            $courses = $classroom->courses;
 
-    //         Log::info("Kursus ditemukan: " . $courses);
-    //         return response()->json($courses);
+            Log::info("Kursus ditemukan: " . $courses);
+            return response()->json($courses);
 
-    //     } catch (\Throwable $th) {
-    //         Log::error("Gagal mengambil data kursus: " . $th->getMessage());
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Gagal mengambil data kursus',
-    //         ], 500);
-    //     }
-    // }
+        } catch (\Throwable $th) {
+            Log::error("Gagal mengambil data kursus: " . $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data kursus',
+            ], 500);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
