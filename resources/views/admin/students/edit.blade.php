@@ -611,15 +611,46 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
-                                        <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
+                                        <label for="classrooms_id">Pilih Kelas</label>
+                                        <select name="classrooms_id" id="classrooms_id" class="form-control">
                                             <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} / {{ $student->classrooms->semesters->name }}</option>
-                                            @foreach ($classrooms as $data)
-                                                <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->semesters->name }}</option>
+                                            @foreach($classrooms as $classroom)
+                                                <option value="{{ $classroom->id }}">{{ $classroom->name }} / {{ $classroom->semesters->name }}</option>
                                             @endforeach
                                         </select>
                                         <!-- error message untuk jenis kelamin -->
                                         @error('classrooms_id')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3 custom-checkbox">
+                                        <label class="font-weight-bold">Pilih Master Kategori Pelajaran</label>
+                                        <div class="row">
+                                            @php $count = 0; @endphp
+                                            @foreach ($master_category_courses_id as $master_category)
+                                                <div class="col-md-6">
+                                                    <p class="font-weight-bold">{{ $master_category->name }}</p>
+                                                    @foreach ($master_category->masterCourses as $master_course)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input course-checkbox" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}"
+                                                                {{ $student->courses->pluck('id')->intersect($master_course->courses->pluck('id'))->isNotEmpty() ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="master_course_{{ $master_course->id }}">
+                                                                {{ $master_course->name }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                @php $count++; @endphp
+                                                @if($count % 2 == 0)
+                                                    </div><div class="row">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <!-- error message untuk Pilih Master Kategori Pelajaran -->
+                                        @error('master_courses_id')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
                                             </div>
@@ -672,6 +703,42 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            // mendapatkan data courses berdasarkan classrooms
+            document.getElementById('classrooms_id').addEventListener('change', function() {
+                var classroomId = this.value;
+                if (classroomId) {
+                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                    console.log('Fetching URL:', url);
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Data received:', data);
+                            // Uncheck all checkboxes first
+                            document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                            // Check the checkboxes that are in the data
+                            data.forEach(course => {
+                                course.master_courses.forEach(masterCourse => {
+                                    document.getElementById(`master_course_${masterCourse.id}`).checked = true;
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
+            });
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();
