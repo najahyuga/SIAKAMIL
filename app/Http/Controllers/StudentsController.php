@@ -297,181 +297,181 @@ class StudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(string $id)
-    // {
-    //     try {
-    //         // Ambil siswa dengan semua data terkait
-    //         $student = Students::with(['education_levels', 'classrooms', 'user', 'files_uploads', 'courses.masterCourses.master_category_course'])->findOrFail($id);
+    public function edit(string $id)
+    {
+        try {
+            // Ambil siswa dengan semua data terkait
+            $student = Students::with(['education_levels', 'classrooms', 'user', 'files_uploads', 'courses.masterCourses.master_category_course'])->findOrFail($id);
 
-    //         // Ambil kategori master
-    //         $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
+            // Ambil kategori master
+            $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
 
-    //         // Ambil data tambahan berdasarkan kebutuhan
-    //         $education_levels = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
-    //         $classrooms = Classrooms::where('id', '!=', $student->classrooms_id)->get();
-    //         $users = User::where('id', '!=', $student->users_id)->get();
-    //         $roles = Roles::all();
+            // Ambil data tambahan berdasarkan kebutuhan
+            $education_levels = EducationLevels::where('id', '!=', $student->education_levels_id)->get(['id', 'name']);
+            $classrooms = Classrooms::where('id', '!=', $student->classrooms_id)->get();
+            $users = User::where('id', '!=', $student->users_id)->get();
+            $roles = Roles::all();
 
-    //         // Determine active role
-    //         $activeRole = session('current_role');
+            // Determine active role
+            $activeRole = session('current_role');
 
-    //         // Render view based on role
-    //         if ($activeRole === 'guru') {
-    //             return view('guru.students.edit', [
-    //                 'education_levels' => $education_levels,
-    //                 'classrooms' => $classrooms,
-    //                 'user' => $users,
-    //                 'student' => $student,
-    //                 'roles' => $roles,
-    //             ]);
-    //         } elseif ($activeRole === 'admin') {
-    //             return view('admin.students.edit', [
-    //                 'education_levels' => $education_levels,
-    //                 'classrooms' => $classrooms,
-    //                 'user' => $users,
-    //                 'student' => $student,
-    //                 'master_category_courses_id' => $master_category_courses_id,
-    //                 'roles' => $roles,
-    //             ]);
-    //         }
+            // Render view based on role
+            if ($activeRole === 'guru') {
+                return view('guru.students.edit', [
+                    'education_levels' => $education_levels,
+                    'classrooms' => $classrooms,
+                    'user' => $users,
+                    'student' => $student,
+                    'roles' => $roles,
+                ]);
+            } elseif ($activeRole === 'admin') {
+                return view('admin.students.edit', [
+                    'education_levels' => $education_levels,
+                    'classrooms' => $classrooms,
+                    'user' => $users,
+                    'student' => $student,
+                    'master_category_courses_id' => $master_category_courses_id,
+                    'roles' => $roles,
+                ]);
+            }
 
-    //         // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Peran tidak sah',
-    //         ], 403);
+            // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
+            return response()->json([
+                'status' => false,
+                'message' => 'Peran tidak sah',
+            ], 403);
 
-    //     } catch (\Throwable $th) {
-    //         Log::error("Gagal mengambil data: " . $th->getMessage());
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Gagal mengambil data',
-    //         ], 500);
-    //     }
-    // }
+        } catch (\Throwable $th) {
+            Log::error("Gagal mengambil data: " . $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data',
+            ], 500);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, $id): RedirectResponse
-    // {
-    //     try {
-    //         // validate form
-    //         $request->validate([
-    //             'name'                  => 'required|min:4',
-    //             'nik'                   => 'required|numeric|min:16',
-    //             'noAkteLahir'           => 'required|numeric|min:4',
-    //             'nis'                   => 'required|numeric|min:5',
-    //             'nisn'                  => 'required|numeric|min:10',
-    //             'noHP'                  => 'required|numeric|digits_between:10,15', // hanya angka, panjang antara 10-15 digit,
-    //             'agama'                 => 'required',
-    //             'gender'                => 'required',
-    //             'dateOfBirth'           => 'required',
-    //             'address'               => 'required|min:10',
-    //             'status'                => 'required',
-    //             'education_levels_id'   => 'required|exists:education_levels,id',
-    //             'classrooms_id'         => 'required|exists:classrooms,id',
-    //             'files_uploads_id'      => 'exists:files_uploads,id',
-    //             'username'              => 'required|min:4',
-    //             'email'                 => 'required|min:5|email',
-    //             'password'              => 'required|min:6',
-    //             'level.*'               => 'exists:roles,id',
-    //             'master_courses_id.*'   => 'exists:master_courses,id',
-    //         ], [
-    //             'noHP.numeric'          => 'Nomor HP harus berupa angka',
-    //             'noHP.digits_between'   => 'Nomor HP harus terdiri dari 10 sampai 15 digit'
-    //         ]);
+    public function update(Request $request, $id): RedirectResponse
+    {
+        try {
+            // validate form
+            $request->validate([
+                'name'                  => 'required|min:4',
+                'nik'                   => 'required|numeric|min:16',
+                'noAkteLahir'           => 'required|numeric|min:4',
+                'nis'                   => 'required|numeric|min:5',
+                'nisn'                  => 'required|numeric|min:10',
+                'noHP'                  => 'required|numeric|digits_between:10,15', // hanya angka, panjang antara 10-15 digit,
+                'agama'                 => 'required',
+                'gender'                => 'required',
+                'dateOfBirth'           => 'required',
+                'address'               => 'required|min:10',
+                'status'                => 'required',
+                'education_levels_id'   => 'required|exists:education_levels,id',
+                'classrooms_id'         => 'required|exists:classrooms,id',
+                'files_uploads_id'      => 'exists:files_uploads,id',
+                'username'              => 'required|min:4',
+                'email'                 => 'required|min:5|email',
+                'password'              => 'required|min:6',
+                'level.*'               => 'exists:roles,id',
+                'master_courses_id.*'   => 'exists:master_courses,id',
+            ], [
+                'noHP.numeric'          => 'Nomor HP harus berupa angka',
+                'noHP.digits_between'   => 'Nomor HP harus terdiri dari 10 sampai 15 digit'
+            ]);
 
-    //         // get data by id
-    //         $student = Students::with('user', 'files_uploads')->findOrFail($id);
+            // get data by id
+            $student = Students::with('user', 'files_uploads')->findOrFail($id);
 
-    //         // Update or create user data
-    //         $user = User::updateOrCreate(
-    //             ['id' => $student->users_id], // Add id here
-    //             [
-    //                 'username'  => $request->username,
-    //                 'email'     => $request->email,
-    //                 'password'  => $request->password
-    //             ]
-    //         );
-    //         $user->save();
+            // Update or create user data
+            $user = User::updateOrCreate(
+                ['id' => $student->users_id], // Add id here
+                [
+                    'username'  => $request->username,
+                    'email'     => $request->email,
+                    'password'  => $request->password
+                ]
+            );
+            $user->save();
 
-    //         // Tangani array nilai level
-    //         if ($request->has('level')) {
-    //             $user->roles()->sync($request->input('level'));
-    //         }
+            // Tangani array nilai level
+            if ($request->has('level')) {
+                $user->roles()->sync($request->input('level'));
+            }
 
-    //         // Update or create files_uploads data
-    //         if ($request->hasFile('path')) {
+            // Update or create files_uploads data
+            if ($request->hasFile('path')) {
 
-    //             // Upload new image
-    //             $path = $request->file('path');
-    //             $path->getClientOriginalName();
-    //             $imagePath = $path->storeAs('public/images', $path->getClientOriginalName());
+                // Upload new image
+                $path = $request->file('path');
+                $path->getClientOriginalName();
+                $imagePath = $path->storeAs('public/images', $path->getClientOriginalName());
 
-    //             // Delete old image if exists
-    //             if ($student->files_uploads && $student->files_uploads->path) {
-    //                 Storage::delete('public/images/' . $student->files_uploads->path);
-    //             }
+                // Delete old image if exists
+                if ($student->files_uploads && $student->files_uploads->path) {
+                    Storage::delete('public/images/' . $student->files_uploads->path);
+                }
 
-    //             $filesUpload = FilesUploads::updateOrCreate(
-    //                 ['id' => $student->files_uploads_id],
-    //                 ['path' => basename($imagePath)]
-    //             );
+                $filesUpload = FilesUploads::updateOrCreate(
+                    ['id' => $student->files_uploads_id],
+                    ['path' => basename($imagePath)]
+                );
 
-    //             $student->files_uploads_id = $filesUpload->id;
-    //         }
+                $student->files_uploads_id = $filesUpload->id;
+            }
 
-    //         // update data tanpa student
-    //         $student->update([
-    //             'name'                  => $request->name,
-    //             'nik'                   => $request->nik,
-    //             'noAkteLahir'           => $request->noAkteLahir,
-    //             'nis'                   => $request->nis,
-    //             'nisn'                  => $request->nisn,
-    //             'noHP'                  => $request->noHP,
-    //             'agama'                 => $request->agama,
-    //             'gender'                => $request->gender,
-    //             'dateOfBirth'           => $request->dateOfBirth,
-    //             'address'               => $request->address,
-    //             'status'                => $request->status,
-    //             'education_levels_id'   => $request->education_levels_id,
-    //             'classrooms_id'         => $request->classrooms_id,
-    //             'users_id'              => $user->id,
-    //         ]);
+            // update data tanpa student
+            $student->update([
+                'name'                  => $request->name,
+                'nik'                   => $request->nik,
+                'noAkteLahir'           => $request->noAkteLahir,
+                'nis'                   => $request->nis,
+                'nisn'                  => $request->nisn,
+                'noHP'                  => $request->noHP,
+                'agama'                 => $request->agama,
+                'gender'                => $request->gender,
+                'dateOfBirth'           => $request->dateOfBirth,
+                'address'               => $request->address,
+                'status'                => $request->status,
+                'education_levels_id'   => $request->education_levels_id,
+                'classrooms_id'         => $request->classrooms_id,
+                'users_id'              => $user->id,
+            ]);
 
-    //         $classrooms_id = $request->classrooms_id;
+            $classrooms_id = $request->classrooms_id;
 
-    //         // Ambil semua course_ids yang terkait dengan classrooms_id yang dipilih
-    //         $courseIds = Courses::where('classrooms_id', $classrooms_id)->pluck('id')->toArray();
+            // Ambil semua course_ids yang terkait dengan classrooms_id yang dipilih
+            $courseIds = Courses::where('classrooms_id', $classrooms_id)->pluck('id')->toArray();
 
-    //         // Sinkronisasi relasi many-to-many dengan courses
-    //         $student->courses()->sync($courseIds);
+            // Sinkronisasi relasi many-to-many dengan courses
+            $student->courses()->sync($courseIds);
 
-    //         // Check the role with higher priority first
-    //         $activeRole = session('current_role');
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
 
-    //         if ($activeRole === 'guru') {
-    //             // redirect to guru students index page
-    //             return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
-    //         } elseif ($activeRole === 'admin') {
-    //             // redirect to admin students index page
-    //             return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         Log::error("Tidak dapat mengubah data siswa: " . $th->getMessage());
-    //         if ($th instanceof \Illuminate\Validation\ValidationException) {
-    //             $errors = $th->validator->errors()->all();
-    //             foreach ($errors as $error) {
-    //                 Log::error($error);
-    //             }
-    //         } else {
-    //             Log::error("Exception type: " . get_class($th));
-    //             Log::error($th->getTraceAsString());
-    //         }
-    //         return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat mengupdate data.']);
-    //     }
-    // }
+            if ($activeRole === 'guru') {
+                // redirect to guru students index page
+                return redirect()->route('guru.students.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
+            } elseif ($activeRole === 'admin') {
+                // redirect to admin students index page
+                return redirect()->route('admin.students.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengubah data siswa: " . $th->getMessage());
+            if ($th instanceof \Illuminate\Validation\ValidationException) {
+                $errors = $th->validator->errors()->all();
+                foreach ($errors as $error) {
+                    Log::error($error);
+                }
+            } else {
+                Log::error("Exception type: " . get_class($th));
+                Log::error($th->getTraceAsString());
+            }
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat mengupdate data.']);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
