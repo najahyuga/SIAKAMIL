@@ -363,7 +363,7 @@ class StudentsController extends Controller
                 'noAkteLahir'           => 'required|numeric|min:4',
                 'nis'                   => 'required|numeric|min:5',
                 'nisn'                  => 'required|numeric|min:10',
-                'noHP'                  => 'required|numeric|digits_between:10,15', // hanya angka, panjang antara 10-15 digit,
+                'noHP'                  => 'required|regex:/^\+?\d{10,15}$/', // hanya angka, panjang antara 10-15 digit,
                 'agama'                 => 'required',
                 'gender'                => 'required',
                 'dateOfBirth'           => 'required',
@@ -378,8 +378,7 @@ class StudentsController extends Controller
                 'level.*'               => 'exists:roles,id',
                 'master_courses_id.*'   => 'exists:master_courses,id',
             ], [
-                'noHP.numeric'          => 'Nomor HP harus berupa angka',
-                'noHP.digits_between'   => 'Nomor HP harus terdiri dari 10 sampai 15 digit'
+                'noHP.regex' => 'Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.',
             ]);
 
             // get data by id
