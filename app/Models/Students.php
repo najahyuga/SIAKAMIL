@@ -58,4 +58,8 @@ class Students extends Model
     {
         return $this->hasMany(TasksDetails::class);
     }
+
+    public function getCourses() {
+        return $this->belongsTo(Courses::class,'classrooms_id','classrooms_id');
+    }
 }
