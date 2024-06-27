@@ -45,6 +45,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
     Route::resource('tasks', TasksController::class);
     Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
     Route::get('/classrooms/{id}/courses', [StudentsController::class, 'getCoursesByClassroom']);
+    Route::post('/ckeditor/upload', [TasksController::class, 'upload'])->name('ckeditor.upload');
 });
 
 // Rute untuk guru
