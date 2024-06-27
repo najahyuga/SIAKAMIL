@@ -145,42 +145,42 @@ class TasksController extends Controller
      */
     public function show(string $id)
     {
-        // try {
-        //     // get data to display in create page
-        //     $courses_id = Courses::with('masterCourses', 'classrooms')->get();
+        try {
+            // get data to display in create page
+            $courses_id = Courses::with('masterCourses', 'classrooms')->get();
 
-        //     // display data based on ID
-        //     // menampilkan data berdasarkan ID
-        //     $task = Tasks::findOrFail($id);
+            // display data based on ID
+            // menampilkan data berdasarkan ID
+            $task = Tasks::findOrFail($id);
 
-        //     // Determine active role
-        //     $activeRole = session('current_role');
+            // Determine active role
+            $activeRole = session('current_role');
 
-        //     // Render view based on role
-        //     if ($activeRole === 'guru') {
-        //         return view('guru.tasks.show', [
-        //             'courses_id' => $courses_id,
-        //             'task' => $task,
-        //         ]);
-        //     } elseif ($activeRole === 'admin') {
-        //         return view('admin.tasks.show', [
-        //             'courses_id' => $courses_id,
-        //             'task' => $task,
-        //         ]);
-        //     }
+            // Render view based on role
+            if ($activeRole === 'guru') {
+                return view('guru.tasks.show', [
+                    'courses_id' => $courses_id,
+                    'task' => $task,
+                ]);
+            } elseif ($activeRole === 'admin') {
+                return view('admin.tasks.show', [
+                    'courses_id' => $courses_id,
+                    'task' => $task,
+                ]);
+            }
 
-        //     // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Peran tidak sah',
-        //     ], 403);
-        // } catch (\Throwable $th) {
-        //     Log::error("Gagal mengambil data show tugas: " . $th->getMessage());
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Gagal mengambil data show tugas',
-        //     ], 500);
-        // }
+            // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
+            return response()->json([
+                'status' => false,
+                'message' => 'Peran tidak sah',
+            ], 403);
+        } catch (\Throwable $th) {
+            Log::error("Gagal mengambil data show tugas: " . $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data show tugas',
+            ], 500);
+        }
     }
 
     /**
