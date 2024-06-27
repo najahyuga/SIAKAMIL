@@ -58,6 +58,7 @@
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
                                 <h6>{{ Auth::user()->username }}</h6>
+                                <span>{{ Auth::user()->roles->first()->level }}</span>
                             </li>
                             <li><hr class="dropdown-divider" /></li>
 
