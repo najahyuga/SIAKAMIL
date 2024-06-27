@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
+use App\Models\Students;
 use App\Models\Tasks;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +19,8 @@ class TasksController extends Controller
      */
     public function index()
     {
+        // $students = Students::first()->getCourses->courseMaster;
+        // dd($students);
         try {
             // get data to display in index page
             $tasks = Tasks::all();
@@ -47,105 +50,137 @@ class TasksController extends Controller
     {
         try {
             // get data to display in create page
-            $courses_id = Courses::select('id', 'name')->get();
+            $courses_id = Courses::with('masterCourses', 'classrooms')->get();
+            $activeRole = session('current_role');
 
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman create admin
-                return view('admin.tasks.create', ['courses_id' => $courses_id]);
-            } elseif (Auth::user()->level == 'guru') {
-                // mengembalikan ke halaman create admin
-                return view('guru.tasks.create', ['courses_id' => $courses_id]);
+            if ($activeRole === 'guru') {
+                // Mengembalikan ke halaman index students guru
+                return view('guru.tasks.create', compact('courses_id'));
+            } elseif ($activeRole === 'admin') {
+                // Mengembalikan ke halaman index students admin
+                return view('admin.tasks.create', compact('courses_id'));
             }
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat menampilkan halaman ". $th->getMessage());
+            Log::error("Tidak dapat menampilkan halaman create ". $th->getMessage());
             response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat menampilkan halaman'
+                'status' => false,
+                'message' => 'Tidak dapat menampilkan halaman create'
             ], 500);
         }
     }
 
     public function store(Request $request): RedirectResponse
-{
-    try {
-        // Validate form
-        $request->validate([
-            'name'          => 'required|min:5',
-            'description'   => 'required|min:5',
-            'deadline'      => 'required|date',
-            'file'          => 'required|file|max:20048',
-            'courses_id'    => 'required|exists:courses,id'
-        ]);
+    {
+        try {
+            // Validate form
+            $request->validate([
+                'name'          => 'required|min:5',
+                'description'   => 'required|min:5',
+                'deadline'      => 'required|date',
+                'file'          => 'required|file|max:20048',
+                'courses_id'    => 'required|exists:courses,id'
+            ]);
 
-        // Store the file
-        $fileTugas = $request->file('file');
-        $fileName = time() . '_' . $fileTugas->getClientOriginalName();
-        $fileTugas->storeAs('public/file', $fileName);
+            // Store the file
+            $fileTugas = $request->file('file');
+            $fileName = time() . '_' . $fileTugas->getClientOriginalName();
+            $fileTugas->storeAs('public/file', $fileName);
 
-        // Create the task using Active Record pattern
-        $task = new Tasks();
-        $task->name = $request->name;
-        $task->description = $request->description;
-        $task->deadline = $request->deadline;
-        $task->file = $fileName;
-        $task->courses_id = $request->courses_id;
-        $task->save();
+            // Create the task using Active Record pattern
+            $task = new Tasks();
+            $task->name         = $request->name;
+            $task->description  = $request->description;
+            $task->deadline     = $request->deadline;
+            $task->file         = $fileName;
+            $task->courses_id   = $request->courses_id;
+            $task->save();
 
-        // Redirect based on user level
-        $user = Auth::user();
+            // Check the role with higher priority first
+            $activeRole = session('current_role');
+            if ($activeRole === 'guru') {
+                // redirect to guru students index
+                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
+            } elseif ($activeRole === 'admin') {
+                // redirect to admin students index
+                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
+            }
 
-        if ($user->level == 'admin') {
-            // Redirect to admin tasks index
-            return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
-        } elseif ($user->level == 'guru') {
-            // Redirect to guru tasks index
-            return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
-        } else {
-            // Redirect to a default route if level is not recognized
-            return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menyimpan data tugas: " . $th->getMessage());
+            if ($th instanceof \Illuminate\Validation\ValidationException) {
+                $errors = $th->validator->errors()->all();
+                foreach ($errors as $error) {
+                    Log::error($error);
+                }
+            }
+            return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data tugas']);
+        }
+    }
+
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/uploads', $filename);
+
+            $url = Storage::url('uploads/' . $filename);
+
+            return response()->json([
+                'uploaded' => true,
+                'url' => $url,
+            ]);
         }
 
-    } catch (\Throwable $th) {
-        Log::error("Tidak dapat menyimpan data: " . $th->getMessage());
-        return redirect()->back()->with(['error' => 'Tidak dapat menyimpan data']);
+        return response()->json([
+            'uploaded' => false,
+            'error' => [
+                'message' => 'File upload failed.',
+            ],
+        ]);
     }
-}
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        try {
-            // get data to display in create page
-            $courses_id = Courses::select('id', 'name')->get();
+        // try {
+        //     // get data to display in create page
+        //     $courses_id = Courses::with('masterCourses', 'classrooms')->get();
 
-            // display data based on ID
-            // menampilkan data berdasarkan ID
-            $task = Tasks::findOrFail($id);
+        //     // display data based on ID
+        //     // menampilkan data berdasarkan ID
+        //     $task = Tasks::findOrFail($id);
 
-            // Redirect based on user level
-        $user = Auth::user();
+        //     // Determine active role
+        //     $activeRole = session('current_role');
 
-        if ($user->level == 'admin') {
-            // Redirect to admin tasks show
-            // mengembalikan ke halaman show
-            return view('admin.tasks.show', ['courses_id' => $courses_id], compact('task'));
-        } elseif ($user->level == 'guru') {
-            // Redirect to guru tasks show
-            // mengembalikan ke halaman show
-            return view('guru.tasks.show', ['courses_id' => $courses_id], compact('task'));
-        } else {
-            // Redirect to a default route if level is not recognized
-            return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
-        }
-        } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengambil data ". $th->getMessage());
-            response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat mengambil data'
-            ], 500);
-        }
+        //     // Render view based on role
+        //     if ($activeRole === 'guru') {
+        //         return view('guru.tasks.show', [
+        //             'courses_id' => $courses_id,
+        //             'task' => $task,
+        //         ]);
+        //     } elseif ($activeRole === 'admin') {
+        //         return view('admin.tasks.show', [
+        //             'courses_id' => $courses_id,
+        //             'task' => $task,
+        //         ]);
+        //     }
+
+        //     // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Peran tidak sah',
+        //     ], 403);
+        // } catch (\Throwable $th) {
+        //     Log::error("Gagal mengambil data show tugas: " . $th->getMessage());
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Gagal mengambil data show tugas',
+        //     ], 500);
+        // }
     }
 
     /**
