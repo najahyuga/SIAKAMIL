@@ -14,35 +14,16 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
-
-
-        <!--Get your own code at fontawesome.com-->
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" />
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
@@ -77,7 +58,6 @@
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
                                 <h6>{{ Auth::user()->username }}</h6>
-                                <span>{{ session('current_role') }}</span>
                             </li>
                             <li><hr class="dropdown-divider" /></li>
 
@@ -358,6 +338,35 @@
 
                                 @csrf
                                 <div class="form-group mb-3">
+                                    <label class="font-weight-bold">Pilih Kelas</label>
+                                    <select class="form-select @error('courses_id') is-invalid @enderror" name="courses_id" id="courses_id" aria-label="Pilih Kelas">
+                                        <option selected>Pilih Kelas</option>
+                                        @foreach ($courses_id as $course)
+                                        <option value="{{ $course->classrooms->id }}">{{ $course->classrooms->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!-- error message untuk jenis kelamin -->
+                                    @error('courses_id')
+                                        <div class="alert alert-danger mt-2">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="font-weight-bold">Tugas Dari Pelajaran</label>
+                                    <select class="form-select @error('courses_id') is-invalid @enderror" name="task_course_id" id="task_course_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
+                                        <option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                    @error('task_course_id')
+                                        <div class="alert alert-danger mt-2">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-3">
                                     <label class="font-weight-bold">Nama Tugas</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama Tugas!">
 
@@ -371,9 +380,8 @@
 
                                 <div class="form-group mb-3">
                                     <label class="font-weight-bold">Deskripsi Tugas</label>
-                                    <textarea class="tinymce-editor form-control @error('description') is-invalid @enderror" name="description" placeholder="Masukkan Deskripsi dari Tugas yang Akan Diberikan!">{{ old('description') }}</textarea>
-
-                                    <!-- error message untuk alamat -->
+                                    <textarea class="form-control @error('description') is-invalid @enderror" id="editor" name="description" placeholder="Masukkan Deskripsi dari Tugas yang Akan Diberikan!">{{ old('description') }}</textarea>
+                                    <!-- error message untuk alamat tinymce-editor -->
                                     @error('description')
                                         <div class="alert alert-danger mt-2">
                                             {{ $message }}
@@ -405,23 +413,6 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    <label class="font-weight-bold">Tugas Dari Pelajaran</label>
-                                    <select class="form-select @error('courses_id') is-invalid @enderror" name="courses_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
-                                        <option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>
-                                        <option value="">=================</option>
-                                        @foreach ($courses_id as $data)
-                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!-- error message untuk jenis kelamin -->
-                                    @error('courses_id')
-                                        <div class="alert alert-danger mt-2">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
                                 <button type="submit" class="btn btn-md btn-primary me-3">SAVE</button>
                                 <button type="reset" class="btn btn-md btn-warning">RESET</button>
 
@@ -443,12 +434,9 @@
             </div>
         </footer><!-- End Footer -->
 
-
-        <a
-            href="#"
-            class="back-to-top d-flex align-items-center justify-content-center"
-            ><i class="bi bi-arrow-up-short"></i
-        ></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center" >
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
 
         <!-- Vendor JS Files -->
         <script src="{{asset('backend/assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
@@ -466,7 +454,54 @@
         {{-- Library Sweatalert --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
         <script>
+            ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('admin.ckeditor.upload').'?_token='.csrf_token() }}"
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        </script>
+
+        <script>
+            document.getElementById('courses_id').addEventListener('change', function() {
+                var classroomId = this.value;
+                if (classroomId) {
+                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                    console.log('Fetching URL:', url);
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Data received:', data);
+                            const taskCourseSelect = document.getElementById('task_course_id');
+                            taskCourseSelect.innerHTML = '<option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
+                            data.forEach(course => {
+                                course.master_courses.forEach(masterCourse => {
+                                    const option = document.createElement('option');
+                                    option.value = masterCourse.id;
+                                    option.textContent = masterCourse.name;
+                                    taskCourseSelect.appendChild(option);
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    const taskCourseSelect = document.getElementById('task_course_id');
+                    taskCourseSelect.innerHTML = '<option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
+                }
+            });
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();
