@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
+use App\Models\MasterCategoryCourses;
+use App\Models\MasterCourses;
 use App\Models\Students;
 use App\Models\Tasks;
 use Illuminate\Http\RedirectResponse;
@@ -73,26 +75,36 @@ class TasksController extends Controller
     {
         try {
             // Validate form
-            $request->validate([
-                'name'          => 'required|min:5',
-                'description'   => 'required|min:5',
-                'deadline'      => 'required|date',
-                'file'          => 'required|file|max:20048',
-                'courses_id'    => 'required|exists:courses,id'
+            $validatedData = $request->validate([
+                'name'                      => 'required|min:5',
+                'description'               => 'required|min:5',
+                'deadline'                  => 'required|date',
+                'file'                      => 'required|file|max:20048',
+                'courses_id'                => 'required|exists:courses,id',
+                'master_courses_id'         => 'required|exists:master_courses,id',
             ]);
 
             // Store the file
-            $fileTugas = $request->file('file');
-            $fileName = time() . '_' . $fileTugas->getClientOriginalName();
-            $fileTugas->storeAs('public/file', $fileName);
+            $path = $request->file('file');
+            $path->getClientOriginalName();
+            $filePath = $path->storeAs('public/file', $path->getClientOriginalName());
+
+            // Get the courses and master_courses_id based on courses_id
+            $course = Courses::findOrFail($request->courses_id);
+            $master_courses_id = $request->master_courses_id;
+
+            if (!$master_courses_id) {
+                return redirect()->back()->with(['error' => 'Master Courses tidak ditemukan untuk courses_id yang dipilih']);
+            }
 
             // Create the task using Active Record pattern
-            $task = new Tasks();
-            $task->name         = $request->name;
-            $task->description  = $request->description;
-            $task->deadline     = $request->deadline;
-            $task->file         = $fileName;
-            $task->courses_id   = $request->courses_id;
+            $task                       = new Tasks();
+            $task->name                 = $validatedData['name'];
+            $task->description          = $validatedData['description'];
+            $task->deadline             = $validatedData['deadline'];
+            $task->file                 = basename($filePath);
+            $task->courses_id           = $validatedData['courses_id'];
+            $task->master_courses_id    = $validatedData['master_courses_id'];
             $task->save();
 
             // Check the role with higher priority first
@@ -188,89 +200,112 @@ class TasksController extends Controller
      */
     public function edit(string $id)
     {
-        try {
-            $courses_id = Courses::select('id', 'name')->get();
+        // try {
+        //     // Ambil kategori master
+        //     $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
 
-            $task = Tasks::findOrFail($id);
-            if (Auth::user()->level == 'admin') {
-                // mengembalikan ke halaman edit admin
-                return view('admin.tasks.edit', ['courses_id' => $courses_id], compact('task'));
-            } elseif (Auth::user()->level == 'guru') {
-                // mengembalikan ke halaman edir guru
-                return view('guru.tasks.edit', ['courses_id' => $courses_id], compact('task'));
-            }
+        //     // display data based on ID
+        //     // menampilkan data berdasarkan ID
+        //     $task = Tasks::with('courses.masterCourses', 'tasksDetails')->findOrFail($id);
 
-        } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengambil data ". $th->getMessage());
-            response()->json([
-                'status'    => false,
-                'message'   => 'Tidak dapat mengambil data'
-            ], 500);
-        }
+        //     // get data to display in create page
+        //     $courses_id = Courses::where('id', '!=', $task->courses_id)->with('masterCourses', 'classrooms')->get();
+
+        //     // Determine active role
+        //     $activeRole = session('current_role');
+
+        //     // Render view based on role
+        //     if ($activeRole === 'guru') {
+        //         return view('guru.tasks.edit', [
+        //             'courses_id'                    => $courses_id,
+        //             'task'                          => $task,
+        //             'master_category_courses_id'    => $master_category_courses_id,
+        //         ]);
+        //     } elseif ($activeRole === 'admin') {
+        //         return view('admin.tasks.edit', [
+        //             'courses_id'                    => $courses_id,
+        //             'task'                          => $task,
+        //             'master_category_courses_id'    => $master_category_courses_id,
+        //         ]);
+        //     }
+
+        //     // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Peran tidak sah',
+        //     ], 403);
+        // } catch (\Throwable $th) {
+        //     Log::error("Gagal mengambil data show tugas: " . $th->getMessage());
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Gagal mengambil data show tugas',
+        //     ], 500);
+        // }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, string $id)//: RedirectResponse
     {
-        try {
-            // Validate form
-            $request->validate([
-                'name'          => 'required|min:5',
-                'description'   => 'required|min:5',
-                'deadline'      => 'required',
-                'file'          => 'nullable|file|max:20048',
-                'courses_id'    => 'required|exists:courses,id'
-            ]);
+        // try {
+        //     // Validate form
+        //     $request->validate([
+        //         'name'                      => 'required|min:5',
+        //         'description'               => 'required|min:5',
+        //         'deadline'                  => 'required',
+        //         'file'                      => 'nullable|file|max:20048',
+        //         'courses_id'                => 'required|exists:courses,id',
+        //         'course_master_course_id'   => 'required|exists:course_master_course,id',
+        //     ]);
 
-            // Get data by ID
-            $task = Tasks::findOrFail($id);
+        //     // Get data by ID
+        //     $task = Tasks::findOrFail($id);
 
-            // Check if file is uploaded
-            if ($request->hasFile('file')) {
-                // Store new file
-                $fileTugas = $request->file('file');
-                $fileName = time() . '_' . $fileTugas->getClientOriginalName();
-                $fileTugas->storeAs('public/file', $fileName);
+        //     // Check if file is uploaded
+        //     if ($request->hasFile('file')) {
+        //         // Store new file
+        //         $path = $request->file('file');
+        //         $path->getClientOriginalName();
+        //         $filePath = $path->storeAs('public/file', $path->getClientOriginalName());
 
-                // Delete old file if exists
-                if ($task->file) {
-                    Storage::delete('public/file/' . $task->file);
-                }
+        //         // Delete old file if exists
+        //         if ($task->file) {
+        //             Storage::delete('public/file/' . $task->file);
+        //         }
 
-                // Update task with new file
-                $task->update([
-                    'name'          => $request->name,
-                    'description'   => $request->description,
-                    'deadline'      => $request->deadline,
-                    'file'          => $fileName,
-                    'courses_id'    => $request->courses_id
-                ]);
-            } else {
-                // Update task without new file
-                $task->update([
-                    'name'          => $request->name,
-                    'description'   => $request->description,
-                    'deadline'      => $request->deadline,
-                    'courses_id'    => $request->courses_id
-                ]);
-            }
+        //         // Update task with new file
+        //         $task->update([
+        //             'name'                      => $request->name,
+        //             'description'               => $request->description,
+        //             'deadline'                  => $request->deadline,
+        //             'file'                      => basename($filePath),
+        //             'courses_id'                => $request->courses_id,
+        //             'course_master_course_id'   => $request->course_master_course_id,
+        //         ]);
+        //     } else {
+        //         // Update task without new file
+        //         $task->update([
+        //             'name'                      => $request->name,
+        //             'description'               => $request->description,
+        //             'deadline'                  => $request->deadline,
+        //             'courses_id'                => $request->courses_id,
+        //             'course_master_course_id'   => $request->course_master_course_id,
+        //         ]);
+        //     }
 
-            // Redirect based on user level
-            $user = Auth::user();
+        //     // Redirect based on user level
+        //     $user = Auth::user()->roles->first();
 
-            if ($user->level == 'admin') {
-                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
-            } elseif ($user->level == 'guru') {
-                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
-            } else {
-                return redirect()->route('home')->with(['error' => 'Level pengguna tidak dikenali']);
-            }
-        } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengubah data: " . $th->getMessage());
-            return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
-        }
+        //     if ($user->level == 'admin') {
+        //         return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
+        //     } elseif ($user->level == 'guru') {
+        //         return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
+        //     }
+        // } catch (\Throwable $th) {
+        //     Log::error("Tidak dapat mengubah data: " . $th->getMessage());
+        //     return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
+        // }
     }
 
     /**
