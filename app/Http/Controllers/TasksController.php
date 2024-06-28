@@ -200,47 +200,42 @@ class TasksController extends Controller
      */
     public function edit(string $id)
     {
-        // try {
-        //     // Ambil kategori master
-        //     $master_category_courses_id = MasterCategoryCourses::with('masterCourses')->get();
+        try {
+            // display data based on ID
+            // menampilkan data berdasarkan ID
+            $task = Tasks::with('courses.masterCourses', 'tasksDetails')->findOrFail($id);
 
-        //     // display data based on ID
-        //     // menampilkan data berdasarkan ID
-        //     $task = Tasks::with('courses.masterCourses', 'tasksDetails')->findOrFail($id);
+            // get data to display in create page
+            $courses_id = Courses::where('id', '!=', $task->courses_id)->with('masterCourses', 'classrooms')->get();
 
-        //     // get data to display in create page
-        //     $courses_id = Courses::where('id', '!=', $task->courses_id)->with('masterCourses', 'classrooms')->get();
+            // Determine active role
+            $activeRole = session('current_role');
 
-        //     // Determine active role
-        //     $activeRole = session('current_role');
+            // Render view based on role
+            if ($activeRole === 'guru') {
+                return view('guru.tasks.edit', [
+                    'courses_id'                    => $courses_id,
+                    'task'                          => $task,
+                ]);
+            } elseif ($activeRole === 'admin') {
+                return view('admin.tasks.edit', [
+                    'courses_id'                    => $courses_id,
+                    'task'                          => $task,
+                ]);
+            }
 
-        //     // Render view based on role
-        //     if ($activeRole === 'guru') {
-        //         return view('guru.tasks.edit', [
-        //             'courses_id'                    => $courses_id,
-        //             'task'                          => $task,
-        //             'master_category_courses_id'    => $master_category_courses_id,
-        //         ]);
-        //     } elseif ($activeRole === 'admin') {
-        //         return view('admin.tasks.edit', [
-        //             'courses_id'                    => $courses_id,
-        //             'task'                          => $task,
-        //             'master_category_courses_id'    => $master_category_courses_id,
-        //         ]);
-        //     }
-
-        //     // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Peran tidak sah',
-        //     ], 403);
-        // } catch (\Throwable $th) {
-        //     Log::error("Gagal mengambil data show tugas: " . $th->getMessage());
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Gagal mengambil data show tugas',
-        //     ], 500);
-        // }
+            // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
+            return response()->json([
+                'status' => false,
+                'message' => 'Peran tidak sah',
+            ], 403);
+        } catch (\Throwable $th) {
+            Log::error("Gagal mengambil data show tugas: " . $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data show tugas',
+            ], 500);
+        }
     }
 
     /**
@@ -248,64 +243,58 @@ class TasksController extends Controller
      */
     public function update(Request $request, string $id)//: RedirectResponse
     {
-        // try {
-        //     // Validate form
-        //     $request->validate([
-        //         'name'                      => 'required|min:5',
-        //         'description'               => 'required|min:5',
-        //         'deadline'                  => 'required',
-        //         'file'                      => 'nullable|file|max:20048',
-        //         'courses_id'                => 'required|exists:courses,id',
-        //         'course_master_course_id'   => 'required|exists:course_master_course,id',
-        //     ]);
+        try {
+            // Validate form
+            $request->validate([
+                'name'          => 'required|min:5',
+                'description'   => 'required|min:5',
+                'deadline'      => 'required',
+                'file'          => 'nullable|file|max:20048',
+            ]);
 
-        //     // Get data by ID
-        //     $task = Tasks::findOrFail($id);
+            // Get data by ID
+            $task = Tasks::findOrFail($id);
 
-        //     // Check if file is uploaded
-        //     if ($request->hasFile('file')) {
-        //         // Store new file
-        //         $path = $request->file('file');
-        //         $path->getClientOriginalName();
-        //         $filePath = $path->storeAs('public/file', $path->getClientOriginalName());
+            // Check if file is uploaded
+            if ($request->hasFile('file')) {
+                // Store new file
+                $path = $request->file('file');
+                $path->getClientOriginalName();
+                $filePath = $path->storeAs('public/file', $path->getClientOriginalName());
 
-        //         // Delete old file if exists
-        //         if ($task->file) {
-        //             Storage::delete('public/file/' . $task->file);
-        //         }
+                // Delete old file if exists
+                if ($task->file) {
+                    Storage::delete('public/file/' . $task->file);
+                }
 
-        //         // Update task with new file
-        //         $task->update([
-        //             'name'                      => $request->name,
-        //             'description'               => $request->description,
-        //             'deadline'                  => $request->deadline,
-        //             'file'                      => basename($filePath),
-        //             'courses_id'                => $request->courses_id,
-        //             'course_master_course_id'   => $request->course_master_course_id,
-        //         ]);
-        //     } else {
-        //         // Update task without new file
-        //         $task->update([
-        //             'name'                      => $request->name,
-        //             'description'               => $request->description,
-        //             'deadline'                  => $request->deadline,
-        //             'courses_id'                => $request->courses_id,
-        //             'course_master_course_id'   => $request->course_master_course_id,
-        //         ]);
-        //     }
+                // Update task with new file
+                $task->update([
+                    'name'          => $request->name,
+                    'description'   => $request->description,
+                    'deadline'      => $request->deadline,
+                    'file'          => basename($filePath),
+                ]);
+            } else {
+                // Update task without new file
+                $task->update([
+                    'name'          => $request->name,
+                    'description'   => $request->description,
+                    'deadline'      => $request->deadline,
+                ]);
+            }
 
-        //     // Redirect based on user level
-        //     $user = Auth::user()->roles->first();
+            // Redirect based on user level
+            $user = Auth::user()->roles->first();
 
-        //     if ($user->level == 'admin') {
-        //         return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
-        //     } elseif ($user->level == 'guru') {
-        //         return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
-        //     }
-        // } catch (\Throwable $th) {
-        //     Log::error("Tidak dapat mengubah data: " . $th->getMessage());
-        //     return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
-        // }
+            if ($user->level == 'admin') {
+                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
+            } elseif ($user->level == 'guru') {
+                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
+            }
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengubah data: " . $th->getMessage());
+            return redirect()->back()->with(['error' => 'Tidak dapat mengubah data']);
+        }
     }
 
     /**
