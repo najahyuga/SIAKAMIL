@@ -341,12 +341,11 @@
                                 <div class="form-group mb-3">
                                     <label class="font-weight-bold">Pilih Kelas</label>
                                     <select class="form-select @error('courses_id') is-invalid @enderror" name="courses_id" id="courses_id" aria-label="Pilih Kelas">
-                                        <option selected>Pilih Kelas</option>
+                                        <option selected disabled>Pilih Kelas</option>
                                         @foreach ($courses_id as $course)
-                                        <option value="{{ $course->classrooms->id }}">{{ $course->classrooms->name }}</option>
+                                            <option value="{{ $course->id }}">{{ $course->classrooms->name }} / {{ $course->classrooms->semesters->name }}</option>
                                         @endforeach
                                     </select>
-                                    <!-- error message untuk jenis kelamin -->
                                     @error('courses_id')
                                         <div class="alert alert-danger mt-2">
                                             {{ $message }}
@@ -356,11 +355,10 @@
 
                                 <div class="form-group mb-3">
                                     <label class="font-weight-bold">Tugas Dari Pelajaran</label>
-                                    <select class="form-select @error('courses_id') is-invalid @enderror" name="task_course_id" id="task_course_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
-                                        <option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>
-                                        <!-- Options will be populated by JavaScript -->
+                                    <select class="form-select @error('master_courses_id') is-invalid @enderror" name="master_courses_id" id="task_course_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
+                                        <option selected disabled>Pilih Pelajaran yang Akan Diberikan Tugas</option>
                                     </select>
-                                    @error('task_course_id')
+                                    @error('master_courses_id')
                                         <div class="alert alert-danger mt-2">
                                             {{ $message }}
                                         </div>
@@ -470,9 +468,9 @@
 
         <script>
             document.getElementById('courses_id').addEventListener('change', function() {
-                var classroomId = this.value;
-                if (classroomId) {
-                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                var courseId = this.value;
+                if (courseId) {
+                    const url = `http://siakamil_beta.test/admin/classrooms/${courseId}/courses`;
                     console.log('Fetching URL:', url);
                     fetch(url)
                         .then(response => {
@@ -484,7 +482,7 @@
                         .then(data => {
                             console.log('Data received:', data);
                             const taskCourseSelect = document.getElementById('task_course_id');
-                            taskCourseSelect.innerHTML = '<option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
+                            taskCourseSelect.innerHTML = '<option selected disabled>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
                             data.forEach(course => {
                                 course.master_courses.forEach(masterCourse => {
                                     const option = document.createElement('option');
@@ -499,7 +497,7 @@
                         });
                 } else {
                     const taskCourseSelect = document.getElementById('task_course_id');
-                    taskCourseSelect.innerHTML = '<option selected>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
+                    taskCourseSelect.innerHTML = '<option selected disabled>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
                 }
             });
 
