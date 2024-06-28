@@ -14,35 +14,25 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
+        {{-- <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" /> --}}
 
-
-        <!--Get your own code at fontawesome.com-->
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
@@ -354,8 +344,75 @@
                         <div class="card">
                             <div class="card-body pt-3">
                                 <div class="tab-content pt-3">
+                                    <style>
+                                        .card {
+                                            margin-top: 20px;
+                                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                        }
+
+                                        .card-header {
+                                            background-color: #007bff;
+                                            color: #fff;
+                                            border-bottom: none;
+                                        }
+
+                                        .card-body {
+                                            padding: 1.25rem;
+                                        }
+
+                                        .label {
+                                            font-weight: bold;
+                                        }
+
+                                        .table {
+                                            width: 100%;
+                                            margin-bottom: 1rem;
+                                            color: #212529;
+                                        }
+
+                                        .table th,
+                                        .table td {
+                                            padding: 0.75rem;
+                                            vertical-align: top;
+                                            border-top: 1px solid #dee2e6;
+                                        }
+
+                                        .table thead th {
+                                            vertical-align: bottom;
+                                            border-bottom: 2px solid #dee2e6;
+                                        }
+
+                                        .table tbody + tbody {
+                                            border-top: 2px solid #dee2e6;
+                                        }
+
+                                        .table-striped tbody tr:nth-of-type(odd) {
+                                            background-color: rgba(0, 0, 0, 0.05);
+                                        }
+
+                                        .table-bordered {
+                                            border: 1px solid #dee2e6;
+                                        }
+
+                                        .table-bordered th,
+                                        .table-bordered td {
+                                            border: 1px solid #dee2e6;
+                                        }
+                                    </style>
                                     <!-- Bordered Tabs -->
                                     <ul class="nav nav-tabs nav-tabs-bordered">
+                                        <li class="nav-item collapsed">
+                                            <a href="{{ route('admin.tasks.show', $task->id) }}">
+                                                <button class="nav-link collapsed">Overview Tugas</button>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item collapsed">
+                                            <a href="{{ route('admin.tasks.show', $task->id) }}">
+                                                <button class="nav-link collapsed">Edit Tugas</button>
+                                            </a>
+                                        </li>
+
                                         <li class="nav-item">
                                             <a href="{{ route('admin.tasks.detail', $task->id) }}">
                                                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Detail Tugas</button>
@@ -365,38 +422,46 @@
                                     {{-- Start List --}}
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                        <h6 class="card-title">List tugas dari setiap siswa</h6>
+                                        <h6 class="card-title">Daftar tugas dari setiap siswa</h6>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label mb-2">Kelas</div>
-                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->courses->classrooms->name }}</div>
+                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->courses->classrooms->name }} / {{ $task->courses->classrooms->semesters->name }}</div>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label mb-2">Nama Pelajaran</div>
-                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->courses->name }}</div>
+                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->masterCourses->name }}</div>
                                         </div>
 
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label mb-2">Nama Tugas</div>
+                                            <div class="col-lg-9 col-md-8 mb-2">{{ $task->name }}</div>
+                                        </div>
 
-                                        <table class="table table-striped table-bordered border-primary">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Nama Siswa</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @forelse ($task->courses->classrooms->semesters->education_levels->students as $student)
+                                        <div class="table-responsive mt-2">
+                                            <table class="table table-striped table-bordered datatable">
+                                                <thead class="thead-dark">
                                                     <tr>
-                                                        <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $student->name }}</td>
-                                                        <td><a href="{{ route('admin.tasks.detail', $task->id) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
+                                                        <th class="text-center">No</th>
+                                                        <th class="text-center">Nama Siswa</th>
+                                                        <th class="text-center">Action</th>
                                                     </tr>
-                                                @empty
-
-                                                @endforelse
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse ($task->courses->classrooms->semesters->education_levels->students as $student)
+                                                        <tr>
+                                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                                            <td class="text-center">{{ $student->name }}</td>
+                                                            <td class="text-center"><a href="{{ route('admin.tasks.detail', $task->id) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="3">Tidak ada data siswa</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>{{-- End List --}}
                                 </div>
                                 <!-- End Bordered Tabs -->
@@ -430,7 +495,7 @@
         <script src="{{asset('backend/assets/vendor/chart.js/chart.umd.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/echarts/echarts.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/quill/quill.min.js')}}"></script>
-        <script src="{{asset('backend/assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
+        {{-- <script src="{{asset('backend/assets/vendor/simple-datatables/simple-datatables.js')}}"></script> --}}
         <script src="{{asset('backend/assets/vendor/tinymce/tinymce.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/php-email-form/validate.js')}}"></script>
 
@@ -441,6 +506,10 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            $(document).ready(function() {
+                $('.datatable').DataTable();
+            });
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();
