@@ -14,7 +14,8 @@ class Tasks extends Model
         'description',
         'deadline',
         'file',
-        'courses_id'
+        'courses_id',
+        'master_courses_id',
     ];
 
     public function courses()
@@ -25,5 +26,10 @@ class Tasks extends Model
     public function tasksDetails()
     {
         return $this->hasMany(TasksDetails::class);
+    }
+
+    public function masterCourses()
+    {
+        return $this->belongsTo(MasterCourses::class, 'master_courses_id');
     }
 }
