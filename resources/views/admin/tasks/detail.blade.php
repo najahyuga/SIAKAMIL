@@ -401,18 +401,6 @@
                                     </style>
                                     <!-- Bordered Tabs -->
                                     <ul class="nav nav-tabs nav-tabs-bordered">
-                                        <li class="nav-item collapsed">
-                                            <a href="{{ route('admin.tasks.show', $task->id) }}">
-                                                <button class="nav-link collapsed">Overview Tugas</button>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item collapsed">
-                                            <a href="{{ route('admin.tasks.show', $task->id) }}">
-                                                <button class="nav-link collapsed">Edit Tugas</button>
-                                            </a>
-                                        </li>
-
                                         <li class="nav-item">
                                             <a href="{{ route('admin.tasks.detail', $task->id) }}">
                                                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Detail Tugas</button>
@@ -452,7 +440,7 @@
                                                         <tr>
                                                             <td class="text-center">{{ $loop->iteration }}</td>
                                                             <td class="text-center">{{ $student->name }}</td>
-                                                            <td class="text-center"><a href="{{ route('admin.tasks.detail', $task->id) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
+                                                            <td class="text-center"><a href="{{ route('admin.taskDetails.index', ['studentsId' => $student, 'taskId' => $task->id]) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
                                                         </tr>
                                                     @empty
                                                         <tr>
