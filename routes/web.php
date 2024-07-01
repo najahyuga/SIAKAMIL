@@ -10,6 +10,7 @@ use App\Http\Controllers\MasterCoursesController;
 use App\Http\Controllers\SemestersController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\TasksDetailsController;
 use App\Http\Controllers\TeachersController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
     Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
     Route::get('/classrooms/{id}/courses', [StudentsController::class, 'getCoursesByClassroom']);
     Route::post('/ckeditor/upload', [TasksController::class, 'upload'])->name('ckeditor.upload');
+    Route::resource('taskDetails', TasksDetailsController::class);
+    Route::get('taskDetails/{studentsId}/{taskId}', [TasksDetailsController::class, 'index'])->name('taskDetails.index');
 });
 
 // Rute untuk guru
