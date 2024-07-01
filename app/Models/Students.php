@@ -56,7 +56,7 @@ class Students extends Model
 
     public function tasksDetails()
     {
-        return $this->hasMany(TasksDetails::class);
+        return $this->hasMany(TasksDetails::class, 'students_id', 'id');
     }
 
     public function getCourses() {
