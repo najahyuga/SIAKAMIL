@@ -10,17 +10,20 @@ class TasksDetails extends Model
     use HasFactory;
 
     protected $fillable = [
+        'description',
+        'file',
         'result',
-        'tasks_id'
+        'students_id',
+        'tasks_id',
     ];
 
     public function tasks()
     {
-        return $this->belongsTo(Tasks::class);
+        return $this->belongsTo(Tasks::class, 'tasks_id');
     }
 
-    public function student()
+    public function students()
     {
-        return $this->belongsTo(Students::class);
+        return $this->belongsTo(Students::class, 'students_id');
     }
 }
