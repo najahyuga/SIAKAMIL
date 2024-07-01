@@ -8,6 +8,7 @@ use App\Models\MasterCategoryCourses;
 use App\Models\MasterCourses;
 use App\Models\Students;
 use App\Models\Tasks;
+use App\Models\TasksDetails;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -308,12 +309,14 @@ class TasksController extends Controller
     public function detail(string $id)
     {
         try {
-            // get data to display in create page
-            $courses_id = Courses::all();
-
             // display data based on ID
-            // menampilkan data berdasarkan ID
             $task = Tasks::with('courses.masterCourses', 'tasksDetails')->findOrFail($id);
+
+            // Mengambil students_id berdasarkan $id
+            $student = Students::findOrFail($id);
+
+            // Mengambil tasks_details berdasarkan students_id dan tasks_id
+            $tasksDetails = TasksDetails::where('students_id', $student)->where('tasks_id', $task->id)->get();
 
             // Determine active role
             $activeRole = session('current_role');
@@ -321,13 +324,15 @@ class TasksController extends Controller
             // Render view based on role
             if ($activeRole === 'guru') {
                 return view('guru.tasks.detail', [
-                    'courses_id'                    => $courses_id,
-                    'task'                          => $task,
+                    'tasksDetails' => $tasksDetails,
+                    'task'         => $task,
+                    'students_id'  => $student,
                 ]);
             } elseif ($activeRole === 'admin') {
                 return view('admin.tasks.detail', [
-                    'courses_id'                    => $courses_id,
-                    'task'                          => $task,
+                    'tasksDetails' => $tasksDetails,
+                    'task'         => $task,
+                    'students_id'  => $student,
                 ]);
             }
 
@@ -337,8 +342,8 @@ class TasksController extends Controller
                 'message' => 'Peran tidak sah',
             ], 403);
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat mengambil data ". $th->getMessage());
-            response()->json([
+            Log::error("Tidak dapat mengambil data " . $th->getMessage());
+            return response()->json([
                 'status'    => false,
                 'message'   => 'Tidak dapat mengambil data'
             ], 500);
