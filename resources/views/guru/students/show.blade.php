@@ -854,7 +854,7 @@
             document.getElementById('classrooms_id').addEventListener('change', function() {
                 var classroomId = this.value;
                 if (classroomId) {
-                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                    const url = `http://siakamil_beta.test/guru/classrooms/${classroomId}/courses`;
                     console.log('Fetching URL:', url);
                     fetch(url)
                         .then(response => {
