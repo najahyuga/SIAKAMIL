@@ -262,20 +262,21 @@ class StudentsController extends Controller
             // Render view based on role
             if ($activeRole === 'guru') {
                 return view('guru.students.show', [
-                    'education_levels' => $education_levels,
-                    'classrooms' => $classrooms,
-                    'user' => $users,
-                    'student' => $student,
-                    'roles' => $roles,
+                    'education_levels'              => $education_levels,
+                    'classrooms'                    => $classrooms,
+                    'user'                          => $users,
+                    'student'                       => $student,
+                    'master_category_courses_id'    => $master_category_courses_id,
+                    'roles'                         => $roles,
                 ]);
             } elseif ($activeRole === 'admin') {
                 return view('admin.students.show', [
-                    'education_levels' => $education_levels,
-                    'classrooms' => $classrooms,
-                    'user' => $users,
-                    'student' => $student,
-                    'master_category_courses_id' => $master_category_courses_id,
-                    'roles' => $roles,
+                    'education_levels'              => $education_levels,
+                    'classrooms'                    => $classrooms,
+                    'user'                          => $users,
+                    'student'                       => $student,
+                    'master_category_courses_id'    => $master_category_courses_id,
+                    'roles'                         => $roles,
                 ]);
             }
 
@@ -318,20 +319,21 @@ class StudentsController extends Controller
             // Render view based on role
             if ($activeRole === 'guru') {
                 return view('guru.students.edit', [
-                    'education_levels' => $education_levels,
-                    'classrooms' => $classrooms,
-                    'user' => $users,
-                    'student' => $student,
-                    'roles' => $roles,
+                    'education_levels'              => $education_levels,
+                    'classrooms'                    => $classrooms,
+                    'user'                          => $users,
+                    'student'                       => $student,
+                    'master_category_courses_id'    => $master_category_courses_id,
+                    'roles'                         => $roles,
                 ]);
             } elseif ($activeRole === 'admin') {
                 return view('admin.students.edit', [
-                    'education_levels' => $education_levels,
-                    'classrooms' => $classrooms,
-                    'user' => $users,
-                    'student' => $student,
-                    'master_category_courses_id' => $master_category_courses_id,
-                    'roles' => $roles,
+                    'education_levels'              => $education_levels,
+                    'classrooms'                    => $classrooms,
+                    'user'                          => $users,
+                    'student'                       => $student,
+                    'master_category_courses_id'    => $master_category_courses_id,
+                    'roles'                         => $roles,
                 ]);
             }
 
