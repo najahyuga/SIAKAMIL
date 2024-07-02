@@ -14,35 +14,24 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
 
-
-        <!--Get your own code at fontawesome.com-->
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
@@ -211,8 +200,8 @@
                     <div class="col-xl-4">
                         <div class="card">
                             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                @if ($student->image != '')
-                                    <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded-circle" style="width: 70%" alt="image">
+                                @if ($student->files_uploads->path != '')
+                                    <img src="{{ asset('/storage/images/' . $student->files_uploads->path) }}" class="rounded-circle" style="width: 70%" alt="image">
                                     <h2>{{ $student->name }}</h2>
                                     <div class="social-links mt-2">
                                         <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
@@ -335,8 +324,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-4 label">Role Level</div>
-                                            <div class="col-lg-6 col-md-8">{{ $student->user->level }}</div>
+                                            <div class="col-lg-6 col-md-4 label">Level</div>
+                                            <div class="col-lg-6 col-md-8">
+                                                @foreach ($student->user->roles as $role)
+                                                    @if ($role->level == 'admin')
+                                                        <span class="badge rounded-pill bg-success">Admin</span>
+                                                    @elseif ($role->level == 'guru')
+                                                        <span class="badge rounded-pill bg-primary">Guru</span>
+                                                    @elseif ($role->level == 'siswa')
+                                                        <span class="badge rounded-pill bg-info">Siswa</span>
+                                                    @elseif ($role->level == 'calonSiswa')
+                                                        <span class="badge rounded-pill bg-secondary">Calon Siswa</span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         </div>
 
                                         <h6 class="card-title">Jenjang Pendidikan Yang Diambil</h6>
@@ -359,28 +360,23 @@
 
                                     <!-- Start Profile Edit Form -->
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                        <form action="{{ route('guru.students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('guru.students.update', $student->id) }}" method="POST" enctype="multipart/form-data" id="updateForm">
                                             @csrf
                                             @method('PUT')
                                             <div class="row mb-3">
                                                 <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                                 <div class="col-md-8 col-lg-9">
-                                                    @if ($student->image != '')
-                                                    <img src="{{ asset('/storage/images/'.$student->image) }}" class="rounded pe-2" style="width: 30%" alt="image">
+                                                    @if ($student->files_uploads_id)
+                                                        <img src="{{ asset('/storage/images/' . $student->files_uploads->path) }}" class="rounded" style="width: 30%" alt="Profile Image"><br>
                                                     @else
-                                                        @if ($student->gender == 'Laki-Laki')
-                                                            <img src="{{asset('imgDefault/man.png')}}" class="rounded" style="width: 30%" alt="image">
-                                                        @elseif (($student->gender == 'Perempuan'))
-                                                            <img src="{{asset('imgDefault/muslimah.png')}}" class="rounded" style="width: 30%" alt="image">
-                                                        @endif
+                                                        <p>No profile image available</p>
                                                     @endif
-                                                    <br>
-                                                    <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maksimum Size 2 MB</span>
+                                                    <span class="badge bg-danger mb-1 mt-1"><i class="bi bi-exclamation-octagon pe-2"></i>Maximum Size 2 MB</span>
                                                     <div class="pt-1">
-                                                        <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image">
-                                                            <input type="file" id="file_upload_id" style="display:none">
-                                                            <i class="bi bi-upload" onclick="_upload()"></i>
-                                                        </a>
+                                                        <label for="file_upload_id" class="btn btn-primary btn-sm" title="Upload new profile image">
+                                                            <input type="file" id="file_upload_id" style="display:none" name='path'>
+                                                            <i class="bi bi-upload" onclick="_upload()"></i> Upload
+                                                        </label>
                                                         {{-- <a href="" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a> --}}
                                                     </div>
                                                 </div>
@@ -457,9 +453,11 @@
                                             <div class="row mb-3">
                                                 <label class="col-md-4 col-lg-3 col-form-label">Nomor HP</label>
                                                 <div class="col-md-8 col-lg-9">
-                                                    <input type="number" class="form-control @error('noHP') is-invalid @enderror" name="noHP" value="{{ old('noHP', $student->noHP) }}" placeholder="Masukkan Nomor HP Anda!">
+                                                    <input type="text" class="form-control" id="noHP" name="noHP" value="{{ old('noHP', $student->noHP) }}" placeholder="Masukkan Nomor HP Anda!" aria-describedby="noHPHelpBlock">
+                                                    <div id="noHPHelpBlock" class="form-text text-muted">
+                                                        Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.
+                                                    </div>
                                                 </div>
-
                                                 <!-- error message untuk nik -->
                                                 @error('noHP')
                                                     <div class="alert alert-danger mt-2">
@@ -469,16 +467,18 @@
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label class="font-weight-bold">Agama</label>
-                                                <select class="form-select @error('agama') is-invalid @enderror" name="agama" aria-label="Pilih Agama">
-                                                    <option selected>Pilih Agama</option>
-                                                    <option value="islam" {{ ($student->agama=='islam') ? 'selected' : '' }}>Islam</option>
-                                                    <option value="kristen" {{ ($student->agama=='kristen') ? 'selected' : '' }}>Kristen</option>
-                                                    <option value="katolik" {{ ($student->agama=='katolik') ? 'selected' : '' }}>Katolik</option>
-                                                    <option value="buddha" {{ ($student->agama=='buddha') ? 'selected' : '' }}>Buddha</option>
-                                                    <option value="hindu" {{ ($student->agama=='hindu') ? 'selected' : '' }}>Kristen</option>
-                                                    <option value="khonghucu" {{ ($student->agama=='khonghucu') ? 'selected' : '' }}>Khonghucu</option>
-                                                </select>
+                                                <label class="col-md-4 col-lg-3 col-form-label">Agama</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <select class="form-select @error('agama') is-invalid @enderror" name="agama" aria-label="Pilih Agama">
+                                                        <option selected>Pilih Agama</option>
+                                                        <option value="islam" {{ ($student->agama=='islam') ? 'selected' : '' }}>Islam</option>
+                                                        <option value="kristen" {{ ($student->agama=='kristen') ? 'selected' : '' }}>Kristen</option>
+                                                        <option value="katolik" {{ ($student->agama=='katolik') ? 'selected' : '' }}>Katolik</option>
+                                                        <option value="buddha" {{ ($student->agama=='buddha') ? 'selected' : '' }}>Buddha</option>
+                                                        <option value="hindu" {{ ($student->agama=='hindu') ? 'selected' : '' }}>Kristen</option>
+                                                        <option value="khonghucu" {{ ($student->agama=='khonghucu') ? 'selected' : '' }}>Khonghucu</option>
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk agama -->
                                                 @error('agama')
                                                     <div class="alert alert-danger mt-2">
@@ -501,13 +501,15 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Jenis Kelamin</label>
-                                                <select class="form-select @error('gender') is-invalid @enderror" name="gender" aria-label="Default select example">
-                                                    <option selected>Pilih Jenis kelamin</option>
-                                                    <option value="Laki-Laki" {{ ($student->gender=='Laki-Laki') ? 'selected' : '' }}>Laki-Laki</option>
-                                                    <option value="Perempuan" {{ ($student->gender=='Perempuan') ? 'selected' : '' }}>Perempuan</option>
-                                                </select>
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Jenis Kelamin</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <select class="form-select @error('gender') is-invalid @enderror" name="gender" aria-label="Default select example">
+                                                        <option selected>Pilih Jenis kelamin</option>
+                                                        <option value="Laki-Laki" {{ ($student->gender=='Laki-Laki') ? 'selected' : '' }}>Laki-Laki</option>
+                                                        <option value="Perempuan" {{ ($student->gender=='Perempuan') ? 'selected' : '' }}>Perempuan</option>
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk jenis kelamin -->
                                                 @error('gender')
                                                     <div class="alert alert-danger mt-2">
@@ -529,15 +531,17 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Status Keaktifan
-                                                    <span class="badge bg-success mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Active</span>
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Status Keaktifan
                                                 </label>
-                                                <select class="form-select @error('status') is-invalid @enderror" name="status" aria-label="Default select example">
-                                                    <option>Status Keaktifan</option>
-                                                    <option value="active" {{ ($student->status=='active') ? 'selected' : '' }}>Active</option>
-                                                    <option value="non-active" {{ ($student->status=='non-active') ? 'selected' : '' }}>Non-Active</option>
-                                                </select>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <span class="badge bg-success mb-1"><i class="bi bi-exclamation-octagon"></i>Default Active</span>
+                                                    <select class="form-select @error('status') is-invalid @enderror" name="status" aria-label="Default select example">
+                                                        <option>Status Keaktifan</option>
+                                                        <option value="active" {{ ($student->status=='active') ? 'selected' : '' }}>Active</option>
+                                                        <option value="non-active" {{ ($student->status=='non-active') ? 'selected' : '' }}>Non-Active</option>
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk jenis kelamin -->
                                                 @error('status')
                                                     <div class="alert alert-danger mt-2">
@@ -547,10 +551,11 @@
                                             </div>
 
                                             {{-- form input to users tabel --}}
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Nama</label>
-                                                <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $student->user->username) }}" placeholder="Masukkan Username Anda!">
-
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Username</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $student->user->username) }}" placeholder="Masukkan Username Anda!">
+                                                </div>
                                                 <!-- error message untuk name -->
                                                 @error('username')
                                                     <div class="alert alert-danger mt-2">
@@ -559,10 +564,11 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Email</label>
-                                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->user->email) }}" placeholder="Masukkan Email Anda!">
-
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->user->email) }}" placeholder="Masukkan Email Anda!">
+                                                </div>
                                                 <!-- error message untuk name -->
                                                 @error('email')
                                                     <div class="alert alert-danger mt-2">
@@ -571,12 +577,12 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Password
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Password</label>
+                                                <div class="col-md-8 col-lg-9">
                                                     <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal 6 Karakter</span>
-                                                </label>
-                                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $student->user->password) }}" placeholder="Masukkan Password Anda!">
-
+                                                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $student->user->password) }}" placeholder="Masukkan Password Anda!">
+                                                </div>
                                                 <!-- error message untuk name -->
                                                 @error('password')
                                                     <div class="alert alert-danger mt-2">
@@ -586,35 +592,30 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Role Level
-                                                    <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Calon Siswa</span>
-                                                </label>
-                                                <select class="form-select @error('level') is-invalid @enderror" name="level" aria-label="Pilih Role Level Sesuai Kebutuhan">
-                                                    <option value="{{ $student->user->level }}">{{ $student->user->id }}. {{ $student->user->level }}</option>
-                                                    {{-- @foreach ($user as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->level }}</option>
-                                                    @endforeach --}}
-                                                    <option value="admin" {{ (old('level')=='admin') ? 'selected' : '' }}>Admin</option>
-                                                    <option value="guru" {{ (old('level')=='guru') ? 'selected' : '' }}>Guru</option>
-                                                    <option value="siswa" {{ (old('level')=='siswa') ? 'selected' : '' }}>Siswa</option>
-                                                    <option value="calonSiswa" {{ (old('level')=='calonSiswa') ? 'selected' : '' }}>Calon Siswa</option>
-                                                </select>
-                                                <!-- error message untuk level -->
-                                                @error('level')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
+                                                <label class="font-weight-bold">Role Levels</label>
+                                                @foreach ($roles as $role)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="level[]" value="{{ $role->id }}" id="role{{ $role->id }}"
+                                                        @if($student->user->roles->contains($role->id)) checked @endif>
+                                                        <label class="form-check-label" for="role{{ $role->id }}">{{ $role->level }}</label>
                                                     </div>
+                                                @endforeach
+                                                <!-- error message untuk roles -->
+                                                @error('roles')
+                                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Pilih Kategori Jenjang Pendidikan</label>
-                                                <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
-                                                    <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
-                                                    @foreach ($education_levels_id as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Jenjang Pendidikan</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
+                                                        <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
+                                                        @foreach ($education_levels as $data)
+                                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk jenis kelamin -->
                                                 @error('education_levels_id')
                                                     <div class="alert alert-danger mt-2">
@@ -623,16 +624,41 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Pilih Kelas yang Sesuai</label>
-                                                <select class="form-select @error('classrooms_id') is-invalid @enderror" name="classrooms_id" aria-label="Default select example">
+                                            <div class="form-group">
+                                                <label for="classrooms_id">Pilih Kelas</label>
+                                                <select name="classrooms_id" id="classrooms_id" class="form-select">
                                                     <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} / {{ $student->classrooms->semesters->name }}</option>
-                                                    @foreach ($classrooms_id as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->semesters->name }}</option>
+                                                    @foreach($classrooms as $classroom)
+                                                        <option value="{{ $classroom->id }}">{{ $classroom->name }} / {{ $classroom->semesters->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <!-- error message untuk jenis kelamin -->
-                                                @error('classrooms_id')
+                                            </div>
+
+                                            <div class="form-group mb-3 custom-checkbox">
+                                                <label class="font-weight-bold">Pilih Master Kategori Pelajaran</label>
+                                                <div class="row">
+                                                    @php $count = 0; @endphp
+                                                    @foreach ($master_category_courses_id as $master_category)
+                                                        <div class="col-md-6">
+                                                            <p class="font-weight-bold">{{ $master_category->name }}</p>
+                                                            @foreach ($master_category->masterCourses as $master_course)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input course-checkbox" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}"
+                                                                        {{ $student->courses->pluck('id')->intersect($master_course->courses->pluck('id'))->isNotEmpty() ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="master_course_{{ $master_course->id }}">
+                                                                        {{ $master_course->name }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        @php $count++; @endphp
+                                                        @if($count % 2 == 0)
+                                                            </div><div class="row">
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                <!-- error message untuk Pilih Master Kategori Pelajaran -->
+                                                @error('master_courses_id')
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $message }}
                                                     </div>
@@ -683,6 +709,110 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body pt-3">
+                                <div class="tab-content pt-2">
+                                    <style>
+                                        .card {
+                                            margin-top: 20px;
+                                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                        }
+
+                                        .card-header {
+                                            background-color: #007bff;
+                                            color: #fff;
+                                            border-bottom: none;
+                                        }
+
+                                        .card-body {
+                                            padding: 1.25rem;
+                                        }
+
+                                        .label {
+                                            font-weight: bold;
+                                        }
+
+                                        .table {
+                                            width: 100%;
+                                            margin-bottom: 1rem;
+                                            color: #212529;
+                                        }
+
+                                        .table th,
+                                        .table td {
+                                            padding: 0.75rem;
+                                            vertical-align: top;
+                                            border-top: 1px solid #dee2e6;
+                                        }
+
+                                        .table thead th {
+                                            vertical-align: bottom;
+                                            border-bottom: 2px solid #dee2e6;
+                                        }
+
+                                        .table tbody + tbody {
+                                            border-top: 2px solid #dee2e6;
+                                        }
+
+                                        .table-striped tbody tr:nth-of-type(odd) {
+                                            background-color: rgba(0, 0, 0, 0.05);
+                                        }
+
+                                        .table-bordered {
+                                            border: 1px solid #dee2e6;
+                                        }
+
+                                        .table-bordered th,
+                                        .table-bordered td {
+                                            border: 1px solid #dee2e6;
+                                        }
+                                    </style>
+                                    <h6 class="card-title">Detail</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered datatable">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th class="text-center">No</th>
+                                                    <th class="text-center">Kategori Mata Pelajaran</th>
+                                                    <th class="text-center">Nama Mata Pelajaran</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $no = 1; // Inisialisasi nomor urut
+                                                @endphp
+                                                @forelse ($student->courses as $course)
+                                                    @foreach ($course->masterCourses as $masterCourse)
+                                                        <tr>
+                                                            <td class="text-center">{{ $no++ }}</td> <!-- Gunakan variabel $no untuk nomor urut -->
+                                                            <td class="text-center">
+                                                                @if ($masterCourse->master_category_course)
+                                                                    {{ $masterCourse->master_category_course->name }}
+                                                                @else
+                                                                    Kategori tidak tersedia
+                                                                @endif
+                                                            </td>
+                                                            <td class="text-center">{{ $masterCourse->name }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="3" class="text-center">
+                                                            <div class="alert alert-danger">
+                                                                Data belum Tersedia.
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main><!-- End #main -->
@@ -697,12 +827,9 @@
             </div>
         </footer><!-- End Footer -->
 
-
-        <a
-            href="#"
-            class="back-to-top d-flex align-items-center justify-content-center"
-            ><i class="bi bi-arrow-up-short"></i
-        ></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center" >
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
 
         <!-- Vendor JS Files -->
         <script src="{{asset('backend/assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
@@ -710,7 +837,6 @@
         <script src="{{asset('backend/assets/vendor/chart.js/chart.umd.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/echarts/echarts.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/quill/quill.min.js')}}"></script>
-        <script src="{{asset('backend/assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/tinymce/tinymce.min.js')}}"></script>
         <script src="{{asset('backend/assets/vendor/php-email-form/validate.js')}}"></script>
 
@@ -721,6 +847,64 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            $(document).ready(function() {
+                $('.datatable').DataTable();
+            });
+
+            document.getElementById('classrooms_id').addEventListener('change', function() {
+                var classroomId = this.value;
+                if (classroomId) {
+                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                    console.log('Fetching URL:', url);
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Data received:', data);
+                            // Uncheck all checkboxes first
+                            document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                            // Check the checkboxes that are in the data
+                            data.forEach(course => {
+                                course.master_courses.forEach(masterCourse => {
+                                    document.getElementById(`master_course_${masterCourse.id}`).checked = true;
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
+            });
+
+            document.getElementById('updateForm').addEventListener('submit', function(event) {
+                let noHPInput = document.getElementById('noHP');
+                let noHPValue = noHPInput.value.trim();
+
+                // Validasi menggunakan regex untuk memastikan hanya angka yang diterima
+                if (!/^\+?\d{10,15}$/.test(noHPValue)) {
+                    event.preventDefault(); // Mencegah pengiriman form
+
+                    // Tampilkan pesan SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.',
+                    });
+
+                    noHPInput.focus();
+                }
+            });
+
             // get image in local
             function _upload(){
                 document.getElementById('file_upload_id').click();
