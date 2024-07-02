@@ -58,6 +58,7 @@ Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->gro
     Route::resource('students', StudentsController::class);
     Route::get('/classrooms/{id}/courses', [StudentsController::class, 'getCoursesByClassroom']);
     Route::post('/ckeditor/upload', [TasksController::class, 'upload'])->name('ckeditor.upload');
+    Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
 });
 
 // Rute untuk siswa
