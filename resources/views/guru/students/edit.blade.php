@@ -546,6 +546,61 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+            // mendapatkan data courses berdasarkan classrooms
+            document.getElementById('classrooms_id').addEventListener('change', function() {
+                var classroomId = this.value;
+                if (classroomId) {
+                    const url = `http://siakamil_beta.test/guru/classrooms/${classroomId}/courses`;
+                    console.log('Fetching URL:', url);
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Data received:', data);
+                            // Uncheck all checkboxes first
+                            document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                            // Check the checkboxes that are in the data
+                            data.forEach(course => {
+                                course.master_courses.forEach(masterCourse => {
+                                    document.getElementById(`master_course_${masterCourse.id}`).checked = true;
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
+            });
+
+            document.getElementById('updateForm').addEventListener('submit', function(event) {
+                let noHPInput = document.getElementById('noHP');
+                let noHPValue = noHPInput.value.trim();
+
+                // Validasi menggunakan regex untuk memastikan hanya angka yang diterima
+                if (!/^\+?\d{10,15}$/.test(noHPValue)) {
+                    event.preventDefault(); // Mencegah pengiriman form
+
+                    // Tampilkan pesan SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.',
+                    });
+
+                    noHPInput.focus();
+                }
+            });
+
             // get datetime to view in header
             document.addEventListener("DOMContentLoaded", function() {
                 getDateTime();
@@ -589,6 +644,36 @@
             //     }
             //     setTimeout(getSelamat, 1000);
             // }
+
+            function previewImage(input) {
+                var preview = document.getElementById('imagePreview');
+                var updateImageBadge = document.getElementById('updateImageBadge');
+
+                preview.innerHTML = '';
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        var img = document.createElement('img');
+                        img.setAttribute('src', e.target.result);
+                        img.setAttribute('class', 'rounded');
+                        var imageSize = 40; // Ukuran gambar baru dalam persen
+                        img.style.width = imageSize + '%'; // Mengatur lebar gambar baru
+                        preview.appendChild(img);
+
+                        // Sembunyikan badge "Profile Image Saat ini" dan tampilkan badge "Profile Image Baru"
+                        updateImageBadge.classList.remove('d-none');
+                        // Atur lebar badge "Profile Image Baru" sesuai dengan ukuran gambar baru
+                        updateImageBadge.style.width = imageSize + '%';
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    // Tampilkan kembali badge "Profile Image Saat ini" dan sembunyikan badge "Profile Image Baru"
+                    updateImageBadge.classList.add('d-none');
+                }
+            }
 
             // Message with SweetAlert if user tries to access unauthorized route
             @if(session('unauthorized'))
