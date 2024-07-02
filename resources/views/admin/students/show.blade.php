@@ -596,10 +596,9 @@
                                                 <div class="col-md-8 col-lg-9">
                                                     <input type="text" class="form-control" id="noHP" name="noHP" value="{{ old('noHP', $student->noHP) }}" placeholder="Masukkan Nomor HP Anda!" aria-describedby="noHPHelpBlock">
                                                     <div id="noHPHelpBlock" class="form-text text-muted">
-                                                        Nomor HP harus berupa angka.
+                                                        Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.
                                                     </div>
                                                 </div>
-
                                                 <!-- error message untuk nik -->
                                                 @error('noHP')
                                                     <div class="alert alert-danger mt-2">
@@ -609,16 +608,18 @@
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label class="font-weight-bold">Agama</label>
-                                                <select class="form-select @error('agama') is-invalid @enderror" name="agama" aria-label="Pilih Agama">
-                                                    <option selected>Pilih Agama</option>
-                                                    <option value="islam" {{ ($student->agama=='islam') ? 'selected' : '' }}>Islam</option>
-                                                    <option value="kristen" {{ ($student->agama=='kristen') ? 'selected' : '' }}>Kristen</option>
-                                                    <option value="katolik" {{ ($student->agama=='katolik') ? 'selected' : '' }}>Katolik</option>
-                                                    <option value="buddha" {{ ($student->agama=='buddha') ? 'selected' : '' }}>Buddha</option>
-                                                    <option value="hindu" {{ ($student->agama=='hindu') ? 'selected' : '' }}>Kristen</option>
-                                                    <option value="khonghucu" {{ ($student->agama=='khonghucu') ? 'selected' : '' }}>Khonghucu</option>
-                                                </select>
+                                                <label class="col-md-4 col-lg-3 col-form-label">Agama</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <select class="form-select @error('agama') is-invalid @enderror" name="agama" aria-label="Pilih Agama">
+                                                        <option selected>Pilih Agama</option>
+                                                        <option value="islam" {{ ($student->agama=='islam') ? 'selected' : '' }}>Islam</option>
+                                                        <option value="kristen" {{ ($student->agama=='kristen') ? 'selected' : '' }}>Kristen</option>
+                                                        <option value="katolik" {{ ($student->agama=='katolik') ? 'selected' : '' }}>Katolik</option>
+                                                        <option value="buddha" {{ ($student->agama=='buddha') ? 'selected' : '' }}>Buddha</option>
+                                                        <option value="hindu" {{ ($student->agama=='hindu') ? 'selected' : '' }}>Kristen</option>
+                                                        <option value="khonghucu" {{ ($student->agama=='khonghucu') ? 'selected' : '' }}>Khonghucu</option>
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk agama -->
                                                 @error('agama')
                                                     <div class="alert alert-danger mt-2">
@@ -1023,14 +1024,14 @@
                 let noHPValue = noHPInput.value.trim();
 
                 // Validasi menggunakan regex untuk memastikan hanya angka yang diterima
-                if (!/^\d+$/.test(noHPValue)) {
+                if (!/^\+?\d{10,15}$/.test(noHPValue)) {
                     event.preventDefault(); // Mencegah pengiriman form
 
                     // Tampilkan pesan SweetAlert
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Nomor HP hanya boleh berisi angka.',
+                        text: 'Nomor HP harus berupa angka, bisa diawali dengan tanda plus (+) dan terdiri dari 10 hingga 15 digit.',
                     });
 
                     noHPInput.focus();
