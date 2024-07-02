@@ -642,13 +642,15 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Jenis Kelamin</label>
-                                                <select class="form-select @error('gender') is-invalid @enderror" name="gender" aria-label="Default select example">
-                                                    <option selected>Pilih Jenis kelamin</option>
-                                                    <option value="Laki-Laki" {{ ($student->gender=='Laki-Laki') ? 'selected' : '' }}>Laki-Laki</option>
-                                                    <option value="Perempuan" {{ ($student->gender=='Perempuan') ? 'selected' : '' }}>Perempuan</option>
-                                                </select>
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Jenis Kelamin</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <select class="form-select @error('gender') is-invalid @enderror" name="gender" aria-label="Default select example">
+                                                        <option selected>Pilih Jenis kelamin</option>
+                                                        <option value="Laki-Laki" {{ ($student->gender=='Laki-Laki') ? 'selected' : '' }}>Laki-Laki</option>
+                                                        <option value="Perempuan" {{ ($student->gender=='Perempuan') ? 'selected' : '' }}>Perempuan</option>
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk jenis kelamin -->
                                                 @error('gender')
                                                     <div class="alert alert-danger mt-2">
@@ -670,15 +672,17 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Status Keaktifan
-                                                    <span class="badge bg-success mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Default Active</span>
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Status Keaktifan
                                                 </label>
-                                                <select class="form-select @error('status') is-invalid @enderror" name="status" aria-label="Default select example">
-                                                    <option>Status Keaktifan</option>
-                                                    <option value="active" {{ ($student->status=='active') ? 'selected' : '' }}>Active</option>
-                                                    <option value="non-active" {{ ($student->status=='non-active') ? 'selected' : '' }}>Non-Active</option>
-                                                </select>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <span class="badge bg-success mb-1"><i class="bi bi-exclamation-octagon"></i>Default Active</span>
+                                                    <select class="form-select @error('status') is-invalid @enderror" name="status" aria-label="Default select example">
+                                                        <option>Status Keaktifan</option>
+                                                        <option value="active" {{ ($student->status=='active') ? 'selected' : '' }}>Active</option>
+                                                        <option value="non-active" {{ ($student->status=='non-active') ? 'selected' : '' }}>Non-Active</option>
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk jenis kelamin -->
                                                 @error('status')
                                                     <div class="alert alert-danger mt-2">
@@ -688,10 +692,11 @@
                                             </div>
 
                                             {{-- form input to users tabel --}}
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Username</label>
-                                                <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $student->user->username) }}" placeholder="Masukkan Username Anda!">
-
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Username</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $student->user->username) }}" placeholder="Masukkan Username Anda!">
+                                                </div>
                                                 <!-- error message untuk name -->
                                                 @error('username')
                                                     <div class="alert alert-danger mt-2">
@@ -700,10 +705,11 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Email</label>
-                                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->user->email) }}" placeholder="Masukkan Email Anda!">
-
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $student->user->email) }}" placeholder="Masukkan Email Anda!">
+                                                </div>
                                                 <!-- error message untuk name -->
                                                 @error('email')
                                                     <div class="alert alert-danger mt-2">
@@ -712,12 +718,12 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Password
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Password</label>
+                                                <div class="col-md-8 col-lg-9">
                                                     <span class="badge bg-danger mb-1"><i class="bi bi-exclamation-octagon pe-2"></i>Minimal 6 Karakter</span>
-                                                </label>
-                                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $student->user->password) }}" placeholder="Masukkan Password Anda!">
-
+                                                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password', $student->user->password) }}" placeholder="Masukkan Password Anda!">
+                                                </div>
                                                 <!-- error message untuk name -->
                                                 @error('password')
                                                     <div class="alert alert-danger mt-2">
@@ -741,14 +747,16 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Jenjang Pendidikan</label>
-                                                <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
-                                                    <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
-                                                    @foreach ($education_levels as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Jenjang Pendidikan</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <select class="form-select @error('education_levels_id') is-invalid @enderror" name="education_levels_id" aria-label="Default select example">
+                                                        <option value="{{ $student->education_levels->id }}">{{ $student->education_levels->name }}</option>
+                                                        @foreach ($education_levels as $data)
+                                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                                 <!-- error message untuk jenis kelamin -->
                                                 @error('education_levels_id')
                                                     <div class="alert alert-danger mt-2">
@@ -759,7 +767,7 @@
 
                                             <div class="form-group">
                                                 <label for="classrooms_id">Pilih Kelas</label>
-                                                <select name="classrooms_id" id="classrooms_id" class="form-control">
+                                                <select name="classrooms_id" id="classrooms_id" class="form-select">
                                                     <option value="{{ $student->classrooms->id }}">{{ $student->classrooms->name }} / {{ $student->classrooms->semesters->name }}</option>
                                                     @foreach($classrooms as $classroom)
                                                         <option value="{{ $classroom->id }}">{{ $classroom->name }} / {{ $classroom->semesters->name }}</option>
