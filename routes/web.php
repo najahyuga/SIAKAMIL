@@ -56,6 +56,7 @@ Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->gro
     Route::get('/', [AuthController::class, 'indexGuru']);
     Route::resource('tasks', TasksController::class);
     Route::resource('students', StudentsController::class);
+    Route::get('/classrooms/{id}/courses', [StudentsController::class, 'getCoursesByClassroom']);
 });
 
 // Rute untuk siswa
