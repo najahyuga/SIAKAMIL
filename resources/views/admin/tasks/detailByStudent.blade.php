@@ -346,55 +346,84 @@
                                 <div class="tab-content pt-3">
                                     {{-- Start List --}}
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
-
                                         <h6 class="card-title">Daftar Tugas Siswa</h6>
                                         @if($tasksDetails->isNotEmpty())
                                             @foreach($tasksDetails as $detail)
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label mb-2">Nama Siswa</div>
-                                                    <div class="col-lg-9 col-md-8 mb-2">{{ $detail->students->name ?? 'N/A' }}</div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label mb-2">Kelas</div>
-                                                    <div class="col-lg-9 col-md-8 mb-2">{{ $detail->tasks->courses->classrooms->name ?? 'N/A' }} / {{ $detail->tasks->courses->classrooms->semesters->name ?? 'N/A' }}</div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label mb-2">Nama Pelajaran</div>
-                                                    <div class="col-lg-9 col-md-8 mb-2">{{ $detail->tasks->masterCourses->name ?? 'N/A' }}</div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label mb-2">Nama Tugas</div>
-                                                    <div class="col-lg-9 col-md-8 mb-2">{{ $detail->tasks->name ?? 'N/A' }}</div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">File Tugas</div>
-                                                    <div class="col-lg-9 col-md-8">
-                                                        <iframe src="{{ asset('/storage/file/'.$detail->file) }}" width="100%" height="500px"></iframe>
+                                                <form action="{{ route('admin.taskDetails.store') }}" method="POST">
+                                                    @csrf
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-4 label mb-2">Nama Siswa</div>
+                                                        <div class="col-lg-9 col-md-8 mb-2">{{ $detail->students->name ?? 'N/A' }}</div>
                                                     </div>
-                                                </div>
 
-                                                <div class="row mt-2">
-                                                    <label for="inputNumber" class="col-lg-3 col-md-4 label">Nilai Tugas</label>
-                                                    <div class="col-lg-9 col-md-8">
-                                                        <input type="number" class="form-control @error('result') is-invalid @enderror" name="result" value="{{ old('result') }}" placeholder="Masukkan Nilai Tugas!">
-                                                        @error('result')
-                                                            <div class="invalid-feedback">{{ $message }}</div>
-                                                        @enderror
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-4 label mb-2">Kelas</div>
+                                                        <div class="col-lg-9 col-md-8 mb-2">{{ $detail->tasks->courses->classrooms->name ?? 'N/A' }} / {{ $detail->tasks->courses->classrooms->semesters->name ?? 'N/A' }}</div>
                                                     </div>
-                                                </div>
 
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
-                                                </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-4 label mb-2">Nama Pelajaran</div>
+                                                        <div class="col-lg-9 col-md-8 mb-2">{{ $detail->tasks->masterCourses->name ?? 'N/A' }}</div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-4 label mb-2">Nama Tugas</div>
+                                                        <div class="col-lg-9 col-md-8 mb-2">{{ $detail->tasks->name ?? 'N/A' }}</div>
+                                                    </div>
+
+                                                    <div class="row mt-2">
+                                                        <label for="description" class="col-lg-3 col-md-4 label">Deskripsi</label>
+                                                        <div class="col-lg-9 col-md-8 mb-3">
+                                                            <textarea class="form-control @error('description') is-invalid @enderror" id="editor" name="description" placeholder="Masukkan Deskripsi dari Tugas yang Akan Diberikan!">{{ old('description', $detail->description) }}</textarea>
+                                                            @error('description')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-2">
+                                                        <label for="inputNumber" class="col-lg-3 col-md-4 label">Nilai Tugas</label>
+                                                        <div class="col-lg-9 col-md-8">
+                                                            <input type="number" class="form-control @error('result') is-invalid @enderror" name="result" value="{{ old('result', $detail->result) }}" placeholder="Masukkan Nilai Tugas!">
+                                                            @error('result')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-4 label">File Tugas</div>
+                                                        <div class="col-lg-9 col-md-8">
+                                                            <iframe src="{{ asset('/storage/file/'.$detail->file) }}" width="100%" height="500px"></iframe>
+                                                        </div>
+                                                    </div>
+
+                                                    @if(session('current_role') === 'students')
+                                                        <div class="row mt-2">
+                                                            <label for="file" class="col-lg-3 col-md-4 label">Unggah File Tugas</label>
+                                                            <div class="col-lg-9 col-md-8">
+                                                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
+                                                                @error('file')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Hidden inputs to pass students_id and tasks_id -->
+                                                    <input type="hidden" name="students_id" value="{{ $detail->students_id }}">
+                                                    <input type="hidden" name="tasks_id" value="{{ $detail->tasks_id }}">
+
+                                                    <div class="text-center">
+                                                        <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+                                                    </div>
+                                                </form>
                                             @endforeach
                                         @else
                                             <p>Data tugas siswa tidak tersedia.</p>
                                         @endif
-                                    </div>{{-- End List --}}
+                                    </div>
+                                    {{-- End List --}}
                                 </div>
                                 <!-- End Bordered Tabs -->
                             </div>
@@ -432,6 +461,20 @@
 
         {{-- Library Sweatalert --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        {{-- ckeditor --}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('admin.ckeditor.upload').'?_token='.csrf_token() }}"
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        </script>
 
         <script>
             $(document).ready(function() {
