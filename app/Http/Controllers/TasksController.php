@@ -284,13 +284,24 @@ class TasksController extends Controller
                 ]);
             }
 
-            // Redirect based on user level
-            $user = Auth::user()->roles->first();
+            // Determine active role cek session role
+            $activeRole = session('current_role');
 
-            if ($user->level == 'admin') {
-                return redirect()->route('admin.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Admin!']);
-            } elseif ($user->level == 'guru') {
-                return redirect()->route('guru.tasks.index')->with(['success' => 'Data Berhasil Diubah oleh Guru!']);
+            // Check role
+            if (!in_array($activeRole, ['admin', 'guru', 'students'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Peran tidak sah',
+                ], 403);
+            }
+
+            // Render view based on role
+            if ($activeRole === 'guru') {
+                // Redirect to a suitable view for guru
+                return redirect()->route('guru.tasks.show', ['task' => $task->id])->with(['success' => 'Data Berhasil Disimpan oleh Guru!']);
+            } elseif ($activeRole === 'admin') {
+                // Redirect to a suitable view for admin
+                return redirect()->route('admin.tasks.show', ['task' => $task->id])->with(['success' => 'Data Berhasil Disimpan oleh Admin!']);
             }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat mengubah data: " . $th->getMessage());
