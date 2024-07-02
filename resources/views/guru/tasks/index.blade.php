@@ -209,9 +209,9 @@
                                                 <td>{{ date('d-M-Y H:i:s', strtotime($row->deadline)) }}</td>
                                                 <td class="text-center">
                                                     <form method="POST">
-                                                        <a href="{{ route('admin.tasks.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('admin.tasks.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                                        <a href="{{ route('admin.tasks.detail', $row->id) }}" class="btn btn-sm btn-warning">DETAILS</a>
+                                                        <a href="{{ route('guru.tasks.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
+                                                        <a href="{{ route('guru.tasks.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                        <a href="{{ route('guru.tasks.detail', $row->id) }}" class="btn btn-sm btn-warning">DETAILS</a>
                                                     </form>
                                                 </td>
                                             </tr>
