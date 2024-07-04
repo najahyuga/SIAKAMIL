@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classrooms;
 use App\Models\Courses;
-use App\Models\MasterCategoryCourses;
-use App\Models\MasterCourses;
 use App\Models\Students;
 use App\Models\Tasks;
 use App\Models\TasksDetails;
@@ -22,24 +21,58 @@ class TasksController extends Controller
      */
     public function index()
     {
-        // $students = Students::first()->getCourses->courseMaster;
-        // dd($students);
         try {
-            // get data to display in index page
-            $tasks = Tasks::all();
-
+            // Ambil peran aktif dari sesi
             $activeRole = session('current_role');
 
-            if ($activeRole === 'guru') {
-                // Mengembalikan ke halaman index students guru
-                return view('guru.tasks.index', compact('tasks'));
-            } elseif ($activeRole === 'admin') {
-                // Mengembalikan ke halaman index students admin
-                return view('admin.tasks.index', compact('tasks'));
+            // Inisialisasi classrooms menjadi null
+            $classroomName = null;
+
+            // Jika peran adalah guru atau admin, ambil semua tugas
+            if ($activeRole === 'guru' || $activeRole === 'admin') {
+                $tasks = Tasks::all();
+
+                // Ambil nama classrooms yang terkait dengan setiap task
+                $classroomNames = Tasks::with('courses.classrooms')
+                ->get()
+                ->pluck('courses.classrooms.name', 'courses.classrooms.id')
+                ->toArray();
+
+                if ($activeRole === 'guru') {
+                    return view('guru.tasks.index', compact('tasks', 'classroomNames'));
+                } elseif ($activeRole === 'admin') {
+                    return view('admin.tasks.index', compact('tasks', 'classroomNames'));
+                }
+            }
+            // Jika peran adalah siswa, ambil tugas yang terkait dengan classrooms_id siswa
+            elseif ($activeRole === 'siswa') {
+                // Dapatkan siswa yang sedang login
+                $student = Auth::user()->student;
+
+                // Periksa apakah siswa valid dan memiliki classrooms_id
+                if ($student && $student->classrooms_id) {
+                    // Dapatkan classrooms_id dari siswa tersebut
+                    $classroomsId = $student->classrooms_id;
+
+                    // Dapatkan nama classrooms
+                    $classroomName = Classrooms::findorFail($classroomsId)->name;
+
+                    // Dapatkan semua courses yang terkait dengan classrooms_id
+                    $courses = Courses::where('classrooms_id', $classroomsId)->pluck('id')->toArray();
+
+                    // Dapatkan semua tasks yang terkait dengan courses_id
+                    $tasks = Tasks::whereIn('courses_id', $courses)->get();
+                } else {
+                    // Jika siswa tidak valid atau tidak memiliki classrooms_id, inisialisasi $tasks sebagai koleksi kosong
+                    $tasks = collect();
+                }
+
+                // Mengembalikan ke halaman index siswa
+                return view('siswa.tasks.index', compact('tasks', 'classroomName'));
             }
         } catch (\Throwable $th) {
-            Log::error("Tidak dapat menampilkan halaman index ". $th->getMessage());
-            response()->json([
+            Log::error("Tidak dapat menampilkan halaman index " . $th->getMessage());
+            return response()->json([
                 'status' => false,
                 'message' => 'Tidak dapat menampilkan halaman index'
             ], 500);
