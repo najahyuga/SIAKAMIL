@@ -66,4 +66,5 @@ Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->gro
 Route::prefix('siswa')->name('siswa.')->middleware('auth', 'UsersAkses:siswa')->group(function () {
     Route::get('/', [AuthController::class, 'indexSiswa']);
     Route::resource('tasks', TasksController::class);
+    Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
 });
