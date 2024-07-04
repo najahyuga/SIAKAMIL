@@ -58,7 +58,7 @@ class ClassroomsController extends Controller
     {
         try {
             // Dapatkan data kelas berdasarkan ID
-            $classroom = Classrooms::with('semesters', 'courses.masterCourses.master_category_course')->findOrFail($id);
+            $classroom = Classrooms::with('semesters', 'courses.masterCourses.master_category_course', 'students')->findOrFail($id);
 
             // Jika kelas tidak ditemukan, lemparkan exception
             if (!$classroom) {
