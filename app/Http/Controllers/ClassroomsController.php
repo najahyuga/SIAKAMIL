@@ -8,6 +8,7 @@ use App\Models\Courses;
 use App\Models\Semesters;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ClassroomsController extends Controller
 {
@@ -58,21 +59,39 @@ class ClassroomsController extends Controller
     {
         try {
             // Dapatkan data kelas berdasarkan ID
-            $classroom = Classrooms::with('semesters', 'courses.masterCourses.master_category_course', 'students')->findOrFail($id);
+            $classroom = Classrooms::with('semesters', 'courses', 'courses.masterCourses.master_category_course', 'students')->findOrFail($id);
 
             // Jika kelas tidak ditemukan, lemparkan exception
             if (!$classroom) {
                 throw new \Exception('Kelas tidak ditemukan.');
             }
 
+            // Ambil teachers_id dan nama teacher dari courses yang memiliki classrooms_id sesuai dengan kelas yang ditemukan
+            $course = Courses::where('classrooms_id', $classroom->id)->with('teachers')->first();
+
+            // Jika tidak ada data course yang sesuai
+            if (!$course) {
+                $teacher_name = null; // null jika data guru tidak tersedia
+            } else {
+                // Ambil nama guru dari relasi teachers
+                $teacher_name = optional($course->teachers)->name;
+            }
+
             // Dapatkan data semester selain semester kelas tersebut
             $semesters_id = Semesters::where('id', '!=', $classroom->semesters_id)->get();
 
             // Kembalikan ke halaman tampilan kelas dengan data yang diperlukan
-            return view('admin.classrooms.show', ['semesters_id' => $semesters_id], compact('classroom'));
-        } catch (\Exception $e) {
-            // Tangani exception jika kelas tidak ditemukan
-            return redirect()->back()->with('error', $e->getMessage());
+            return view('admin.classrooms.show', [
+                'classroom'     => $classroom,
+                'semesters_id'  => $semesters_id,
+                'teacher_name'  => $teacher_name, // Mengambil nama teacher
+            ]);
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat mengambil data ". $th->getMessage());
+            return response()->json([
+                'status'    => false,
+                'message'   => 'Tidak dapat mengambil data'
+            ], 500);
         }
     }
 
