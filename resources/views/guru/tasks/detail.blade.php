@@ -299,7 +299,7 @@
                                                         <tr>
                                                             <td class="text-center">{{ $loop->iteration }}</td>
                                                             <td class="text-center">{{ $student->name }}</td>
-                                                            <td class="text-center"><a href="{{ route('admin.taskDetails.index', ['studentsId' => $student, 'taskId' => $task->id]) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
+                                                            <td class="text-center"><a href="{{ route('guru.taskDetails.index', ['studentsId' => $student, 'taskId' => $task->id]) }}" class="btn btn-sm btn-warning">DETAILS</a></td>
                                                         </tr>
                                                     @empty
                                                         <tr>
