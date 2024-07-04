@@ -198,6 +198,8 @@ class TasksController extends Controller
             // display data based on ID
             // menampilkan data berdasarkan ID
             $task = Tasks::findOrFail($id);
+            $classroomName = $task->courses->classrooms->name;
+            $semesterName = $task->courses->classrooms->semesters->name;
 
             // Determine active role
             $activeRole = session('current_role');
@@ -205,13 +207,17 @@ class TasksController extends Controller
             // Render view based on role
             if ($activeRole === 'guru') {
                 return view('guru.tasks.show', [
-                    'courses_id' => $courses_id,
-                    'task' => $task,
+                    'courses_id'    => $courses_id,
+                    'task'          => $task,
+                    'classroomName' => $classroomName,
+                    'semesterName'  => $semesterName,
                 ]);
             } elseif ($activeRole === 'admin') {
                 return view('admin.tasks.show', [
-                    'courses_id' => $courses_id,
-                    'task' => $task,
+                    'courses_id'    => $courses_id,
+                    'task'          => $task,
+                    'classroomName' => $classroomName,
+                    'semesterName'  => $semesterName,
                 ]);
             }
 
