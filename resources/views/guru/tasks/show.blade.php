@@ -14,35 +14,16 @@
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
-
-
-        <!--Get your own code at fontawesome.com-->
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" />
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
@@ -214,11 +195,17 @@
                                 <!-- Bordered Tabs -->
                                 <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
-                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview Tugas</button>
                                     </li>
 
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Education Level</button>
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Tugas</button>
+                                    </li>
+
+                                    <li class="nav-item collapsed">
+                                        <a href="{{ route('guru.tasks.detail', $task->id) }}">
+                                            <button class="nav-link collapsed">Detail Tugas</button>
+                                        </a>
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-2">
@@ -256,8 +243,35 @@
                                             @method('PUT')
 
                                             <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Nama Kelas</label>
+                                                <select class="form-select @error('courses_id') is-invalid @enderror" name="courses_id" id="courses_id" aria-label="Pilih Kelas" disabled>
+                                                    <option value="{{ $task->courses_id }}">{{ $task->courses->classrooms->name }} / {{ $task->courses->classrooms->semesters->name }}</option>
+                                                    @foreach ($courses_id as $course)
+                                                        <option value="{{ $course->id }}" {{ $task->courses_id == $course->id ? 'selected' : '' }}>{{ $course->classrooms->name }} / {{ $course->classrooms->semesters->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('courses_id')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="font-weight-bold">Tugas Dari Pelajaran</label>
+                                                <select class="form-select @error('master_courses_id') is-invalid @enderror" name="master_courses_id" id="task_course_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas" disabled>
+                                                    <option value="{{ $task->masterCourses->id }}">{{ $task->masterCourses->name }} - {{ $task->masterCourses->master_category_course->name }}</option>
+                                                </select>
+                                                @error('master_courses_id')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
                                                 <label class="font-weight-bold mb-2">Nama Tugas</label>
-                                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $task->name) }}" placeholder="Masukkan Kategori Mata Pelajaran!">
+                                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $task->name) }}" placeholder="Masukkan Nama Tugas!">
 
                                                 <!-- error message untuk name -->
                                                 @error('name')
@@ -268,10 +282,9 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label class="font-weight-bold mb-2">Deskripsi Tugas</label>
-                                                <textarea class="tinymce-editor form-control @error('description') is-invalid @enderror" name="description" placeholder="Masukkan Deskripsi dari Tugas yang Akan Diberikan!">{{ old('name', $task->description) }}</textarea>
-
-                                                <!-- error message untuk name -->
+                                                <label class="font-weight-bold">Deskripsi Tugas</label>
+                                                <textarea class="form-control @error('description') is-invalid @enderror" id="editor" name="description" placeholder="Masukkan Deskripsi dari Tugas yang Akan Diberikan!">{{ old('description', $task->description) }}</textarea>
+                                                <!-- error message untuk alamat tinymce-editor -->
                                                 @error('description')
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $message }}
@@ -293,27 +306,18 @@
 
                                             <div class="form-group mb-3">
                                                 <label class="font-weight-bold">File Tugas</label>
+                                                <!-- Display existing file if available -->
+                                                @if(isset($task))
+                                                    <div class="mb-2">
+                                                        {{-- <iframe src="{{ asset('/storage/file/'.$task->file) }}" width="100%" height="500px"></iframe> --}}
+                                                        <a href="{{ asset('storage/file/' . $task->file) }}" target="_blank">Download File: {{ $task->file }}</a>
+                                                    </div>
+                                                @endif
+
                                                 <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
 
                                                 <!-- error message untuk image -->
                                                 @error('file')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label class="font-weight-bold">Tugas Dari Pelajaran</label>
-                                                <select class="form-select @error('courses_id') is-invalid @enderror" name="courses_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
-                                                    <option value="{{ $task->courses->id }}">{{ $task->courses->id }}. {{ $task->courses->name }}</option>
-                                                    @foreach ($courses_id as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->id }}. {{ $data->name }}</option>
-                                                        {{-- {{ old('education_levels_id', $data->name) }} --}}
-                                                    @endforeach
-                                                </select>
-                                                <!-- error message untuk jenis kelamin -->
-                                                @error('courses_id')
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $message }}
                                                     </div>
@@ -344,12 +348,9 @@
             </div>
         </footer><!-- End Footer -->
 
-
-        <a
-            href="#"
-            class="back-to-top d-flex align-items-center justify-content-center"
-            ><i class="bi bi-arrow-up-short"></i
-        ></a>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
 
         <!-- Vendor JS Files -->
         <script src="{{asset('backend/assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
@@ -366,6 +367,20 @@
 
         {{-- Library Sweatalert --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        {{-- ckeditor --}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('guru.ckeditor.upload').'?_token='.csrf_token() }}"
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        </script>
 
         <script>
             // get datetime to view in header
