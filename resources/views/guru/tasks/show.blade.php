@@ -214,6 +214,11 @@
 
                                         <h6 class="card-title">Tugas Details</h6>
                                         <div class="row">
+                                            <div class="col-lg-3 col-md-4 label mb-2">Kelas</div>
+                                            <div class="col-lg-9 col-md-8 mb-2">{{ $classroomName }} / {{ $semesterName }}</div>
+                                        </div>
+
+                                        <div class="row">
                                             <div class="col-lg-3 col-md-4 label mb-2">Nama Tugas</div>
                                             <div class="col-lg-9 col-md-8 mb-2">{{ $task->name }}</div>
                                         </div>
