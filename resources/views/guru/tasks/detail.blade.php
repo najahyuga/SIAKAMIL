@@ -295,7 +295,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse ($task->courses->classrooms->semesters->education_levels->students as $student)
+                                                    @forelse ($task->courses->classrooms->students as $student)
                                                         <tr>
                                                             <td class="text-center">{{ $loop->iteration }}</td>
                                                             <td class="text-center">{{ $student->name }}</td>
