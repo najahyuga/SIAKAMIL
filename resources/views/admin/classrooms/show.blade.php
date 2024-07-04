@@ -15,34 +15,16 @@
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect" />
         <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-            rel="stylesheet"
-        />
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
         <!-- Vendor CSS Files -->
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}"
-            rel="stylesheet"
-        />
-        <link
-            href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}"
-            rel="stylesheet"
-        />
+        <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet" />
+        <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        <link
-            href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}"
-            rel="stylesheet"
-        />
-
-
-        <!--Get your own code at fontawesome.com-->
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" />
 
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
@@ -426,7 +408,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>List Nama Siswa</th>
-                                                    <th>List Nama Guru</th>
+                                                    <th>Nama Guru</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -440,28 +422,32 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @forelse ($classroom->semesters->education_levels->students as $student)
+                                                                @forelse ($classroom->students as $student)
                                                                     <tr>
                                                                         <td>{{ $loop->iteration }}</td>
-                                                                        <td>{{ $student->name }} <br></td>
+                                                                        <td>{{ $student->name }}</td>
                                                                     </tr>
                                                                 @empty
-                                                                    <div class="alert alert-danger">
-                                                                        Data Siswa belum Tersedia.
-                                                                    </div>
+                                                                    <tr>
+                                                                        <td colspan="2">
+                                                                            <div class="alert alert-danger mb-0">
+                                                                                Data Siswa belum Tersedia.
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
                                                                 @endforelse
                                                             </tbody>
                                                         </table>
                                                     </td>
                                                     <td>
-                                                        @forelse ($classroom->semesters->education_levels->teachers as $teacher)
-                                                            {{ $loop->iteration }}.
-                                                            {{ $teacher->name }} <br>
-                                                        @empty
-                                                            <div class="alert alert-danger">
+                                                        @if ($teacher_name)
+                                                            {{ $teacher_name }}
+                                                        @else
+                                                            <div class="alert alert-danger mb-0">
                                                                 Data Guru belum Tersedia.
                                                             </div>
-                                                        @endforelse
+                                                        @endif
+                                                        {{-- {{ $teacher_name }} --}}
                                                     </td>
                                                 </tr>
                                             </tbody>
