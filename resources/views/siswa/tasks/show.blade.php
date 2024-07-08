@@ -184,27 +184,27 @@
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
                                         <h6 class="card-title">Tugas Details</h6>
-                                        <div class="row">
+                                        <div class="row mb-3">
                                             <div class="col-lg-3 col-md-4 label mb-2">Nama Pelajaran</div>
                                             <div class="col-lg-9 col-md-8 mb-2">{{ $task->masterCourses->name }}</div>
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row mb-3">
                                             <div class="col-lg-3 col-md-4 label mb-2">Nama Tugas</div>
                                             <div class="col-lg-9 col-md-8 mb-2">{{ $task->name }}</div>
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row mb-3">
                                             <div class="col-lg-3 col-md-4 label mb-2">Deskripsi Tugas</div>
                                             <div class="col-lg-9 col-md-8 mb-2">{!! $task->description !!}</div>
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row mb-3">
                                             <div class="col-lg-3 col-md-4 label mb-2">Deadline Tugas</div>
                                             <div class="col-lg-9 col-md-8 mb-2">{{ $task->deadline }}</div>
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row mb-3">
                                             <div class="col-lg-3 col-md-4 label">File Tugas</div>
                                             <div class="col-lg-9 col-md-8">
                                                 @if(isset($task->file))
@@ -215,11 +215,40 @@
                                             </div>
                                         </div>
 
+                                        @if(Auth::user()->student && isset($submittedTask))
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3 col-md-4 font-weight-bold">File yang Disubmit</div>
+                                                <div class="col-lg-9 col-md-8">
+                                                    <a href="{{ asset('storage/file/' . $submittedTask->file) }}" target="_blank" class="text-decoration-none">{{ $submittedTask->file }}</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3 col-md-4 font-weight-bold">Deskripsi</div>
+                                                <div class="col-lg-9 col-md-8">{!! $submittedTask->description !!}</div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3 col-md-4 font-weight-bold">Nilai</div>
+                                                <div class="col-lg-9 col-md-8">
+                                                    @if(isset($submittedTask->result))
+                                                        {{ $submittedTask->result }}
+                                                    @else
+                                                        <p class="text-muted">Belum dinilai.</p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+
                                         <div class="text-center">
                                             @if(Auth::user()->student)
-                                                <a href="{{ route('siswa.taskDetails.index', ['studentsId' => Auth::user()->student->id, 'taskId' => $task->id]) }}" class="btn btn-sm btn-success">Kumpulkan Tugas</a>
+                                                @if(isset($submittedTask))
+                                                    <a href="{{ route('siswa.taskDetails.index', ['studentsId' => Auth::user()->student->id, 'taskId' => $task->id]) }}" class="btn btn-warning btn-sm">Update Tugas</a>
+                                                @else
+                                                    <a href="{{ route('siswa.taskDetails.index', ['studentsId' => Auth::user()->student->id, 'taskId' => $task->id]) }}" class="btn btn-success btn-sm">Kumpulkan Tugas</a>
+                                                @endif
                                             @else
-                                                <p>Tidak bisa mengumpulkan tugas</p>
+                                                <p class="text-muted">Tidak bisa mengumpulkan tugas</p>
                                             @endif
                                         </div>
                                     </div>{{-- End List --}}
