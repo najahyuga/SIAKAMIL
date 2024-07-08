@@ -201,6 +201,9 @@ class TasksController extends Controller
             $classroomName = $task->courses->classrooms->name;
             $semesterName = $task->courses->classrooms->semesters->name;
 
+            // tugas yg disubmit siswa
+            $submittedTask = TasksDetails::where('tasks_id', $task->id)->where('students_id', Auth::user()->student->id)->first();
+
             // Determine active role
             $activeRole = session('current_role');
 
@@ -218,6 +221,7 @@ class TasksController extends Controller
                     'task'          => $task,
                     'classroomName' => $classroomName,
                     'semesterName'  => $semesterName,
+                    'submittedTask' => $submittedTask,
                 ]);
             } elseif ($activeRole === 'siswa') {
                 // Mengembalikan ke halaman index siswa
@@ -226,6 +230,7 @@ class TasksController extends Controller
                     'task'          => $task,
                     'classroomName' => $classroomName,
                     'semesterName'  => $semesterName,
+                    'submittedTask' => $submittedTask,
                 ]);
             }
 
