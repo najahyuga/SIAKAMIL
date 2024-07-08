@@ -14,9 +14,15 @@ return new class extends Migration
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
             $table->date('deadline');
+
             $table->unsignedBigInteger('courses_id');
             $table->foreign('courses_id')
                 ->references('id')->on('courses')->cascadeOnDelete();
+
+            $table->unsignedBigInteger('created_by'); // ID yang membuat daftar presensi
+            $table->foreign('created_by')
+                ->references('id')->on('users')->cascadeOnDelete();
+            $table->boolean('is_for_teacher')->default(false);
             $table->timestamps();
         });
     }
