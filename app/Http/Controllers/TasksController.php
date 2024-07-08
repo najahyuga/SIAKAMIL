@@ -219,6 +219,14 @@ class TasksController extends Controller
                     'classroomName' => $classroomName,
                     'semesterName'  => $semesterName,
                 ]);
+            } elseif ($activeRole === 'siswa') {
+                // Mengembalikan ke halaman index siswa
+                return view('siswa.tasks.show', [
+                    'courses_id'    => $courses_id,
+                    'task'          => $task,
+                    'classroomName' => $classroomName,
+                    'semesterName'  => $semesterName,
+                ]);
             }
 
             // Jika peran tidak dikenali (idealnya, ada default case atau validasi yang lebih baik)
