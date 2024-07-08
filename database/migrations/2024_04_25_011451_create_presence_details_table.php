@@ -18,6 +18,13 @@ return new class extends Migration
             $table->unsignedBigInteger('presences_id');
             $table->foreign('presences_id')
                 ->references('id')->on('presences')->cascadeOnDelete();
+
+            $table->unsignedBigInteger('users_id'); // Mengganti student_id menjadi user_id
+            $table->foreign('users_id')
+                ->references('id')->on('users')->cascadeOnDelete();
+
+            $table->boolean('marked_by_teacher')->default(false); // Menandakan presensi dilakukan oleh guru
+            $table->date('presence_date');
             $table->timestamps();
         });
     }
