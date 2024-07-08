@@ -130,12 +130,12 @@
                     </a>
                     <ul id="task-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="/guru/tasks" class="active">
+                            <a href="/siswa/tasks" class="active">
                             <i class="bi bi-circle"></i><span>Tasks Data</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/guru/tasks/create" >
+                            <a href="/siswa/tasks/create" >
                             <i class="bi bi-circle"></i><span>Insert Task Data</span>
                             </a>
                         </li>
@@ -192,9 +192,9 @@
                                                 <td>{{ date('d-M-Y H:i:s', strtotime($row->deadline)) }}</td>
                                                 <td class="text-center">
                                                     <form method="POST">
-                                                        <a href="{{ route('siswa.tasks.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                        <a href="{{ route('siswa.tasks.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                                        <a href="{{ route('siswa.tasks.detail', $row->id) }}" class="btn btn-sm btn-warning">DETAILS</a>
+                                                        <a href="{{ route('siswa.tasks.show', $row->id) }}" class="btn btn-sm btn-warning">Cek Tugas</a>
+                                                        {{-- <a href="{{ route('siswa.tasks.edit', $row->id) }}" class="btn btn-sm btn-primary">EDIT</a> --}}
+                                                        {{-- <a href="{{ route('siswa.tasks.detail', $row->id) }}" class="btn btn-sm btn-warning">DETAILS</a> --}}
                                                     </form>
                                                 </td>
                                             </tr>
