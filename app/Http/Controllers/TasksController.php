@@ -202,7 +202,11 @@ class TasksController extends Controller
             $semesterName = $task->courses->classrooms->semesters->name;
 
             // tugas yg disubmit siswa
-            $submittedTask = TasksDetails::where('tasks_id', $task->id)->where('students_id', Auth::user()->student->id)->first();
+            // $submittedTask = TasksDetails::where('tasks_id', $task->id)->where('students_id', Auth::user()->student->id)->first();
+            $submittedTask = null;
+            if (Auth::user()->student) {
+                $submittedTask = TasksDetails::where('tasks_id', $task->id)->where('students_id', Auth::user()->student->id)->first();
+            }
 
             // Determine active role
             $activeRole = session('current_role');
