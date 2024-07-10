@@ -184,6 +184,17 @@ class PresenceController extends Controller
                 $detail->save();
             }
 
+            // Ambil peran aktif dari sesi
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'admin') {
+                return redirect()->route('admin.presences.show', $presence->id)->with(['success' => 'Presensi berhasil disimpan oleh admin!']);
+            } elseif ($activeRole === 'guru') {
+                return redirect()->route('guru.presences.show', $presence->id)->with(['success' => 'Presensi berhasil disimpan oleh guru!']);
+            } elseif ($activeRole === 'siswa') {
+                return view('siswa.presences.show', compact('presence'));
+            }
+
             // Redirect ke halaman detail presensi dengan pesan sukses
             return redirect()->route('admin.presences.show', $presence->id)->with(['success' => 'Presensi berhasil disimpan!']);
 
