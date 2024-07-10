@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Courses;
 use App\Models\Presences;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PresenceController extends Controller
@@ -30,5 +34,46 @@ class PresenceController extends Controller
                 'message' => 'Tidak dapat menampilkan halaman index'
             ], 500);
         }
+    }
+
+    // Menampilkan form untuk membuat presensi baru
+    public function create()
+    {
+        try {
+            // Logic untuk menampilkan form create, misalnya daftar guru yang bisa dipilih
+            $teachers = User::whereHas('roles', function($query) {
+                $query->where('level', 'guru');
+            })->get();
+
+            $courses = Courses::all();
+
+            return view('admin.presences.create', compact('teachers', 'courses'));
+        } catch (\Throwable $th) {
+            Log::error("Tidak dapat menampilkan halaman create presensi " . $th->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak dapat menampilkan halaman create presensi'
+            ], 500);
+        }
+    }
+
+    // Menyimpan presensi baru yang dibuat oleh admin
+    public function store(Request $request)
+    {
+        $request->validate([
+            'deadline' => 'required|date',
+            'courses_id' => 'required|exists:courses,id',
+            // 'teacher_id' => 'required|exists:users,id',
+        ]);
+
+        $presence = new Presences();
+        $presence->deadline = $request->deadline;
+        $presence->courses_id = $request->courses_id;
+        $presence->created_by = Auth::id();
+        // $presence->is_for_teacher = true; // Sesuaikan dengan kebutuhan
+        $presence->save();
+
+        // Redirect atau response sesuai kebutuhan aplikasi
+        return redirect()->route('admin.presences.index')->with('success', 'Presensi berhasil dibuat.');
     }
 }
