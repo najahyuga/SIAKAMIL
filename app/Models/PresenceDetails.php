@@ -11,11 +11,19 @@ class PresenceDetails extends Model
 
     protected $fillable = [
         'status',
-        'presences_id'
+        'presences_id',
+        'students_id',
+        'marked_by_teacher',
+        'presence_date'
     ];
 
     public function presences()
     {
         return $this->belongsTo(Presences::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsTo(Students::class, 'students_id');
     }
 }
