@@ -7,6 +7,7 @@ use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\EducationLevelsController;
 use App\Http\Controllers\MasterCategoryCoursesController;
 use App\Http\Controllers\MasterCoursesController;
+use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\SemestersController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
@@ -49,6 +50,16 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
     Route::post('/ckeditor/upload', [TasksController::class, 'upload'])->name('ckeditor.upload');
     Route::resource('taskDetails', TasksDetailsController::class);
     Route::get('taskDetails/{studentsId}/{taskId}', [TasksDetailsController::class, 'index'])->name('taskDetails.index');
+    Route::get('/presences', [PresenceController::class, 'index'])->name('presences.index');
+    Route::get('/presences/create', [PresenceController::class, 'create'])->name('presences.create');
+    Route::post('/presences', [PresenceController::class, 'store'])->name('presences.store');
+    Route::get('/presences/{id}', [PresenceController::class, 'show'])->name('presences.show');
+    Route::get('/presences/{id}/showSubmit', [PresenceController::class, 'showSubmit'])->name('presences.showSubmit');
+    Route::post('/presences/{id}/submit', [PresenceController::class, 'submit'])->name('presences.submit');
+    // Rute untuk mendapatkan data classrooms berdasarkan course
+    Route::get('courses/{course_id}/classrooms', [TasksController::class, 'getClassroomsByCourse']);
+    // Rute untuk mendapatkan data master courses berdasarkan course
+    Route::get('courses/{course_id}/master-courses', [TasksController::class, 'getMasterCoursesByCourse']);
 });
 
 // Rute untuk guru
