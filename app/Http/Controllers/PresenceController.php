@@ -89,8 +89,15 @@ class PresenceController extends Controller
         // $presence->is_for_teacher = true; // Sesuaikan dengan kebutuhan
         $presence->save();
 
-        // Redirect atau response sesuai kebutuhan aplikasi
-        return redirect()->route('admin.presences.index')->with('success', 'Presensi berhasil dibuat.');
+        // Ambil peran aktif dari sesi
+        $activeRole = session('current_role');
+        if ($activeRole === 'guru') {
+            // redirect to guru students index
+            return redirect()->route('guru.presences.index')->with(['success' => 'Data Presensi Berhasil Disimpan oleh Guru!']);
+        } elseif ($activeRole === 'admin') {
+            // redirect to admin students index
+            return redirect()->route('admin.presences.index')->with(['success' => 'Data Presensi Berhasil Disimpan oleh Admin!']);
+        }
     }
 
     public function show($id)
