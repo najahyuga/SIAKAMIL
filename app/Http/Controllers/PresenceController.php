@@ -52,7 +52,18 @@ class PresenceController extends Controller
 
             $courses = Courses::all();
 
-            return view('admin.presences.create', compact('teachers', 'courses'));
+            // Ambil peran aktif dari sesi
+            $activeRole = session('current_role');
+
+            // Determine active role cek session role
+            $activeRole = session('current_role');
+            if ($activeRole === 'admin') {
+                return view('admin.presences.create', compact('teachers', 'courses'));
+            } elseif ($activeRole === 'guru') {
+                return view('guru.presences.create', compact('teachers', 'courses'));
+            } elseif ($activeRole === 'siswa') {
+                return view('siswa.presences.index', compact('teachers', 'courses'));
+            }
         } catch (\Throwable $th) {
             Log::error("Tidak dapat menampilkan halaman create presensi " . $th->getMessage());
             return response()->json([
