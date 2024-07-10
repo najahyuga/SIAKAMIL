@@ -352,7 +352,7 @@
                                         </div>
                                     @enderror
                                 </div>
-
+                                
                                 <div class="form-group mb-3">
                                     <label class="font-weight-bold">Tugas Dari Pelajaran</label>
                                     <select class="form-select @error('master_courses_id') is-invalid @enderror" name="master_courses_id" id="task_course_id" aria-label="Pilih Pelajaran yang Akan Diberikan Tugas">
@@ -364,7 +364,7 @@
                                         </div>
                                     @enderror
                                 </div>
-
+                                
                                 <div class="form-group mb-3">
                                     <label class="font-weight-bold">Nama Tugas</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama Tugas!">
@@ -470,27 +470,42 @@
             document.getElementById('courses_id').addEventListener('change', function() {
                 var courseId = this.value;
                 if (courseId) {
-                    const url = `http://siakamil_beta.test/admin/classrooms/${courseId}/courses`;
-                    console.log('Fetching URL:', url);
-                    fetch(url)
+                    const classroomsUrl = `http://siakamil_beta.test/admin/courses/${courseId}/classrooms`;
+                    console.log('Fetching URL:', classroomsUrl);
+                    fetch(classroomsUrl)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Network response was not ok ' + response.statusText);
                             }
                             return response.json();
                         })
-                        .then(data => {
-                            console.log('Data received:', data);
-                            const taskCourseSelect = document.getElementById('task_course_id');
-                            taskCourseSelect.innerHTML = '<option selected disabled>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
-                            data.forEach(course => {
-                                course.master_courses.forEach(masterCourse => {
-                                    const option = document.createElement('option');
-                                    option.value = masterCourse.id;
-                                    option.textContent = masterCourse.name;
-                                    taskCourseSelect.appendChild(option);
+                        .then(classroomsData => {
+                            console.log('Classrooms Data received:', classroomsData);
+                            // Proses data classrooms jika diperlukan
+                            // Misalnya, bisa update UI dengan data classrooms di sini
+
+                            // Fetch master courses berdasarkan course ID
+                            const masterCoursesUrl = `http://siakamil_beta.test/admin/courses/${courseId}/master-courses`;
+                            console.log('Fetching URL:', masterCoursesUrl);
+                            return fetch(masterCoursesUrl)
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok ' + response.statusText);
+                                    }
+                                    return response.json();
+                                })
+                                .then(masterCoursesData => {
+                                    console.log('Master Courses Data received:', masterCoursesData);
+                                    // Update UI dengan data master courses
+                                    const taskCourseSelect = document.getElementById('task_course_id');
+                                    taskCourseSelect.innerHTML = '<option selected disabled>Pilih Pelajaran yang Akan Diberikan Tugas</option>';
+                                    masterCoursesData.forEach(masterCourse => {
+                                        const option = document.createElement('option');
+                                        option.value = masterCourse.id;
+                                        option.textContent = masterCourse.name;
+                                        taskCourseSelect.appendChild(option);
+                                    });
                                 });
-                            });
                         })
                         .catch(error => {
                             console.error('Error:', error);
