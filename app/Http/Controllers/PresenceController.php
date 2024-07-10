@@ -136,8 +136,17 @@ class PresenceController extends Controller
             // Mengambil presensi dengan relasi presenceDetails
             $presence = Presences::with('presenceDetails')->findOrFail($id);
 
-            // Menampilkan view dengan data presensi dan siswa
-            return view('admin.presences.submitPresensi', compact('presence'));
+            // Ambil peran aktif dari sesi
+            $activeRole = session('current_role');
+
+            if ($activeRole === 'admin') {
+                return view('admin.presences.submitPresensi', compact('presence'));
+            } elseif ($activeRole === 'guru') {
+                return view('guru.presences.submitPresensi', compact('presence'));
+            } elseif ($activeRole === 'siswa') {
+                return view('siswa.presences.submitPresensi', compact('presence'));
+            }
+
         } catch (ModelNotFoundException $e) {
             // Handle jika data presensi tidak ditemukan
             Log::error('Data presensi tidak ditemukan saat menyimpan presensi. ID: ' . $id);
