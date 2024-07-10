@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
+use App\Models\PresenceDetails;
 use App\Models\Presences;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -98,6 +99,66 @@ class PresenceController extends Controller
             Log::error('Terjadi kesalahan saat menampilkan presensi. ID: ' . $id . ' - Error: ' . $e->getMessage());
 
             return redirect()->route('admin.presences.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function showSubmit($id)
+    {
+        try {
+            // Mengambil presensi dengan relasi presenceDetails
+            $presence = Presences::with('presenceDetails')->findOrFail($id);
+
+            // Menampilkan view dengan data presensi dan siswa
+            return view('admin.presences.submitPresensi', compact('presence'));
+        } catch (ModelNotFoundException $e) {
+            // Handle jika data presensi tidak ditemukan
+            Log::error('Data presensi tidak ditemukan saat menyimpan presensi. ID: ' . $id);
+            return redirect()->route('admin.presences.show')->with('error', 'Data presensi tidak ditemukan.');
+
+        } catch (\Exception $e) {
+            // Handle kesalahan umum lainnya
+            Log::error('Terjadi kesalahan saat menyimpan presensi. ID: ' . $id . ' - Error: ' . $e->getMessage());
+            return redirect()->route('admin.presences.show')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function submit(Request $request, $id)
+    {
+        try {
+            // Mengambil presensi dengan relasi presenceDetails
+            $presence = Presences::with('presenceDetails')->findOrFail($id);
+
+            // Mendapatkan data input status dan marked_by_teacher dari request
+            $statuses = $request->input('status', []);
+            $markedByTeacher = $request->input('marked_by_teacher', []);
+
+            // Looping setiap students dalam course untuk menyimpan atau mengupdate detail presensi
+            foreach ($presence->course->classrooms->students as $student) {
+                $detail = PresenceDetails::firstOrNew([ // mencari atau membuat detail presensi
+                    'presences_id' => $presence->id,
+                    'students_id' => $student->id,
+                ]);
+
+                // Mengatur nilai status, marked_by_teacher, dan presence_date
+                $detail->status = $statuses[$student->id] ?? 'alpha';
+                $detail->marked_by_teacher = isset($markedByTeacher[$student->id]);
+                $detail->presence_date = now(); // Set tanggal presensi ke waktu sekarang
+
+                $detail->save();
+            }
+
+            // Redirect ke halaman detail presensi dengan pesan sukses
+            return redirect()->route('admin.presences.show', $presence->id)->with(['success' => 'Presensi berhasil disimpan!']);
+
+        } catch (ModelNotFoundException $e) {
+            // Handle jika data presensi tidak ditemukan
+            Log::error('Data presensi tidak ditemukan saat menyimpan presensi. ID: ' . $id);
+            return redirect()->route('admin.presences.show')->with('error', 'Data presensi tidak ditemukan.');
+
+        } catch (\Exception $e) {
+            // Handle kesalahan umum lainnya
+            Log::error('Terjadi kesalahan saat menyimpan presensi. ID: ' . $id . ' - Error: ' . $e->getMessage());
+            return redirect()->route('admin.presences.show')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }
