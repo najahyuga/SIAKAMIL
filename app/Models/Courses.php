@@ -41,6 +41,11 @@ class Courses extends Model
         return $this->hasMany(Tasks::class);
     }
 
+    public function presence()
+    {
+        return $this->hasMany(Presences::class);
+    }
+
     public function courseMaster()
     {
         return $this->hasMany(CourseMasterCourse::class,'course_id','id');
