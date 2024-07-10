@@ -416,4 +416,41 @@ class TasksController extends Controller
             ], 500);
         }
     }
+
+    // mendapatkan data classrooms berdasarkan courses
+    public function getClassroomsByCourse($course_id)
+    {
+        try {
+            // mencatat informasi bahwa proses pengambilan data kelas sedang dimulai
+            Log::info("Mengambil data kelas untuk kursus dengan ID: " . $course_id);
+
+            // Mencari kursus berdasarkan ID dan mengambil relasi classrooms
+            $course = Courses::with('classrooms')->find($course_id);
+
+            // Jika kursus tidak ditemukan, log error dan kembalikan respon error 404
+            if (!$course) {
+                Log::error("Kursus tidak ditemukan: " . $course_id);
+                return response()->json(['error' => 'Kursus tidak ditemukan'], 404);
+            }
+
+            // Ambil semua data kelas dari kursus yang dipilih
+            $classrooms = $course->classrooms;
+
+            // Log informasi bahwa data kelas berhasil ditemukan
+            Log::info("Kelas ditemukan: " . $classrooms);
+
+            // Kembalikan data kelas dalam format JSON
+            return response()->json($classrooms);
+
+        } catch (\Throwable $th) {
+            // Log error jika terjadi kesalahan dalam pengambilan data
+            Log::error("Gagal mengambil data kelas: " . $th->getMessage());
+            
+            // Kembalikan respon error 500 jika terjadi kesalahan
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data kelas',
+            ], 500);
+        }
+    }
 }
