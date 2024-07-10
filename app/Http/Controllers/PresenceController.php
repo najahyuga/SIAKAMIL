@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Courses;
 use App\Models\Presences;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -75,5 +76,28 @@ class PresenceController extends Controller
 
         // Redirect atau response sesuai kebutuhan aplikasi
         return redirect()->route('admin.presences.index')->with('success', 'Presensi berhasil dibuat.');
+    }
+
+    public function show($id)
+    {
+        try {
+            // Mengambil presensi dengan relasi yang dibutuhkan
+            $presence = Presences::with(['course.classrooms.students', 'creator', 'presenceDetails'])->findOrFail($id);
+
+            // Menampilkan view dengan data presensi dan siswa
+            return view('admin.presences.show', compact('presence'));
+
+        } catch (ModelNotFoundException $e) {
+            // Handle jika data tidak ditemukan
+            Log::error('Data presensi tidak ditemukan. ID: ' . $id);
+
+            return redirect()->route('admin.presences.index')->with('error', 'Data presensi tidak ditemukan.');
+
+        } catch (\Exception $e) {
+            // Handle kesalahan umum lainnya
+            Log::error('Terjadi kesalahan saat menampilkan presensi. ID: ' . $id . ' - Error: ' . $e->getMessage());
+
+            return redirect()->route('admin.presences.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }
