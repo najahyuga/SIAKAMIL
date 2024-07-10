@@ -11,11 +11,23 @@ class Presences extends Model
 
     protected $fillable = [
         'deadline',
-        'courses_id'
+        'courses_id',
+        'created_by',
+        'is_for_teacher'
     ];
 
     public function presenceDetails()
     {
         return $this->hasMany(PresenceDetails::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Courses::class, 'courses_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
