@@ -20,6 +20,9 @@ class PresenceController extends Controller
         try {
             $presences = Presences::all();
 
+            // Ambil peran aktif dari sesi
+            $activeRole = session('current_role');
+
             // Determine active role cek session role
             $activeRole = session('current_role');
             if ($activeRole === 'admin') {
