@@ -453,4 +453,41 @@ class TasksController extends Controller
             ], 500);
         }
     }
+
+    // mendapatkan data master courses berdasarkan courses
+    public function getMasterCoursesByCourse($course_id)
+    {
+        try {
+            // mencatat informasi bahwa proses pengambilan data master kursus sedang dimulai
+            Log::info("Mengambil data master kursus untuk kursus dengan ID: " . $course_id);
+
+            // Mencari kursus berdasarkan ID dan mengambil relasi masterCourses
+            $course = Courses::with('masterCourses')->find($course_id);
+
+            // Jika kursus tidak ditemukan, log error dan kembalikan respon error 404
+            if (!$course) {
+                Log::error("Kursus tidak ditemukan: " . $course_id);
+                return response()->json(['error' => 'Kursus tidak ditemukan'], 404);
+            }
+
+            // Ambil semua data master kursus dari kursus yang dipilih
+            $masterCourses = $course->masterCourses;
+
+            // Log informasi bahwa data master kursus berhasil ditemukan
+            Log::info("Master kursus ditemukan: " . $masterCourses);
+
+            // Kembalikan data master kursus dalam format JSON
+            return response()->json($masterCourses);
+
+        } catch (\Throwable $th) {
+            // Log error jika terjadi kesalahan dalam pengambilan data
+            Log::error("Gagal mengambil data master kursus: " . $th->getMessage());
+            
+            // Kembalikan respon error 500 jika terjadi kesalahan
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data master kursus',
+            ], 500);
+        }
+    }
 }
