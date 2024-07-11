@@ -45,7 +45,7 @@ class UsersAkses
         } elseif (Auth::user()->roles->contains('level', 'siswa')) {
             return redirect('siswa');
         } elseif (Auth::user()->roles->contains('level', 'calonSiswa')) {
-            return redirect('/');
+            return redirect('calonSiswa');
         } else {
             return redirect('login');
         }
