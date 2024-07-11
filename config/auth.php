@@ -52,6 +52,10 @@ return [
             'driver' => 'session',
             'provider' => 'siswas',
         ],
+        'calonSiswa' => [
+            'driver' => 'session',
+            'provider' => 'calonSiswas',
+        ],
     ],
 
     /*
@@ -85,6 +89,10 @@ return [
             'model' => App\Models\User::class,
         ],
         'siswas' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'calonSiswas' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ]
