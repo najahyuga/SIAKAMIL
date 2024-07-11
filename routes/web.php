@@ -72,6 +72,12 @@ Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->gro
     Route::post('/ckeditor/upload', [TasksController::class, 'upload'])->name('ckeditor.upload');
     Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
     Route::get('taskDetails/{studentsId}/{taskId}', [TasksDetailsController::class, 'index'])->name('taskDetails.index');
+    Route::get('/presences', [PresenceController::class, 'index'])->name('presences.index');
+    Route::get('/presences/create', [PresenceController::class, 'create'])->name('presences.create');
+    Route::post('/presences', [PresenceController::class, 'store'])->name('presences.store');
+    Route::get('/presences/{id}', [PresenceController::class, 'show'])->name('presences.show');
+    Route::get('/presences/{id}/showSubmit', [PresenceController::class, 'showSubmit'])->name('presences.showSubmit');
+    Route::post('/presences/{id}/submit', [PresenceController::class, 'submit'])->name('presences.submit');
 });
 
 // Rute untuk siswa
