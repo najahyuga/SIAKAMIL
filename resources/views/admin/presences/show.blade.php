@@ -513,19 +513,6 @@
         {{-- Library Sweatalert --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-        <script>
-            ClassicEditor
-            .create(document.querySelector('#editor'), {
-                ckfinder: {
-                    uploadUrl: "{{ route('admin.ckeditor.upload').'?_token='.csrf_token() }}"
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        </script>
-
         <script>
             $(document).ready(function() {
                 $('.datatable').DataTable();
