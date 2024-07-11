@@ -7,6 +7,7 @@ use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\EducationLevelsController;
 use App\Http\Controllers\MasterCategoryCoursesController;
 use App\Http\Controllers\MasterCoursesController;
+use App\Http\Controllers\pendaftaranController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\SemestersController;
 use App\Http\Controllers\StudentsController;
@@ -87,4 +88,10 @@ Route::prefix('siswa')->name('siswa.')->middleware('auth', 'UsersAkses:siswa')->
     Route::resource('taskDetails', TasksDetailsController::class);
     Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
     Route::get('taskDetails/{studentsId}/{taskId}', [TasksDetailsController::class, 'index'])->name('taskDetails.index');
+});
+
+// Rute untuk calon siswa
+Route::prefix('calonSiswa')->name('calonSiswa.')->middleware('auth', 'UsersAkses:calonSiswa')->group(function (){
+    Route::get('/', [AuthController::class, 'indexCalonSiswa']);
+    Route::resource('pendaftaran/paketA', pendaftaranController::class);
 });
