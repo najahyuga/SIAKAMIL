@@ -439,7 +439,7 @@
                             </div>
                             
                             <h5 class="card-title">Detail Kehadiran</h5>
-                            <form action="{{ route('admin.presences.submit', $presence->id) }}" method="POST">
+                            <form action="{{ route('admin.presences.submit', $presence->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="table-responsive mt-2">
                                     <table class="table table-striped table-bordered datatable">
@@ -457,12 +457,18 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $student->name }}</td>
                                                     <td>
-                                                        <select name="status[{{ $student->id }}]" class="form-control">
-                                                            <option value="hadir" {{ (isset($pd) && $pd->status == 'hadir') ? 'selected' : '' }}>Hadir</option>
-                                                            <option value="alpha" {{ (isset($pd) && $pd->status == 'alpha') ? 'selected' : '' }}>Alpha</option>
-                                                            <option value="sakit" {{ (isset($pd) && $pd->status == 'sakit') ? 'selected' : '' }}>Sakit</option>
-                                                            <option value="izin" {{ (isset($pd) && $pd->status == 'izin') ? 'selected' : '' }}>Izin</option>
+                                                        <select name="status[{{ $student->id }}]" class="form-select @error('status') is-invalid @enderror">
+                                                            <option value="hadir" {{ (old('status') == 'hadir') ? 'selected' : '' }}>Hadir</option>
+                                                            <option value="alpha" {{ (old('status') == 'alpha') ? 'selected' : '' }}>Alpha</option>
+                                                            <option value="sakit" {{ (old('status') == 'sakit') ? 'selected' : '' }}>Sakit</option>
+                                                            <option value="izin" {{ (old('status') == 'izin') ? 'selected' : '' }}>Izin</option>
                                                         </select>
+                                                        <!-- error message untuk jenis kelamin -->
+                                                        @error('status')
+                                                            <div class="alert alert-danger mt-2">
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
                                                     </td>
                                                     <td>
                                                         <input type="checkbox" name="marked_by_teacher[{{ $student->id }}]" checked>
@@ -519,19 +525,6 @@
 
         {{-- Library Sweatalert --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-        <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-        <script>
-            ClassicEditor
-            .create(document.querySelector('#editor'), {
-                ckfinder: {
-                    uploadUrl: "{{ route('admin.ckeditor.upload').'?_token='.csrf_token() }}"
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        </script>
 
         <script>
             $(document).ready(function() {
