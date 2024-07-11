@@ -31,6 +31,11 @@ class AuthController extends Controller
         return view('siswa.index');
     }
 
+    // view to page dashboard calonSiswa index
+    public function indexCalonSiswa(){
+        return view('calonSiswa.index');
+    }
+
     // view to page login
     public function indexLogin() {
         return view('login');
@@ -77,7 +82,7 @@ class AuthController extends Controller
             case 'siswa':
                 return redirect('/siswa')->with('success', 'Login Berhasil! Selamat Datang Siswa ' . Auth::user()->username);
             case 'calonSiswa':
-                return redirect('/')->with('success', 'Login Berhasil! Selamat Datang Calon Siswa ' . Auth::user()->username);
+                return redirect('/calonSiswa')->with('success', 'Login Berhasil! Selamat Datang Calon Siswa ' . Auth::user()->username);
             default:
                 return redirect('login')->with('success', 'Login Berhasil, Anda Tidak Memiliki Akses Pengguna! Selamat Datang ' . Auth::user()->username);
         }
