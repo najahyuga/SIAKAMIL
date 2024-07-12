@@ -26,4 +26,8 @@ class EducationLevels extends Model
         return $this->hasMany(Semesters::class);
     }
 
+    public function formSiswa()
+    {
+        return $this->hasMany(FormSiswa::class, 'education_levels_id');
+    }
 }
