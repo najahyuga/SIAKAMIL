@@ -20,4 +20,9 @@ class FilesUploads extends Model
     {
         return $this->hasOne(Students::class, 'files_uploads_id');
     }
+
+    public function formSiswa()
+    {
+        return $this->hasOne(FormSiswa::class, 'files_uploads_id');
+    }
 }
