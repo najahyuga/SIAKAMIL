@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->roles()->where('level', $level)->exists();
     }
+
+    public function formSiswa()
+    {
+        return $this->hasOne(FormSiswa::class, 'users_id');
+    }
 }
