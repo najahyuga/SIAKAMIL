@@ -50,20 +50,18 @@
 
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="{{ route('calonSiswa.index') }}" class="active">Home</a></li>
+                    <li><a href="calonSiswa" class="active">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="courses.html">Courses</a></li>
-                    <li><a href="trainers.html">Trainers</a></li>
+                    <li><a href="trainers.html">Tutor</a></li>
                     <li><a href="events.html">Events</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li class="dropdown has-dropdown"><a href=""><span>Pendaftaran</span> <i class="bi bi-chevron-down"></i></a>
+                    <li class="dropdown has-dropdown"><a href="#"><span>Pendaftaran</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             <li><a href="{{ route('calonSiswa.pendaftaran.create', ['education_level' => 'Paket A Setara SD']) }}">Formulir Kejar Paket A</a></li>
                             <li><a href="{{ route('calonSiswa.pendaftaran.create', ['education_level' => 'Paket B Setara SMP']) }}">Formulir Kejar Paket B</a></li>
                             <li><a href="{{ route('calonSiswa.pendaftaran.create', ['education_level' => 'Paket C Setara SMA']) }}">Formulir Kejar Paket C</a></li>
                         </ul>
                     </li>
-                    <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
