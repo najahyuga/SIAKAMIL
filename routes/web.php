@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryCoursesController;
 use App\Http\Controllers\ClassroomsController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\EducationLevelsController;
@@ -92,6 +91,9 @@ Route::prefix('siswa')->name('siswa.')->middleware('auth', 'UsersAkses:siswa')->
 
 // Rute untuk calon siswa
 Route::prefix('calonSiswa')->name('calonSiswa.')->middleware('auth', 'UsersAkses:calonSiswa')->group(function (){
-    Route::get('/', [AuthController::class, 'indexCalonSiswa']);
-    Route::resource('pendaftaran/paketA', pendaftaranController::class);
+    Route::get('/', [AuthController::class, 'indexCalonSiswa'])->name('index');
+    // Route::resource('pendaftaran/paketA', pendaftaranController::class);
+    Route::get('pendaftaran', [pendaftaranController::class, 'index'])->name('pendaftaran.index');
+    Route::get('pendaftaran/create/{education_level}', [pendaftaranController::class, 'create'])->name('pendaftaran.create');
+    Route::post('pendaftaran/store', [pendaftaranController::class, 'store'])->name('pendaftaran.store');
 });
