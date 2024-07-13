@@ -11,7 +11,6 @@
 
     <!-- Favicons -->
     <link href="{{ asset('backend/assets/img/logopkbm.jpeg') }}" rel="icon">
-    <link href="{{ asset('backend/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -29,7 +28,7 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('backend/assets/css/style.css') }}" rel="stylesheet">
     <style>
-        .cursor-pointer{
+        .cursor-pointer {
             cursor: pointer;
         }
     </style>

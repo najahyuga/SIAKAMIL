@@ -9,8 +9,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{asset('frontend/assets/img/logopkbm.jpeg')}}" rel="icon">
-    <link href="{{asset('frontend/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+    <link href="{{ asset('frontend/assets/img/logopkbm.jpeg') }}" rel="icon">
+
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -18,14 +18,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="{{asset('frontend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/assets/vendor/aos/aos.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <!-- Main CSS File -->
-    <link href="{{asset('frontend/assets/css/main.css')}}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/css/main.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     {{-- <style>
@@ -39,7 +39,7 @@
         <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
             <a href="/" class="logo d-flex align-items-center me-auto">
-                <img src="{{asset('frontend/assets/img/logopkbm.jpeg')}}" alt="SIAKAMIL">
+                <img src="{{ asset('frontend/assets/img/logopkbm.jpeg') }}" alt="SIAKAMIL">
                 <h1 class="">SIAKAMIL</h1>
             </a>
 
@@ -61,7 +61,7 @@
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
 
-            @if(Auth::check())
+            @if (Auth::check())
                 <a class="btn-getstarted" href="{{ route('logout') }}">LOGOUT</a>
             @else
                 <a class="btn-getstarted" href="{{ route('login') }}">LOGIN</a>
@@ -75,10 +75,10 @@
         <section id="hero" class="hero section">
 
             <div class="w3-content w3-section">{{-- style="max-width:500px" --}}
-                <img src="{{asset('frontend/assets/img/pkbmm.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
-                <img src="{{asset('frontend/assets/img/pkbm11.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
-                <img src="{{asset('frontend/assets/img/pkbm22.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
-                <img src="{{asset('frontend/assets/img/pkbm33.jpg')}}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{ asset('frontend/assets/img/pkbmm.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{ asset('frontend/assets/img/pkbm11.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{ asset('frontend/assets/img/pkbm22.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
+                <img src="{{ asset('frontend/assets/img/pkbm33.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
             </div>
 
             <div class="container">
@@ -97,23 +97,23 @@
 
                 <div class="row gy-4">
 
-                <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
-                    <img src="a{{asset('frontend/ssets/img/about.jpg')}}" class="img-fluid" alt="">
-                </div>
+                    <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+                        <img src="a{{ asset('frontend/ssets/img/about.jpg') }}" class="img-fluid" alt="">
+                    </div>
 
-                <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
-                    <h3>Voluptatem dignissimos provident quasi corporis</h3>
-                    <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                    </p>
-                    <ul>
-                    <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-                    <li><i class="bi bi-check-circle"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-                    <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
-                    </ul>
-                    <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-                </div>
+                    <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+                        <h3>Voluptatem dignissimos provident quasi corporis</h3>
+                        <p class="fst-italic">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                            magna aliqua.
+                        </p>
+                        <ul>
+                            <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
+                            <li><i class="bi bi-check-circle"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
+                            <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
+                        </ul>
+                        <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+                    </div>
 
                 </div>
 
@@ -315,7 +315,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
                         <div class="course-item">
-                            <img src="{{asset('frontend/assets/img/course-1.jpg')}}" class="img-fluid" alt="...">
+                            <img src="{{ asset('frontend/assets/img/course-1.jpg') }}" class="img-fluid" alt="...">
                             <div class="course-content">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p class="category">Web Development</p>
@@ -326,7 +326,7 @@
                                 <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
                                 <div class="trainer d-flex justify-content-between align-items-center">
                                     <div class="trainer-profile d-flex align-items-center">
-                                        <img src="{{asset('frontend/assets/img/trainers/trainer-1-2.jpg')}}" class="img-fluid" alt="">
+                                        <img src="{{ asset('frontend/assets/img/trainers/trainer-1-2.jpg') }}" class="img-fluid" alt="">
                                         <a href="" class="trainer-link">Antonio</a>
                                     </div>
                                     <div class="trainer-rank d-flex align-items-center">
@@ -341,18 +341,18 @@
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
                         <div class="course-item">
-                            <img src="{{asset('frontend/assets/img/course-2.jpg')}}" class="img-fluid" alt="...">
+                            <img src="{{ asset('frontend/assets/img/course-2.jpg') }}" class="img-fluid" alt="...">
                             <div class="course-content">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                <p class="category">Marketing</p>
-                                <p class="price">$250</p>
+                                    <p class="category">Marketing</p>
+                                    <p class="price">$250</p>
                                 </div>
 
                                 <h3><a href="course-details.html">Search Engine Optimization</a></h3>
                                 <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
                                 <div class="trainer d-flex justify-content-between align-items-center">
                                     <div class="trainer-profile d-flex align-items-center">
-                                        <img src="{{asset('frontend/assets/img/trainers/trainer-2-2.jpg')}}" class="img-fluid" alt="">
+                                        <img src="{{ asset('frontend/assets/img/trainers/trainer-2-2.jpg') }}" class="img-fluid" alt="">
                                         <a href="" class="trainer-link">Lana</a>
                                     </div>
                                     <div class="trainer-rank d-flex align-items-center">
@@ -367,7 +367,7 @@
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
                         <div class="course-item">
-                            <img src="{{asset('frontend/assets/img/course-3.jpg')}}" class="img-fluid" alt="...">
+                            <img src="{{ asset('frontend/assets/img/course-3.jpg') }}" class="img-fluid" alt="...">
                             <div class="course-content">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p class="category">Content</p>
@@ -378,7 +378,7 @@
                                 <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
                                 <div class="trainer d-flex justify-content-between align-items-center">
                                     <div class="trainer-profile d-flex align-items-center">
-                                        <img src="{{asset('frontend/assets/img/trainers/trainer-3-2.jpg')}}" class="img-fluid" alt="">
+                                        <img src="{{ asset('frontend/assets/img/trainers/trainer-3-2.jpg') }}" class="img-fluid" alt="">
                                         <a href="" class="trainer-link">Brandon</a>
                                     </div>
                                     <div class="trainer-rank d-flex align-items-center">
@@ -400,7 +400,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
                         <div class="member">
-                            <img src="{{asset('frontend/assets/img/trainers/trainer-1.jpg')}}" class="img-fluid" alt="">
+                            <img src="{{ asset('frontend/assets/img/trainers/trainer-1.jpg') }}" class="img-fluid" alt="">
                             <div class="member-content">
                                 <h4>Walter White</h4>
                                 <span>Web Development</span>
@@ -417,7 +417,7 @@
 
                     <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
                         <div class="member">
-                            <img src="{{asset('frontend/assets/img/trainers/trainer-2.jpg')}}" class="img-fluid" alt="">
+                            <img src="{{ asset('frontend/assets/img/trainers/trainer-2.jpg') }}" class="img-fluid" alt="">
                             <div class="member-content">
                                 <h4>Sarah Jhinson</h4>
                                 <span>Marketing</span>
@@ -434,7 +434,7 @@
 
                     <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
                         <div class="member">
-                            <img src="{{asset('frontend/assets/img/trainers/trainer-3.jpg')}}" class="img-fluid" alt="">
+                            <img src="{{ asset('frontend/assets/img/trainers/trainer-3.jpg') }}" class="img-fluid" alt="">
                             <div class="member-content">
                                 <h4>William Anderson</h4>
                                 <span>Content</span>
@@ -528,15 +528,15 @@
     <div id="preloader"></div>
 
     <!-- Vendor JS Files -->
-    <script src="{{asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('frontend/assets/vendor/php-email-form/validate.js')}}"></script>
-    <script src="{{asset('frontend/assets/vendor/aos/aos.js')}}"></script>
-    <script src="{{asset('frontend/assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
-    <script src="{{asset('frontend/assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
-    <script src="{{asset('frontend/assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/php-email-form/validate.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
 
     <!-- Main JS File -->
-    <script src="{{asset('frontend/assets/js/main.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
 
     <!-- library sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -547,19 +547,21 @@
         carousel();
 
         function carousel() {
-        var i;
-        var x = document.getElementsByClassName("mySlides");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-        myIndex++;
-        if (myIndex > x.length) {myIndex = 1}
-        x[myIndex-1].style.display = "block";
-        setTimeout(carousel, 2000); // Change image every 2 seconds
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) {
+                myIndex = 1
+            }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 2000); // Change image every 2 seconds
         }
 
         //message with sweetalert
-        @if(session('success'))
+        @if (session('success'))
             Swal.fire({
                 icon: "success",
                 title: "BERHASIL",
@@ -567,7 +569,7 @@
                 showConfirmButton: false,
                 timer: 2000
             });
-        @elseif(session('error'))
+        @elseif (session('error'))
             Swal.fire({
                 icon: "error",
                 title: "GAGAL!",
@@ -578,4 +580,5 @@
         @endif
     </script>
 </body>
+
 </html>

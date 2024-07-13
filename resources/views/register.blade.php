@@ -10,24 +10,23 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{asset('backend/assets/img/logopkbm.jpeg')}}" rel="icon">
-    <link href="{{asset('backend/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+    <link href="{{ asset('backend/assets/img/logopkbm.jpeg') }}" rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="{{asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/assets/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/css/style.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -40,7 +39,7 @@
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <div class="d-flex justify-content-center py-4">
                                 <a href="/" class="logo d-flex align-items-center w-auto">
-                                    <img src="{{asset('backend/assets/img/logopkbm.jpeg')}}" alt="">
+                                    <img src="{{ asset('backend/assets/img/logopkbm.jpeg') }}" alt="">
                                     <span class="d-none d-lg-block">SIAKAMIL</span>
                                 </a>
                             </div><!-- End Logo -->
@@ -56,7 +55,7 @@
                                         @csrf
                                         <div class="col-12">
                                             <label for="yourName" class="form-label">Your Name</label>
-                                            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{-- {{ old('username') }} --}}" placeholder="Masukkan Username Anda!"> {{--required--}}
+                                            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{-- {{ old('username') }} --}}" placeholder="Masukkan Username Anda!"> {{-- required --}}
                                             <div class="invalid-feedback">Please, enter your name!</div>
                                             <!-- error message untuk name -->
                                             @error('username')
@@ -115,17 +114,17 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
-    <script src="{{asset('backend/assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/chart.js/chart.umd.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/echarts/echarts.min.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/quill/quill.min.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/tinymce/tinymce.min.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/php-email-form/validate.js')}}"></script>
+    <script src="{{ asset('backend/assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/chart.js/chart.umd.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/quill/quill.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/php-email-form/validate.js') }}"></script>
 
     <!-- Template Main JS File -->
-    <script src="{{asset('backend/assets/js/main.js')}}"></script>
+    <script src="{{ asset('backend/assets/js/main.js') }}"></script>
 
     <!-- library sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -134,7 +133,7 @@
     <!-- session success &  error -->
     <script>
         //message with sweetalert
-        @if(session('success'))
+        @if (session('success'))
             Swal.fire({
                 icon: "success",
                 title: "BERHASIL",
@@ -142,7 +141,7 @@
                 showConfirmButton: false,
                 timer: 2000
             });
-        @elseif(session('error'))
+        @elseif (session('error'))
             Swal.fire({
                 icon: "error",
                 title: "GAGAL!",
@@ -153,4 +152,5 @@
         @endif
     </script>
 </body>
+
 </html>
