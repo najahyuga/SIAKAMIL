@@ -45,7 +45,7 @@
 
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="calonSiswa" class="active">Home</a></li>
+                    <li><a href="/" class="active">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="courses.html">Courses</a></li>
                     <li><a href="trainers.html">Tutor</a></li>
