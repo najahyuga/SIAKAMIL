@@ -43,14 +43,14 @@
     <header id="header" class="header d-flex align-items-center sticky-top">
         <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-            <a href="{{ route('calonSiswa.index') }}" class="logo d-flex align-items-center me-auto">
+            <a href="{{ route('calonSiswa.') }}" class="logo d-flex align-items-center me-auto">
                 <img src="{{asset('frontend/assets/img/logopkbm.jpeg')}}" alt="SIAKAMIL">
                 <h1 class="">SIAKAMIL</h1>
             </a>
 
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="calonSiswa" class="active">Home</a></li>
+                    <li><a href="{{ route('calonSiswa.') }}" class="active">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="courses.html">Courses</a></li>
                     <li><a href="trainers.html">Tutor</a></li>
