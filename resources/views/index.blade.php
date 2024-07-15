@@ -76,7 +76,7 @@
 
             <div class="w3-content w3-section">{{-- style="max-width:500px" --}}
                 <img src="{{ asset('frontend/assets/img/pkbmm.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
-                <img src="{{ asset('frontend/assets/img/pkbm11.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
+                {{-- <img src="{{ asset('frontend/assets/img/pkbm11.jpg') }}" class="mySlides" alt="images" data-aos="fade-in"> --}}
                 <img src="{{ asset('frontend/assets/img/pkbm22.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
                 <img src="{{ asset('frontend/assets/img/pkbm33.jpg') }}" class="mySlides" alt="images" data-aos="fade-in">
             </div>
