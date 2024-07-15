@@ -25,9 +25,6 @@
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" />
 
-        <!--Get your own code at fontawesome.com-->
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
 
@@ -669,7 +666,7 @@
             document.getElementById('classrooms_id').addEventListener('change', function() {
                 var classroomId = this.value;
                 if (classroomId) {
-                    const url = `http://siakamil_beta.test/admin/classrooms/${classroomId}/courses`;
+                    const url = `http://siakamil.test/admin/classrooms/${classroomId}/courses`;
                     console.log('Fetching URL:', url);
                     fetch(url)
                         .then(response => {
