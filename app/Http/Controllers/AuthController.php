@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Roles;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -117,37 +118,49 @@ class AuthController extends Controller
         return view('register');
     }
 
-    // create user bt default level calonSiswa
+    // create user default level calonSiswa
     public function storeRegister(Request $request) : RedirectResponse {
-        // validate form
-        $request->validate([
-            'username'      => 'required|min:4',
-            'email'         => 'required|min:5|email',
-            'password'      => 'required|min:6'
-        ],[
-            'username.required'      => 'Username Wajib di Isi!',
-            'email.required'         => 'Email Wajib di Isi!',
-            'password.required'      => 'Password Wajib di Isi!'
-        ]);
+        try {
+            // validate form
+            $request->validate([
+                'username'      => 'required|min:4',
+                'email'         => 'required|min:5|email',
+                'password'      => 'required|min:6'
+            ],[
+                'username.required'      => 'Username Wajib di Isi!',
+                'email.required'         => 'Email Wajib di Isi!',
+                'password.required'      => 'Password Wajib di Isi!'
+            ]);
 
-        // create data user
-        User::create([
-            'username'      => $request->username,
-            'email'         => $request->email,
-            'password'      => $request->password
-        ]);
+            // create data user
+            $user =  User::create([
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => $request->password
+            ]);
 
-        $register = [
-            'username'      => $request->username,
-            'email'         => $request->email,
-            'password'      => $request->password
-        ];
+            // Get the role with default level 'calonSiswa'
+            $role = Roles::where('level', 'calonSiswa')->first();
 
-        if (Auth::attempt($register)) {
-            // mengembalikan ke halaman dashboard
-            return redirect('/')->with(['success' => 'register Berhasil!']);
-        } else {
+            // Attach the role to the user
+            if ($role) {
+                $user->roles()->attach($role->id);
+            }
+
+            // Attempt to log the user in
+            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+                // Redirect to the dashboard with success message
+                return redirect('/calonSiswa')->with(['success' => 'Register Berhasil! Selamat Datang Calon Siswa']);
+            } else {
+                return redirect('/register')->with(['error' => 'Data Tidak Sesuai!']);
+            }
+        } catch (\Throwable $th) {
+            Log::error('Register error: '.$th->getMessage());
             return redirect('/register')->with(['error' => 'Data Tidak Sesuai!']);
+            response()->json([
+                'status'    => false,
+                'message'   => 'Register error: Tidak dapat menyimpan data'
+            ], 500);
         }
     }
 
