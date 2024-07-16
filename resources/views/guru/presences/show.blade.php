@@ -43,7 +43,7 @@
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
         <div class="d-flex align-items-center justify-content-between">
-            <a href="/admin" class="logo d-flex align-items-center">
+            <a href="/guru" class="logo d-flex align-items-center">
                 <img src="{{ asset('backend/assets/img/logopkbm.jpeg') }}" alt="IMAGELOGO" />
                 <span class="d-none d-lg-block">SIAKAMIL</span>
             </a>
@@ -82,7 +82,7 @@
                                 <a class="dropdown-item d-flex align-items-center" href="" onclick="event.preventDefault(); document.getElementById('switch-role-{{ $role->level }}').submit();">
                                     <i class="bi bi-people"></i>
                                     <span>{{ ucfirst($role->level) }}</span>
-                                    @if ($role->level == 'admin')
+                                    @if ($role->level == 'guru')
                                         <span class="badge bg-primary rounded-pill ms-auto">{{ ucfirst($role->level) }}</span>
                                     @else
                                         <span class="badge bg-secondary rounded-pill ms-auto">{{ ucfirst($role->level) }}</span>
