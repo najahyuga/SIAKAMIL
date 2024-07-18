@@ -62,4 +62,11 @@ class Students extends Model
     public function getCourses() {
         return $this->belongsTo(Courses::class,'classrooms_id','classrooms_id');
     }
+
+    // Relasi ke HistoryStudentClassroom
+    public function historyClassrooms()
+    {
+        return $this->hasMany(HistoryStudentClassroom::class, 'students_id');
+    }
+
 }
