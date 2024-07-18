@@ -28,4 +28,10 @@ class Classrooms extends Model
     {
         return $this->hasMany(Courses::class, 'classrooms_id');
     }
+
+    // Relasi ke HistoryStudentClassroom
+    public function historyStudents()
+    {
+        return $this->hasMany(HistoryStudentClassroom::class, 'classrooms_id');
+    }
 }
