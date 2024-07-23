@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Classrooms;
 use App\Models\Courses;
+use App\Models\HistoryStudentClassroom;
 use App\Models\Semesters;
+use App\Models\Students;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -139,5 +142,51 @@ class ClassroomsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function showSelectClassroomForm()
+    {
+        $classrooms = Classrooms::all();
+        $students = Students::with('classrooms')->get();
+        return view('admin.classrooms.select-classroom', compact('classrooms', 'students'));
+    }
+
+    public function selectClassroom(Request $request)
+    {
+        $request->validate([
+            'students_id' => 'required|exists:students,id',
+            'classrooms_id' => 'required|exists:classrooms,id',
+        ]);
+
+        try {
+            $student = Students::findOrFail($request->students_id);
+            $newClassroom = Classrooms::findOrFail($request->classrooms_id);
+
+            // Simpan data lama ke history
+            if ($student->classrooms()->exists()) {
+                foreach ($student->classrooms as $classroom) {
+                    HistoryStudentClassroom::create([
+                        'classrooms_id' => $classroom->id,
+                        'students_id' => $student->id,
+                    ]);
+                }
+            }
+
+            // Assign the new classroom to the student
+            $student->classrooms()->syncWithoutDetaching([$newClassroom->id]);
+
+            return redirect()->back()->with('success', 'Classroom updated successfully!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'There was an error updating the classroom: ' . $e->getMessage());
+        }
+    }
+
+    public function getStudentsByClassroom($classroom_id)
+    {
+        $students = Students::whereHas('classrooms', function($query) use ($classroom_id) {
+            $query->where('classrooms.id', $classroom_id);
+        })->get();
+
+        return response()->json($students);
     }
 }
