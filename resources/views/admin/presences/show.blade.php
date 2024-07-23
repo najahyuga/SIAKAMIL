@@ -236,6 +236,11 @@
                             <i class="bi bi-circle"></i><span>Insert Classroom Data</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="/admin/select-classroom">
+                        <i class="bi bi-circle"></i><span>Management Kenaikan Kelas</span>
+                        </a>
+                    </li>
                 </ul>
             </li><!-- End Management Classrooms Nav -->
 

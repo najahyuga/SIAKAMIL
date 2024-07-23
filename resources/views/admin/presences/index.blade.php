@@ -31,7 +31,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <!-- DataTables JS -->
         <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-        
+
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
 
@@ -231,6 +231,11 @@
                         <li>
                             <a href="/admin/classrooms/create">
                             <i class="bi bi-circle"></i><span>Insert Classroom Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/select-classroom">
+                            <i class="bi bi-circle"></i><span>Management Kenaikan Kelas</span>
                             </a>
                         </li>
                     </ul>
