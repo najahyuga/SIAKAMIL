@@ -25,8 +25,136 @@
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" />
 
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
         <!-- Template Main CSS File -->
-        <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
+        <link href="{{ asset('backend/assets/css/style.css') }}" rel="stylesheet" />
+        {{-- <style>
+            .card {
+                margin-top: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .card-header {
+                background-color: #007bff;
+                color: #fff;
+                border-bottom: none;
+            }
+
+            .card-body {
+                padding: 1.25rem;
+            }
+
+            .label {
+                font-weight: bold;
+            }
+
+            .table {
+                width: 100%;
+                margin-bottom: 1rem;
+                color: #212529;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.75rem;
+                vertical-align: top;
+                border-top: 1px solid #dee2e6;
+            }
+
+            .table thead th {
+                vertical-align: bottom;
+                border-bottom: 2px solid #dee2e6;
+            }
+
+            .table tbody+tbody {
+                border-top: 2px solid #dee2e6;
+            }
+
+            .table-striped tbody tr:nth-of-type(odd) {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            .table-bordered {
+                border: 1px solid #dee2e6;
+            }
+
+            .table-bordered th,
+            .table-bordered td {
+                border: 1px solid #dee2e6;
+            }
+        </style> --}}
+        <style>
+            .card {
+                margin-top: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .card-header {
+                background-color: #007bff;
+                color: #fff;
+                border-bottom: none;
+                padding: 15px;
+                font-size: 1.25rem;
+                text-align: center;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .label {
+                font-weight: bold;
+            }
+
+            .table {
+                width: 100%;
+                margin-bottom: 1rem;
+                color: #212529;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.75rem;
+                vertical-align: middle;
+                border-top: 1px solid #dee2e6;
+            }
+
+            .table thead th {
+                vertical-align: bottom;
+                border-bottom: 2px solid #dee2e6;
+                background-color: #f8f9fa;
+            }
+
+            .table tbody tr:nth-of-type(odd) {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            .table-bordered {
+                border: 1px solid #dee2e6;
+            }
+
+            .table-bordered th,
+            .table-bordered td {
+                border: 1px solid #dee2e6;
+            }
+
+            .alert {
+                margin: 0;
+                padding: 0.75rem;
+            }
+        </style>
     </head>
 
     <body>
@@ -172,6 +300,55 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Selamat Datang {{ Auth::user()->username}}, Anda login Sebagai {{ session('current_role') }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Mata Pelajaran Yang Aktif Pada: {{ $student->classrooms->name }}</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th class="text-center">Kategori Mata Pelajaran</th>
+                                                <th class="text-center">Nama Mata Pelajaran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $no = 1; // Inisialisasi nomor urut
+                                            @endphp
+                                            @forelse ($student->courses as $course)
+                                                @foreach ($course->masterCourses as $masterCourse)
+                                                    <tr>
+                                                        <td class="text-center">{{ $no++ }}</td> <!-- Gunakan variabel $no untuk nomor urut -->
+                                                        <td class="text-center">
+                                                            @if ($masterCourse->master_category_course)
+                                                                {{ $masterCourse->master_category_course->name }}
+                                                            @else
+                                                                Kategori tidak tersedia
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-center">{{ $masterCourse->name }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3" class="text-center">
+                                                        <div class="alert alert-danger">
+                                                            Data belum Tersedia.
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
