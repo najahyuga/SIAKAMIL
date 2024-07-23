@@ -3,21 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CategoryCourses;
 use App\Models\Classrooms;
 use App\Models\CourseMasterCourse;
 use App\Models\Courses;
 use App\Models\EducationLevels;
 use App\Models\FilesUploads;
+use App\Models\HistoryStudentClassroom;
 use App\Models\MasterCategoryCourses;
 use App\Models\Roles;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -202,6 +199,11 @@ class StudentsController extends Controller
                 'classrooms_id'         => $request->classrooms_id,
                 'users_id'              => $user->id,
                 'files_uploads_id'      => $file_uploads->id
+            ]);
+
+            $historyStudentClass = HistoryStudentClassroom::create([
+                'students_id'   => $students->id,
+                'classrooms_id' => $students->classrooms_id,
             ]);
 
             // Attach courses yang dipilih ke siswa
@@ -480,5 +482,37 @@ class StudentsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function updateStudents(Request $request) {
+
+        try {
+            $request->validate([
+                'classroom_id' => 'required|exists:classrooms,id',
+                'students' => 'required|array',
+                'students.*' => 'exists:students,id',
+            ]);
+
+            $classroom = Classrooms::findOrFail($request->classroom_id);
+            $studentsToUpdate = $request->students;
+
+            foreach ($studentsToUpdate as $studentId) {
+                $student = Students::findOrFail($studentId);
+
+                // Simpan data lama ke history
+                HistoryStudentClassroom::create([
+                    'classrooms_id' => $request->new_classroom_id,
+                    'students_id' => $student->id,
+                ]);
+
+                // Update classroom for student
+                $student->classrooms_id = $request->new_classroom_id;
+                $student->save();
+            }
+
+            return redirect()->back()->with('success', 'Students updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error updating students: ' . $e->getMessage());
+        }
     }
 }
