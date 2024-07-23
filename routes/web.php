@@ -60,6 +60,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
     Route::get('courses/{course_id}/classrooms', [TasksController::class, 'getClassroomsByCourse']);
     // Rute untuk mendapatkan data master courses berdasarkan course
     Route::get('courses/{course_id}/master-courses', [TasksController::class, 'getMasterCoursesByCourse']);
+
+    // Rute untuk pemilihan classroom oleh siswa dan penyimpanan history
+    Route::get('/select-classroom', [ClassroomsController::class, 'showSelectClassroomForm'])->name('classroom.form');
+    // Route::post('/select-classroom', [ClassroomsController::class, 'selectClassroom'])->name('classroom.select');
+    Route::get('/classrooms/{classroom_id}/students', [ClassroomsController::class, 'getStudentsByClassroom'])->name('classrooms.students');
+    Route::post('/students/update', [StudentsController::class, 'updateStudents'])->name('students.update');
 });
 
 // Rute untuk guru
