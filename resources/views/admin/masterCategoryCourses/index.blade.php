@@ -149,6 +149,25 @@
                     </a>
                 </li><!-- End Management Users Nav -->
 
+                <!-- Start Management Presences Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#Presences-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Management Presences</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="Presences-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/admin/presences" >
+                            <i class="bi bi-circle"></i><span>Presences Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/presences/create" >
+                            <i class="bi bi-circle"></i><span>Insert Presences Data</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Management Presences Nav -->
+
                 <!-- Start Management educationLevels Nav -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#educationLevels-nav" data-bs-toggle="collapse" href="#">
