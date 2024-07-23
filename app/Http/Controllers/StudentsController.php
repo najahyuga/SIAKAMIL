@@ -399,6 +399,12 @@ class StudentsController extends Controller
             );
             $user->save();
 
+            $historyStudentClass = HistoryStudentClassroom::create([
+                'students_id'   => $student->id,
+                'classrooms_id' => $student->classrooms_id,
+            ]);
+            $historyStudentClass->save();
+
             // Tangani array nilai level
             if ($request->has('level')) {
                 $user->roles()->sync($request->input('level'));
