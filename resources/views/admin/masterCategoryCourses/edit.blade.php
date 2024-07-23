@@ -70,7 +70,11 @@
 
                     <li class="nav-item dropdown pe-3">
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <img src="{{ asset('backend/assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle" />
+                            @if (in_array(session('current_role'),['admin','guru']))
+                                <img src="{{ asset('storage/images/'. Auth::user()->teacher->files_uploads->path) }}" alt="Guru" class="rounded-circle" />
+                            @elseif (in_array(session('current_role'),['siswa']))
+                                <img src="{{ asset('storage/images/'. Auth::user()->student->files_uploads->path) }}" alt="Guru" class="rounded-circle" />
+                            @endif
                             <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->username }}</span>
                         </a><!-- End Profile Image Icon -->
 
