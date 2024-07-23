@@ -29,7 +29,11 @@ class AuthController extends Controller
 
     // view to page dashboard siswa index
     public function indexSiswa(){
-        return view('siswa.index');
+        $student = Auth::user()->student;
+        $classroom = $student->classroom;
+        $courses = $classroom ? $classroom->courses : collect(); // Jika tidak ada classroom, courses akan kosong
+
+        return view('siswa.index', compact('student', 'courses'));
     }
 
     // view to page dashboard calonSiswa index
