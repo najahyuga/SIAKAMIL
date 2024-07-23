@@ -665,7 +665,7 @@
                                                         <p class="font-weight-bold">{{ $master_category->name }}</p>
                                                         @foreach ($master_category->masterCourses as $master_course)
                                                             <div class="form-check">
-                                                                <input class="form-check-input course-checkbox" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}" {{ $student->courses->pluck('id')->intersect($master_course->courses->pluck('id'))->isNotEmpty() ? 'checked' : '' }}>
+                                                                <input class="form-check-input course-checkbox" type="checkbox" value="{{ $master_course->id }}" name="master_courses_id[]" id="master_course_{{ $master_course->id }}" {{ $student->courses->pluck('id')->intersect($master_course->courses->pluck('id'))->isNotEmpty() ? 'checked' : '' }} disabled>
                                                                 <label class="form-check-label" for="master_course_{{ $master_course->id }}">
                                                                     {{ $master_course->name }}
                                                                 </label>
