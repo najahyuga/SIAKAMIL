@@ -83,8 +83,10 @@ class TeachersController extends Controller
 
             // Upload new image
             $path = $request->file('path');
-            $path->getClientOriginalName();
-            $imagePath = $path->storeAs('public/images', $path->getClientOriginalName());
+            // $path->getClientOriginalName();
+            // $imagePath = $path->storeAs('public/images', $path->getClientOriginalName());
+            $imageName = $path->getClientOriginalName();
+            $imagePath = $path->storeAs('public/images', $imageName);
 
             // create data user
             $user = User::create([
