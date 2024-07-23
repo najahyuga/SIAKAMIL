@@ -31,7 +31,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <!-- DataTables JS -->
         <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-        
+
         <!-- Template Main CSS File -->
         <link href="{{asset('backend/assets/css/style.css')}}" rel="stylesheet" />
 
@@ -61,7 +61,11 @@
 
                     <li class="nav-item dropdown pe-3">
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <img src="{{ asset('backend/assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle" />
+                            @if (in_array(session('current_role'),['admin','guru']))
+                                <img src="{{ asset('storage/images/'. Auth::user()->teacher->files_uploads->path) }}" alt="Guru" class="rounded-circle" />
+                            @elseif (in_array(session('current_role'),['siswa']))
+                                <img src="{{ asset('storage/images/'. Auth::user()->student->files_uploads->path) }}" alt="Guru" class="rounded-circle" />
+                            @endif
                             <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->username }}</span>
                         </a><!-- End Profile Image Icon -->
 
