@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -122,25 +123,24 @@ class AuthController extends Controller
         return view('register');
     }
 
-    // create user default level calonSiswa
     public function storeRegister(Request $request) : RedirectResponse {
         try {
-            // validate form
+            // Validate form
             $request->validate([
-                'username'      => 'required|min:4',
-                'email'         => 'required|min:5|email',
-                'password'      => 'required|min:6'
+                'username' => 'required|min:4',
+                'email'    => 'required|min:5|email',
+                'password' => 'required|min:6',
             ],[
-                'username.required'      => 'Username Wajib di Isi!',
-                'email.required'         => 'Email Wajib di Isi!',
-                'password.required'      => 'Password Wajib di Isi!'
+                'username.required' => 'Username Wajib di Isi!',
+                'email.required'    => 'Email Wajib di Isi!',
+                'password.required' => 'Password Wajib di Isi!'
             ]);
 
-            // create data user
-            $user =  User::create([
-                'username'      => $request->username,
-                'email'         => $request->email,
-                'password'      => $request->password
+            // Create data user
+            $user = User::create([
+                'username' => $request->username,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
             ]);
 
             // Get the role with default level 'calonSiswa'
@@ -152,19 +152,13 @@ class AuthController extends Controller
             }
 
             // Attempt to log the user in
-            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-                // Redirect to the dashboard with success message
-                return redirect('/calonSiswa')->with(['success' => 'Register Berhasil! Selamat Datang Calon Siswa']);
-            } else {
-                return redirect('/register')->with(['error' => 'Data Tidak Sesuai!']);
-            }
+            Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+
+            // Redirect to the dashboard with success message
+            return redirect()->route('calonSiswa')->with(['success' => 'Register Berhasil! Selamat Datang Calon Siswa']);
         } catch (\Throwable $th) {
-            Log::error('Register error: '.$th->getMessage());
-            return redirect('/register')->with(['error' => 'Data Tidak Sesuai!']);
-            response()->json([
-                'status'    => false,
-                'message'   => 'Register error: Tidak dapat menyimpan data'
-            ], 500);
+            Log::error('Register error: ' . $th->getMessage());
+            return redirect('/register')->with('error', 'Data Tidak Sesuai!');
         }
     }
 
