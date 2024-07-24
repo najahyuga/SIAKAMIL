@@ -8,6 +8,7 @@ use App\Http\Controllers\MasterCategoryCoursesController;
 use App\Http\Controllers\MasterCoursesController;
 use App\Http\Controllers\pendaftaranController;
 use App\Http\Controllers\PresenceController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SemestersController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TasksController;
@@ -66,6 +67,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
     // Route::post('/select-classroom', [ClassroomsController::class, 'selectClassroom'])->name('classroom.select');
     Route::get('/classrooms/{classroom_id}/students', [ClassroomsController::class, 'getStudentsByClassroom'])->name('classrooms.students');
     Route::post('/students/updateHistory', [StudentsController::class, 'updateStudents'])->name('students.updateHistory');
+
+    Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('editProfile');
+    Route::put('edit-profile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
 });
 
 // Rute untuk guru
@@ -84,6 +88,8 @@ Route::prefix('guru')->name('guru.')->middleware('auth', 'UsersAkses:guru')->gro
     Route::get('/presences/{id}', [PresenceController::class, 'show'])->name('presences.show');
     Route::get('/presences/{id}/showSubmit', [PresenceController::class, 'showSubmit'])->name('presences.showSubmit');
     Route::post('/presences/{id}/submit', [PresenceController::class, 'submit'])->name('presences.submit');
+    Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('editProfile');
+    Route::put('edit-profile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
 });
 
 // Rute untuk siswa
@@ -93,6 +99,8 @@ Route::prefix('siswa')->name('siswa.')->middleware('auth', 'UsersAkses:siswa')->
     Route::resource('taskDetails', TasksDetailsController::class);
     Route::get('tasks/{task}/detail', [TasksController::class, 'detail'])->name('tasks.detail');
     Route::get('taskDetails/{studentsId}/{taskId}', [TasksDetailsController::class, 'index'])->name('taskDetails.index');
+    Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('editProfile');
+    Route::put('edit-profile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
 });
 
 // Rute untuk calon siswa
