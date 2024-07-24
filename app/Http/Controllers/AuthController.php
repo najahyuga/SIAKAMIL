@@ -65,6 +65,7 @@ class AuthController extends Controller
             'password'      => $request->password
         ];
 
+        
         if (Auth::attempt($login)) {
             $user = Auth::user();
             // Asumsi apabila users setidaknya memiliki satu role
@@ -135,15 +136,14 @@ class AuthController extends Controller
                 'email.required'    => 'Email Wajib di Isi!',
                 'password.required' => 'Password Wajib di Isi!'
             ]);
-
+            
             // Create data user
             $user = User::create([
                 'username' => $request->username,
                 'email'    => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-
-            // Get the role with default level 'calonSiswa'
+                        // Get the role with default level 'calonSiswa'
             $role = Roles::where('level', 'calonSiswa')->first();
 
             // Attach the role to the user
@@ -153,7 +153,7 @@ class AuthController extends Controller
 
             // Attempt to log the user in
             Auth::attempt(['email' => $request->email, 'password' => $request->password]);
-
+            
             // Redirect to the dashboard with success message
             return redirect()->route('calonSiswa')->with(['success' => 'Register Berhasil! Selamat Datang Calon Siswa']);
         } catch (\Throwable $th) {
