@@ -251,7 +251,7 @@
 
             <!-- Start Profile Page Nav -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="/profile">
+                <a class="nav-link collapsed" href="admin/edit-profile">
                 <i class="bi bi-person"></i>
                 <span>Profile</span>
                 </a>
