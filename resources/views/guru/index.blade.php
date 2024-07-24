@@ -93,7 +93,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <a class="dropdown-item d-flex align-items-center" href="/guru/edit-profile">
                                     <i class="bi bi-gear"></i>
                                     <span>Account Settings</span>
                                 </a>
@@ -188,7 +188,7 @@
 
                 <!-- Start Profile Page Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="/profile">
+                    <a class="nav-link collapsed" href="/guru/edit-profile">
                     <i class="bi bi-person"></i>
                     <span>Profile</span>
                     </a>
