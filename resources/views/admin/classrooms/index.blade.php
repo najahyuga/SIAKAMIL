@@ -23,7 +23,7 @@
         <link href="{{asset('backend/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet" />
         <link href="{{asset('backend/assets/vendor/remixicon/remixicon.css')}}" rel="stylesheet" />
-        {{-- <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" /> --}}
+        <link href="{{asset('backend/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet" />
 
         <!-- DataTables CSS -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
