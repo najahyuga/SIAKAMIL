@@ -154,8 +154,16 @@ class AuthController extends Controller
             // Attempt to log the user in
             Auth::attempt(['email' => $request->email, 'password' => $request->password]);
             
+            $user = Auth::user();
+
+            // Asumsi apabila users setidaknya memiliki satu role
+            $primaryRole = $user->roles->first()->level;
+
+            // Simpan peran utama dalam sesi
+            session(['current_role' => $primaryRole]);
+
             // Redirect to the dashboard with success message
-            return redirect()->route('calonSiswa')->with(['success' => 'Register Berhasil! Selamat Datang Calon Siswa']);
+            return redirect('/calonSiswa')->with('success', 'Login Berhasil! Selamat Datang Calon Siswa ' . Auth::user()->username);
         } catch (\Throwable $th) {
             Log::error('Register error: ' . $th->getMessage());
             return redirect('/register')->with('error', 'Data Tidak Sesuai!');
