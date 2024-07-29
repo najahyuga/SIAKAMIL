@@ -259,21 +259,10 @@
 
                 <!-- Start Management Tasks Nav -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#task-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Management Tasks</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <a class="nav-link collapsed" href="/siswa/tasks" >
+                        <i class="bi bi-menu-button-wide"></i>
+                        <span>Menu Tugas</span>
                     </a>
-                    <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li>
-                            <a href="/siswa/tasks" >
-                            <i class="bi bi-circle"></i><span>Tasks Data</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/siswa/tasks/create" >
-                            <i class="bi bi-circle"></i><span>Insert Task Data</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li><!-- End Management Tasks Nav -->
 
                 <li class="nav-heading">Pages</li>
