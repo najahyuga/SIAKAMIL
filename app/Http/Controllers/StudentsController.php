@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Classrooms;
-use App\Models\CourseMasterCourse;
 use App\Models\Courses;
 use App\Models\EducationLevels;
 use App\Models\FilesUploads;
@@ -15,6 +14,7 @@ use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -145,7 +145,8 @@ class StudentsController extends Controller
                 'email'                 => 'required|min:5|email',
                 'password'              => 'required|min:6',
                 'level.*'               => 'exists:roles,id',
-                'master_courses_id.*'   => 'exists:master_courses,id',
+                // 'master_courses_id'     => 'required|array',
+                // 'master_courses_id.*'   => 'exists:course_master_course,master_course_id',
             ]);
 
             // Debugging: log validated data
@@ -206,16 +207,24 @@ class StudentsController extends Controller
                 'classrooms_id' => $students->classrooms_id,
             ]);
 
-            // Attach courses yang dipilih ke siswa
-            if ($request->has('master_courses_id')) {
-                foreach ($request->master_courses_id as $masterCourseId) {
-                    // Ambil course_id berdasarkan master_course_id dari tabel CourseMasterCourse
-                    $courseId = CourseMasterCourse::where('master_course_id', $masterCourseId)->value('course_id');
+            // Ambil classrooms_id dari request
+            $classroomId = $request->input('classrooms_id');
 
-                    // Attach course_id ke siswa, untuk menghindari duplikasi gunakan syncWithoutDetaching
-                    if ($courseId) {
-                        $students->courses()->syncWithoutDetaching($courseId);
-                    }
+            // Ambil courses yang berelasi dengan classroom
+            $classroom = Classrooms::find($classroomId);
+            $courses = $classroom->courses;
+
+            foreach ($courses as $course) {
+                // Ambil master_courses_id yang sesuai dari tabel pivot course_master_course
+                $masterCourseIds = DB::table('course_master_course')
+                                    ->join('master_courses', 'master_courses.id', '=', 'course_master_course.master_course_id')
+                                    ->where('course_master_course.course_id', $course->id)
+                                    ->select('master_courses.id')
+                                    ->pluck('master_courses.id');
+
+                // Simpan setiap master_course_id ke pivot table students_courses
+                foreach ($masterCourseIds as $masterCourseId) {
+                    $students->courses()->attach($course->id, ['master_courses_id' => $masterCourseId]);
                 }
             }
 
