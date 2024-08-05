@@ -458,13 +458,37 @@ class StudentsController extends Controller
                 'users_id'              => $user->id,
             ]);
 
-            $classrooms_id = $request->classrooms_id;
+            // $classrooms_id = $request->classrooms_id;
 
-            // Ambil semua course_ids yang terkait dengan classrooms_id yang dipilih
-            $courseIds = Courses::where('classrooms_id', $classrooms_id)->pluck('id')->toArray();
+            // // Ambil semua course_ids yang terkait dengan classrooms_id yang dipilih
+            // $courseIds = Courses::where('classrooms_id', $classrooms_id)->pluck('id')->toArray();
 
-            // Sinkronisasi relasi many-to-many dengan courses
-            $student->courses()->sync($courseIds);
+            // // Sinkronisasi relasi many-to-many dengan courses
+            // $student->courses()->sync($courseIds);
+
+            // Ambil classrooms_id dari request
+            $classroomId = $request->input('classrooms_id');
+
+            // Ambil courses yang berelasi dengan classroom
+            $classroom = Classrooms::find($classroomId);
+            $courses = $classroom->courses;
+
+            // Hapus entri lama di pivot table
+            $student->courses()->detach();
+
+            foreach ($courses as $course) {
+                // Ambil master_courses_id yang sesuai dari tabel pivot course_master_course
+                $masterCourseIds = DB::table('course_master_course')
+                                    ->join('master_courses', 'master_courses.id', '=', 'course_master_course.master_course_id')
+                                    ->where('course_master_course.course_id', $course->id)
+                                    ->select('master_courses.id')
+                                    ->pluck('master_courses.id');
+
+                // Simpan setiap master_course_id ke pivot table students_courses
+                foreach ($masterCourseIds as $masterCourseId) {
+                    $student->courses()->attach($course->id, ['master_courses_id' => $masterCourseId]);
+                }
+            }
 
             // Check the role with higher priority first
             $activeRole = session('current_role');
