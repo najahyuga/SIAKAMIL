@@ -32,7 +32,7 @@ class Courses extends Model
     public function students()
     {
         return $this->belongsToMany(Students::class, 'students_courses')
-        ->withPivot('result_value', 'status')
+        ->withPivot('result_value', 'status', 'master_courses_id')
         ->withTimestamps();
     }
 
