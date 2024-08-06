@@ -387,7 +387,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration}}</td>
                                                 <td>{{ $row->name }}</td>
-                                                <td>{{ $row->semesters->name }}</td>
+                                                <td>{{ $row->semesters->name }} / {{ $row->semesters->education_levels->name }}</td>
                                                 <td class="text-center">
                                                     <form method="POST">
                                                         <a href="{{ route('admin.classrooms.show', $row->id) }}" class="btn btn-sm btn-dark">SHOW</a>
