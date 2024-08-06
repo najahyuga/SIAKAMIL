@@ -70,6 +70,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth', 'UsersAkses:admin')->
 
     Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('editProfile');
     Route::put('edit-profile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
+
+    Route::get('daftar-siswa-baru', [pendaftaranController::class, 'indexPSB'])->name('daftar-siswa-baru');
+    Route::post('update-status', [pendaftaranController::class, 'storePSB'])->name('update-status');
 });
 
 // Rute untuk guru
