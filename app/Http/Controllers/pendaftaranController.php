@@ -8,6 +8,7 @@ use App\Models\FilesUploads;
 use App\Models\FormOrtuWali;
 use App\Models\FormSiswa;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -120,6 +121,55 @@ class pendaftaranController extends Controller
         }
     }
 
+    public function indexPSB()
+    {
+        try {
+            // Ambil data calon siswa yang belum diterima
+            $calonSiswa = FormSiswa::all();
+            return view('admin.daftar-siswa-baru', compact('calonSiswa'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memuat data calon siswa: ' . $e->getMessage());
+        }
+    }
+
+    public function storePSB(Request $request)
+    {
+        try {
+            // Validasi data yang diterima
+            $request->validate([
+                'form_siswa_id' => 'required|exists:form_siswa,id',
+                'status'        => 'required|in:data-terkirim,diterima,data-checking,daftar-ulang',
+            ]);
+
+            // Temukan data calon siswa
+            $formSiswa = FormSiswa::find($request->form_siswa_id);
+
+            if (!$formSiswa) {
+                return redirect()->route('admin.daftar-siswa-baru')->with('error', 'Data calon siswa tidak ditemukan.');
+            }
+
+            // Update status siswa
+            $formSiswa->status = $request->status;
+            $formSiswa->save();
+
+            // Jika status diubah menjadi 'diterima', lakukan proses pendaftaran
+            if ($request->status === 'diterima') {
+                $siswa = $formSiswa->replicate(); // Duplikat data calon siswa
+                $siswa->status = 'diterima'; // Update status siswa
+                $siswa->save();
+
+                // Hapus data dari form_ortu_wali jika perlu
+                FormOrtuWali::where('form_siswa_id', $formSiswa->id)->delete();
+
+                // Hapus data dari form_siswa
+                $formSiswa->delete();
+            }
+
+            return redirect()->route('admin.daftar-siswa-baru')->with('success', 'Status siswa berhasil diperbarui.');
+        } catch (Exception $e) {
+            return redirect()->route('admin.daftar-siswa-baru')->with('error', 'Terjadi kesalahan saat memperbarui status: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Display the specified resource.
