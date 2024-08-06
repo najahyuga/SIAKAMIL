@@ -395,7 +395,7 @@
                                     <select class="form-select @error('semesters_id') is-invalid @enderror" name="semesters_id" aria-label="Pilih Semesters Yang Akan Di Buatkan Kelas">
                                         <option selected>Pilih Semesters Yang Akan Di Buatkan Kelas</option>
                                         @foreach ($semesters_id as $data)
-                                            <option value="{{ $data->id }}">{{ $data->name }} {{ date('Y', strtotime($data->startDate)) }}/{{ date('Y', strtotime($data->endDate)) }}</option>
+                                            <option value="{{ $data->id }}">{{ $data->name }} {{ date('Y', strtotime($data->startDate)) }}/{{ date('Y', strtotime($data->endDate)) }} | {{ $data->education_levels->name }}</option>
                                         @endforeach
                                     </select>
                                     <!-- error message untuk name -->
